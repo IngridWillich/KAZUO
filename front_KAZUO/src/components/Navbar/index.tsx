@@ -16,9 +16,10 @@ export default function Navbar() {
         </Link>
       </nav>
       <div className="flex items-center space-x-4">
-        <button className="px-4 py-2 bg-blue-100 text-blue-600 rounded-md">
-          Nosotros
-        </button>
+      <Link href="/Nosotros" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-500 transition duration-300">
+  Nosotros
+</Link>
+
         <button className="px-4 py-2 text-gray-600">Iniciar sesión</button>
         <button className="px-4 py-2 bg-blue-600 text-white rounded-md">
           Registrarme

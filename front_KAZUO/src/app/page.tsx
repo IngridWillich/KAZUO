@@ -48,7 +48,7 @@ export default function LandingPage() {
         </div>
 
         <div className="md:w-1/2 relative">
-          <div className="absolute inset-0 bg-blue-100 rounded-full transform -rotate-6 scale-110 md:scale-125"></div>
+          {/* <div className="absolute inset-0 bg-blue-100 rounded-full transform -rotate-6 scale-110 md:scale-125"></div> */}
           
           <Image src="https://www.soc.unicen.edu.ar/images/2024/Estadisticas-wp.jpg" className="rounded-3xl relative z-10" alt="logo" width={500} height={500} />
         </div>
