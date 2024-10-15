@@ -1,18 +1,21 @@
+
 "use client";
 import { IProduct } from '@/interfaces';
-import { useEffect, useState } from 'react';
-import { FaUserGraduate } from 'react-icons/fa';
+import { useEffect, useState, useRef } from 'react';
+import { FaPencilAlt } from 'react-icons/fa';
 
 export default function HomePage() {
+// const {userData}=useAuth();
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
   const [newProduct, setNewProduct] = useState({ name: '', quantity: 0 });
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products'); // Cambiar por api del back 
+      const response = await fetch('/api/products'); // Cambiar por api del back
       const data = await response.json();
       setProducts(data.products);
       setLowStockProducts(data.lowStockProducts);
@@ -37,10 +40,9 @@ export default function HomePage() {
         });
 
         if (response.ok) {
-          // Actualiza la lista de productos después de agregar uno nuevo
           const updatedProducts = await response.json();
           setProducts(updatedProducts);
-          setNewProduct({ name: '', quantity: 0 }); // Limpia el formulario
+          setNewProduct({ name: '', quantity: 0 });
         } else {
           console.error('Failed to add product');
         }
@@ -50,19 +52,65 @@ export default function HomePage() {
     }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePencilClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
          
-          <div className="bg-white shadow-md rounded-md p-4 md:col-span-1">
+          {/* Card de Información de Usuario */}
+          <div className="bg-white shadow-md rounded-md p-4 md:col-span-1 relative">
             <h2 className="text-xl font-semibold mb-4">Información de Usuario</h2>
-            <p><strong>Nombre:</strong> Juan Pérez</p>
+
+            {/* Contenedor del avatar */}
+            <div className="relative flex items-center justify-center">
+              <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
+                {/* Imagen de perfil */}
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="object-cover w-full h-full" />
+                ) : (
+                  <span className="text-gray-500 ">No image</span>
+                )}
+              </div>
+
+              <div 
+                className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600"
+                onClick={handlePencilClick}
+              >
+                <FaPencilAlt className="text-white" />
+              </div>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+            </div>
+
+            <p className="mt-4"><strong>Nombre:</strong> Juan Pérez</p>
             <p><strong>Email:</strong> juan@example.com</p>
             <p><strong>Plan:</strong> Kazuo Pro</p>
           </div>
 
-        
+          
           <div className="bg-white shadow-md rounded-md p-4 md:col-span-2">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Gestión de Inventario</h2>
@@ -92,7 +140,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Tabs */}
+            
             <div>
               <div className="flex space-x-4 border-b">
                 <button
@@ -109,7 +157,6 @@ export default function HomePage() {
                 </button>
               </div>
 
-              {/* Tab Content */}
               {activeTab === "stock" && (
                 <div className="mt-4">
                   <div className="bg-gray-100 rounded-md p-4">

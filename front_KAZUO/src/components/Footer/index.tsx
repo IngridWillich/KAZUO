@@ -36,17 +36,24 @@ export default function Footer() {
   const participants: Record<Platform, Participant[]> = {
     instagram: [
       { name: "Ingrid Willich", url: "https://www.instagram.com/ingridwillich/?hl=es" },
-      { name: "insta_participante2", url: "https://instagram.com/participante2" },
-      { name: "insta_participante3", url: "https://instagram.com/participante3" },
+      { name: "Arturo Guzman", url: "https://www.instagram.com/arthurgantego/profilecard/?igsh=MXMwaTIzY3dzNnZleQ==" },
+      { name: "Lautaro Olmos", url: "https://www.instagram.com/lauti.olmos/" },
+      { name: "Fredy Rigueros", url: "https://www.instagram.com/fredyrigueros91" },
     ],
     linkedin: [
       { name: "Ingrid Willich", url: "https://www.linkedin.com/in/ingrid-willich-09631b303/" },
-      { name: "linkedin_participante2", url: "https://linkedin.com/participante2" },
+      { name: "Arturo Guzman", url: "https://www.linkedin.com/in/arturo-guzm%C3%A1n-10730a269?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+      { name: "Lautaro Olmos", url: "https://www.linkedin.com/in/lautaroolmos/" },
+      { name: "Saul Ortiz", url: "https://www.linkedin.com/in/saul-ortiz-1010872b5/" },
+      { name: "Fredy Rigueros", url: "https://www.linkedin.com/in/fredy-rigueros-3a376a1b9/" },
     ],
     
     github: [
       { name: "Ingrid Willich", url: "https://github.com/IngridWillich" },
-      { name: "github_participante2", url: "https://github.com/participante2" },
+      { name: "Arturo Guzman", url: "https://github.com/ArturoGuzman555" },
+      { name: "Lautaro Olmos", url: "https://github.com/LAUTYH" },
+      { name: "Saul Ortiz", url: "https://github.com/XsporosX" },
+      { name: "Fredy Rigueros", url: "https://github.com/M3CH4N1Z3D" },
     ],
   };
 
