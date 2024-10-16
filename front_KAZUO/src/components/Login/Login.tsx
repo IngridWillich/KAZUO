@@ -7,6 +7,7 @@ import { validateLoginForm } from "@/helpers/validate";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
 import Link from "next/link";
+import { useAppContext } from "@/context/AppContext";
 
 const Login = () => {
     const router = useRouter();
@@ -22,6 +23,7 @@ const Login = () => {
         password: false
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const { login } = useAppContext();
 
     useEffect(() => {
         const hasErrors = Object.keys(errors).length > 0;
@@ -64,7 +66,8 @@ const Login = () => {
         setErrors(currentErrors);
 
         if (Object.keys(currentErrors).length === 0) { 
-            // try {
+            try {
+                await login(dataUser.email, dataUser.password);
             //     const response = await login(dataUser); 
             //     const { token, user } = response;
             //     const userData = { 
@@ -82,15 +85,15 @@ const Login = () => {
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                 });
-                // router.push("/");
-            // } catch (error) {
-            //     Swal.fire({
-            //         title: 'Error',
-            //         text: 'Credenciales incorrectas. Por favor, inténtalo de nuevo.',
-            //         icon: 'error',
-            //         confirmButtonText: 'Aceptar'
-            //     });
-            // }
+                router.push("/");
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Credenciales incorrectas. Por favor, inténtalo de nuevo.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
         }
     };
 

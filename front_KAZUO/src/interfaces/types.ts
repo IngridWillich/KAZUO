@@ -33,4 +33,14 @@ export interface userData {
     name: string;
     price: number;
     quantity: number;
+    image: string;
+    minStock: number;
+    storeId: number
 }
+
+export interface AppContextType {
+    isLoggedIn: boolean;
+  userData: userData | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  }
