@@ -21,7 +21,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         {/* <AuthProvider> */}
-
         <ShowComponents>
         <Navbar/>
         </ShowComponents>

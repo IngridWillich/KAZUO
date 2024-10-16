@@ -17,8 +17,8 @@ export interface IRegisterProps {
    
 }
 
-
 export type TRegisterError = Partial<IRegisterProps>;
+
 
 export interface userData {
         id: number;  
