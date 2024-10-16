@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 // File: C:\Users\Windows\OneDrive\Documentos\PROGRAMACION\CARRERA\PF\KAZUO\front_KAZUO\src\app\page.tsx
-=======
-// File: C:\Users\Usuario\front_KAZUO\src\app\page.tsx
->>>>>>> 0c6b95b75652286fa69240cfa0a75f62a71a77ca
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

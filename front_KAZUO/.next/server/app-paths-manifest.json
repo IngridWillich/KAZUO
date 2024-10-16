@@ -1,10 +1,4 @@
 {
-<<<<<<< HEAD
+  "/Nosotros/page": "app/Nosotros/page.js",
   "/page": "app/page.js"
-=======
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/Homee/page": "app/Homee/page.js",
-  "/Nosotros/page": "app/Nosotros/page.js"
->>>>>>> 0c6b95b75652286fa69240cfa0a75f62a71a77ca
 }

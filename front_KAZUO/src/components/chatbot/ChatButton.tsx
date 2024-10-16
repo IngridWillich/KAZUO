@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import ChatBot from "./chatbot/ChatBot";
+import ChatBot from "./ChatBot";
 
 const ChatBotButton = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
