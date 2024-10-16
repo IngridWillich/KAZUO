@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <header className="container mx-auto px-4 py-6 flex items-center justify-between">
       <nav className="flex items-center space-x-6">
-        <Link href="#" className="text-blue-600 font-medium">
+        <Link href="/Soluciones" className="text-blue-600 font-medium">
           Soluciones
         </Link>
         <Link href="#" className="text-gray-600">
