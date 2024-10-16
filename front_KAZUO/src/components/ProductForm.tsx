@@ -1,15 +1,17 @@
 "use client";
 
+import { IProduct } from "@/interfaces/types";
 import { useState } from "react";
 
 const ProductForm: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IProduct>({
+    id: 0,
     name: "",
-    quantity: "",
-    price: "",
+    quantity: 0,
+    price: 0,
     image: "",
-    minStock: "",
-    storeId: "",
+    minStock: 0,
+    storeId: 0,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
