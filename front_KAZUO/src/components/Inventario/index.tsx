@@ -1,10 +1,10 @@
 
 "use client";
-import { IProduct } from '@/interfaces';
+import { IProduct } from '@/interfaces/types';
 import { useEffect, useState, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 
-export default function HomePage() {
+export default function Inventario() {
 // const {userData}=useAuth();
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -60,6 +60,7 @@ export default function HomePage() {
         setProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+      console.log(handleImageUpload)
     }
   };
 

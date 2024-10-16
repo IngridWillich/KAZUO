@@ -110,7 +110,7 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-4">Soluciones</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:underline">Sistema de gestión</a></li>
+            <li><a href="/Soluciones" className="hover:underline">Sistema de gestión</a></li>
             <li><a href="#" className="hover:underline">Facturación electrónica</a></li>
             <li><a href="#" className="hover:underline">Tienda Online</a></li>
             <li><a href="#" className="hover:underline">Punto de venta</a></li>
