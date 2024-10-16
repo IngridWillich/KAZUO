@@ -1,20 +1,22 @@
-"use client"
+'use client'
+
 import React, { createContext, useState, useContext } from 'react';
-import { AppContextType } from '@/interfaces/types';
 
-
+interface AppContextType {
+  // Interfaces a usar para el contexto.
+}
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     // Funciones de contexto a definir, Login, Logout, Inventario, Bodegas, etc.
-    const contextValue: AppContextType = {
-      
-    }
-    return <AppContext.Provider>{children}</AppContext.Provider>;
+  
+  const value = {
+    
   };
 
-
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
