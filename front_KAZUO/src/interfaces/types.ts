@@ -27,3 +27,10 @@ export interface userData {
         name: string;
         company: string;
  }
+
+ export interface IProduct {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+}
