@@ -39,14 +39,8 @@ export interface userData {
 }
 
 export interface AppContextType {
-    userData: userData;
-    token: string | null;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => void;
-    register: (email: string, password: string, name: string, company: string) => Promise<void>;
-    products: IProduct[];
-    getProducts: () => Promise<void>;
-    addProduct: (product: IProduct) => Promise<void>;
-    updateProduct: (product: IProduct) => Promise<void>;
-    deleteProduct: (id: number) => Promise<void>;
+    isLoggedIn: boolean;
+  userData: userData | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
   }
