@@ -97,7 +97,7 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-4">Kazuo</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:underline">Quiénes somos</a></li>
+            <li><a href="/Nosotros" className="hover:underline">Quiénes somos</a></li>
             <li><a href="#" className="hover:underline">Centro de prensa</a></li>
             <li><a href="#" className="hover:underline">Ubicación</a></li>
             <li><a href="#" className="hover:underline">Trabaja con nosotros</a></li>
