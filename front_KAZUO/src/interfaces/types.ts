@@ -11,7 +11,8 @@ export interface ILoginError {
 
 export interface IRegisterProps {
     email: string; 
-    password: string; 
+    password: string;
+    confirmPass: string; 
     name: string; 
     company: string;
    

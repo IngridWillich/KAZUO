@@ -3,6 +3,7 @@
 import { IProduct } from '@/interfaces/types';
 import { useEffect, useState, useRef } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
+import { useAppContext } from '@/context/AppContext';
 
 export default function Inventario() {
 // const {userData}=useAuth();
@@ -12,6 +13,7 @@ export default function Inventario() {
   const [newProduct, setNewProduct] = useState({ name: '', quantity: 0 });
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { userData} = useAppContext();
 
   const fetchProducts = async () => {
     try {
@@ -70,6 +72,8 @@ export default function Inventario() {
     }
   };
 
+
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <main className="flex-grow container mx-auto px-4 py-8">
@@ -106,8 +110,8 @@ export default function Inventario() {
               />
             </div>
 
-            <p className="mt-4"><strong>Nombre:</strong> Juan Pérez</p>
-            <p><strong>Email:</strong> juan@example.com</p>
+            <p className="mt-4"><strong>Nombre: </strong>{userData?.name}</p>
+            <p><strong>Email: </strong>{userData?.email}</p>
             <p><strong>Plan:</strong> Kazuo Pro</p>
           </div>
 
