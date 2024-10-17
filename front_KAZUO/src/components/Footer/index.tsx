@@ -39,6 +39,7 @@ export default function Footer() {
       { name: "Arturo Guzman", url: "https://www.instagram.com/arthurgantego/profilecard/?igsh=MXMwaTIzY3dzNnZleQ==" },
       { name: "Lautaro Olmos", url: "https://www.instagram.com/lauti.olmos/" },
       { name: "Fredy Rigueros", url: "https://www.instagram.com/fredyrigueros91" },
+      { name: "Antonella Defilippi" , url: "https://www.instagram.com/antonella.deff" },
     ],
     linkedin: [
       { name: "Ingrid Willich", url: "https://www.linkedin.com/in/ingrid-willich-09631b303/" },
@@ -46,6 +47,7 @@ export default function Footer() {
       { name: "Lautaro Olmos", url: "https://www.linkedin.com/in/lautaroolmos/" },
       { name: "Saul Ortiz", url: "https://www.linkedin.com/in/saul-ortiz-1010872b5/" },
       { name: "Fredy Rigueros", url: "https://www.linkedin.com/in/fredy-rigueros-3a376a1b9/" },
+      { name: "Antonella Defilippi" , url: "https://www.linkedin.com/in/antonella-defilippi-b91b82289?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
     ],
     
     github: [
@@ -54,6 +56,7 @@ export default function Footer() {
       { name: "Lautaro Olmos", url: "https://github.com/LAUTYH" },
       { name: "Saul Ortiz", url: "https://github.com/XsporosX" },
       { name: "Fredy Rigueros", url: "https://github.com/M3CH4N1Z3D" },
+      { name: "Antonella Defilippi" , url: "https://github.com/antonelladeff" },
     ],
   };
 
@@ -94,7 +97,7 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-4">Kazuo</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:underline">Quiénes somos</a></li>
+            <li><a href="/Nosotros" className="hover:underline">Quiénes somos</a></li>
             <li><a href="#" className="hover:underline">Centro de prensa</a></li>
             <li><a href="#" className="hover:underline">Ubicación</a></li>
             <li><a href="#" className="hover:underline">Trabaja con nosotros</a></li>
@@ -107,7 +110,7 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-4">Soluciones</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:underline">Sistema de gestión</a></li>
+            <li><a href="/Soluciones" className="hover:underline">Sistema de gestión</a></li>
             <li><a href="#" className="hover:underline">Facturación electrónica</a></li>
             <li><a href="#" className="hover:underline">Tienda Online</a></li>
             <li><a href="#" className="hover:underline">Punto de venta</a></li>

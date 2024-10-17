@@ -1,5 +1,5 @@
 
-import Image from 'next/image'
+
 
 type Platform = 'instagram' | 'linkedin' | 'github'
 type Participant = { name: string; url: string }
@@ -10,6 +10,7 @@ const participants: Record<Platform, Participant[]> = {
     { name: "Arturo Guzman", url: "https://www.instagram.com/arthurgantego/profilecard/?igsh=MXMwaTIzY3dzNnZleQ==" },
     { name: "Lautaro Olmos", url: "https://www.instagram.com/lauti.olmos/" },
     { name: "Fredy Rigueros", url: "https://www.instagram.com/fredyrigueros91" },
+    { name: "Antonella Defilippi" , url: "https://www.instagram.com/antonella.deff" },
   ],
   linkedin: [
     { name: "Ingrid Willich", url: "https://www.linkedin.com/in/ingrid-willich-09631b303/" },
@@ -17,6 +18,7 @@ const participants: Record<Platform, Participant[]> = {
     { name: "Lautaro Olmos", url: "https://www.linkedin.com/in/lautaroolmos/" },
     { name: "Saul Ortiz", url: "https://www.linkedin.com/in/saul-ortiz-1010872b5/" },
     { name: "Fredy Rigueros", url: "https://www.linkedin.com/in/fredy-rigueros-3a376a1b9/" },
+    { name: "Antonella Defilippi" , url: "https://www.linkedin.com/in/antonella-defilippi-b91b82289?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   ],
   
   github: [
@@ -25,6 +27,7 @@ const participants: Record<Platform, Participant[]> = {
     { name: "Lautaro Olmos", url: "https://github.com/LAUTYH" },
     { name: "Saul Ortiz", url: "https://github.com/XsporosX" },
     { name: "Fredy Rigueros", url: "https://github.com/M3CH4N1Z3D" },
+    { name: "Antonella Defilippi" , url: "https://github.com/antonelladeff" },
   ],
 };
 
@@ -39,7 +42,7 @@ export default function AboutUs() {
         <div className="bg-white shadow-md rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-blue-600">Nuestra Historia</h2>
           <p className="text-gray-600 mb-8">
-            Comenzamos como un grupo de estudiantes de Henry apasionados por la tecnología, con la idea y propósito de ayudar a las pequeñas y medianas empresas a llevar un mejor análisis de su inventario. Nuestra visión era crear una herramienta que no solo simplificara la gestión de inventarios, sino que también proporcionara insights valiosos para impulsar el crecimiento de los negocios.
+            Comenzamos como un grupo de estudiantes de Henry apasionados por la tecnología, con la idea y propósito de ayudar a las pequeñas y medianas empresas a llevar un mejor análisis de su inventario. Nuestra visión era crear una herramienta que no solo simplificara la gestión de inventarios, sino que también proporcionara soluciones valiosoas para impulsar el crecimiento de los negocios.
           </p>
           <p className="text-gray-600 mb-8">
             A medida que profundizamos en las necesidades de las PyMEs, nos dimos cuenta de que podíamos ofrecer mucho más. Expandimos nuestra plataforma para incluir funcionalidades de facturación electrónica, punto de venta y análisis de datos, convirtiéndonos en una solución integral para la gestión empresarial.

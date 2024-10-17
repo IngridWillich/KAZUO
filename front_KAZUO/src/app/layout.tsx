@@ -23,15 +23,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         {/* <AuthProvider> */}
-
-<AppProvider>
+        <AppProvider>
         <ShowComponents>
         <Navbar/>
         </ShowComponents>
         {children}
-       <Footer />
+        <Footer />
+        </AppProvider>
 {/* </AuthProvider> */}
-</AppProvider>
       </body>
     </html>
   );
