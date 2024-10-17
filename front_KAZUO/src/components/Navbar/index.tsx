@@ -15,25 +15,16 @@ export default function Navbar() {
 
   return (
     <header className="container mx-auto px-4 py-6 flex items-center justify-between">
-      <Link href="/" className="text-2xl font-bold text-blue-600">
-        KAZUO
-      </Link>
-      <nav>
-        <ul className="flex space-x-4">
-          <li>
-            <Link href="/" className="text-gray-600 hover:text-blue-600">
-              Inicio
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/productos"
-              className="text-gray-600 hover:text-blue-600"
-            >
-              Productos
-            </Link>
-          </li>
-        </ul>
+      <nav className="flex items-center space-x-6">
+        <Link href="#" className="text-blue-600 font-medium">
+          Soluciones
+        </Link>
+        <Link href="#" className="text-gray-600">
+          Planes
+        </Link>
+        <Link href="#" className="text-gray-600">
+          Contacto
+        </Link>
       </nav>
       <div className="flex items-center space-x-4">
         <Link
