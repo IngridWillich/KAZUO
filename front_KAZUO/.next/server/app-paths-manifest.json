@@ -1,6 +1,6 @@
 {
-  "/page": "app/page.js",
-  "/Register/page": "app/Register/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/Login/page": "app/Login/page.js",
-  "/Homee/page": "app/Homee/page.js"
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/page": "app/page.js"
 }
