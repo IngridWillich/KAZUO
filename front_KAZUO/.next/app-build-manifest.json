@@ -11,15 +11,20 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/Nosotros/page": [
+    "/Register/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Nosotros/page.js"
+      "static/chunks/app/Register/page.js"
     ],
     "/Login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Login/page.js"
+    ],
+    "/Homee/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Homee/page.js"
     ]
   }
 }
