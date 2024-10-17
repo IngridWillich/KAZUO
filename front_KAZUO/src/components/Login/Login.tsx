@@ -65,36 +65,37 @@ const Login = () => {
     const currentErrors = validateLoginForm(dataUser);
     setErrors(currentErrors);
 
-        if (Object.keys(currentErrors).length === 0) { 
-            // try {
-            //     const response = await login(dataUser); 
-            //     const { token, user } = response;
-            //     const userData = { 
-            //         id: user.id,
-            //         address: user.address,
-            //         email: user.email,
-            //         name: user.name,
-            //         phone: user.phone,
-            //         orders: user.orders,
-            //     };
-            //     setUserData({ token, userData }); 
-                Swal.fire({
-                    title: '¡Inicio de sesión exitoso!',
-                    text: 'Te has iniciado sesión correctamente.',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-                // router.push("/");
-            // } catch (error) {
-            //     Swal.fire({
-            //         title: 'Error',
-            //         text: 'Credenciales incorrectas. Por favor, inténtalo de nuevo.',
-            //         icon: 'error',
-            //         confirmButtonText: 'Aceptar'
-            //     });
-            // }
+    if (Object.keys(currentErrors).length === 0) {
+      console.log("Datos del formulario:", dataUser);
+      try {
+        const response = await fetch("http://localhost:8080/auth/signin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataUser),
+        });
+
+        if (response.ok) {
+            await login(dataUser.email, dataUser.password);
+          Swal.fire({
+            title: "¡Inicio de sesión exitoso!",
+            text: "Te has iniciado sesión correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+          router.push("/Homee");
         }
-    };
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">

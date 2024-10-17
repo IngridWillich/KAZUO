@@ -30,19 +30,26 @@ export interface userData {
  }
 
  export interface IProduct{
-  name: string;
-  quantity: string;
-  price: string;
-  image: string;
-  minStock: string;
-  storeId: string;
-}
+    name: string;
+    quantity: string;
+    price: string;
+    image: string;
+    minStock: string;
+    storeId: string;
+  }
 
-export interface IProductsErrors { [key: string]: string | undefined;
-  name?: string;
-  quantity?: string;
-  price?: string
-  minStock?: string;
-  storeId?: string;
-}
+  export interface IProductsErrors { [key: string]: string | undefined;
+    name?: string;
+    quantity?: string;
+    price?: string
+    minStock?: string;
+    storeId?: string;
+  }
+
+export interface AppContextType {
+    isLoggedIn: boolean;
+  userData: userData | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  }
 
