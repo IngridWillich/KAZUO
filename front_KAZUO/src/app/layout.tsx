@@ -6,6 +6,7 @@ import ShowComponents from "../components/ShowComponents";
 import Footer from "../components/Footer";
 import { AppProvider } from "@/context/AppContext";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -34,5 +35,4 @@ export default function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
-
 

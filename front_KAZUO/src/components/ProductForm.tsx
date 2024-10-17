@@ -1,18 +1,27 @@
 "use client";
-
-import { IProduct } from "@/interfaces/types";
 import { useState } from "react";
+import { IProduct } from "@/interfaces/types";
+import { validateProductForm } from "@/helpers/validate";
+import { IProductsErrors } from "@/interfaces/types";
 
 const ProductForm: React.FC = () => {
   const [formData, setFormData] = useState<IProduct>({
-    id: 0,
     name: "",
-    quantity: 0,
-    price: 0,
+    quantity: "",
+    price: "",
     image: "",
-    minStock: 0,
-    storeId: 0,
+    minStock: "",
+    storeId: "",
   });
+  const [errors, setErrors] = useState<IProductsErrors>({});
+
+  const validateField = (name: string, value: string) => {
+    const validationErrors = validateProductForm({ ...formData, [name]: value });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: validationErrors[name] || '', 
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,12 +29,27 @@ const ProductForm: React.FC = () => {
       ...prevState,
       [name]: value,
     }));
+
+    // Validar el campo actual
+    validateField(name, value);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    // Validar el campo que ha perdido el foco
+    validateField(name, value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(JSON.stringify(formData));
-    // Here you would typically send the data to your backend
+    const validationErrors = validateProductForm(formData);
+    setErrors(validationErrors);
+
+    // Solo proceder si no hay errores
+    if (Object.keys(validationErrors).length === 0) {
+      console.log(JSON.stringify(formData));
+      // Aquí enviarías normalmente los datos a tu backend
+    }
   };
 
   return (
@@ -45,9 +69,11 @@ const ProductForm: React.FC = () => {
           className="border border-gray-300 rounded-sm w-fit"
           required
           onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {errors.name && <p className="text-red-600">{errors.name}</p>}
       </div>
-
+  
       <div className="flex flex-col">
         <label htmlFor="quantity">Cantidad</label>
         <input
@@ -55,11 +81,14 @@ const ProductForm: React.FC = () => {
           id="quantity"
           name="quantity"
           className="border border-gray-300 rounded-sm w-fit"
+          min="0" // Asegura que no se pueden ingresar números negativos
           required
           onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {errors.quantity && <p className="text-red-600">{errors.quantity}</p>}
       </div>
-
+  
       <div className="flex flex-col">
         <label htmlFor="price">Precio</label>
         <input
@@ -67,11 +96,14 @@ const ProductForm: React.FC = () => {
           id="price"
           name="price"
           className="border border-gray-300 rounded-sm w-fit"
+          min="0" // Asegura que no se pueden ingresar números negativos
           required
           onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {errors.price && <p className="text-red-600">{errors.price}</p>}
       </div>
-
+  
       <div className="flex flex-col">
         <label htmlFor="image">Imagen</label>
         <input
@@ -80,9 +112,11 @@ const ProductForm: React.FC = () => {
           name="image"
           className="border border-gray-300 rounded-sm w-fit"
           onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {errors.image && <p className="text-red-600">{errors.image}</p>}
       </div>
-
+  
       <div className="flex flex-col">
         <label htmlFor="minStock">Cantidad Mínima</label>
         <input
@@ -90,11 +124,14 @@ const ProductForm: React.FC = () => {
           id="minStock"
           name="minStock"
           className="border border-gray-300 rounded-sm w-fit"
+          min="0" // Asegura que no se pueden ingresar números negativos
           required
           onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {errors.minStock && <p className="text-red-600">{errors.minStock}</p>}
       </div>
-
+  
       <div className="flex flex-col">
         <label htmlFor="storeId">Bodega</label>
         <input
@@ -102,11 +139,14 @@ const ProductForm: React.FC = () => {
           id="storeId"
           name="storeId"
           className="border border-gray-300 rounded-sm w-fit"
+          min="0" // Asegura que no se pueden ingresar números negativos
           required
           onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {errors.storeId && <p className="text-red-600">{errors.storeId}</p>}
       </div>
-
+  
       <div className="flex flex-row justify-center gap-8">
         <button
           type="submit"
@@ -123,6 +163,6 @@ const ProductForm: React.FC = () => {
       </div>
     </form>
   );
-};
+}
 
 export default ProductForm;
