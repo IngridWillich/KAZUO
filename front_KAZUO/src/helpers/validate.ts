@@ -1,5 +1,6 @@
 import { ILoginError, ILoginProps } from "@/interfaces/types";
 import { IRegisterProps, TRegisterError } from "@/interfaces/types";
+import {IProduct,IProductsErrors} from "@/interfaces/types";
 
 export function validateLoginForm(values: ILoginProps): ILoginError {
     const errors: ILoginError = {};
@@ -67,3 +68,54 @@ export function validateRegisterForm(values: IRegisterProps): TRegisterError {
     }
     return errors;
 }
+
+// Función de validación del formulario
+export function validateProductForm(values: IProduct): IProductsErrors {
+    const errors: IProductsErrors = {};
+
+    // Validación del nombre
+    if (!values.name) {
+        errors.name = "El nombre del producto es obligatorio";
+    } else if (values.name.length < 5) {
+        errors.name = "El nombre del producto debe tener al menos 5 letras";
+    }
+
+    // Validación de la cantidad
+    if (!values.quantity) {
+        errors.quantity = "La cantidad es obligatoria";
+    } else if (Number(values.quantity) <= 0) {
+        errors.quantity = "La cantidad debe ser mayor que cero";
+ 
+    }
+
+    // Validación del stock mínimo
+    if (!values.minStock) {
+        errors.minStock = "La cantidad mínima es obligatoria";
+    } else if (Number(values.minStock) <= 0) {
+        errors.minStock = "La cantidad mínima debe ser mayor que cero";
+ 
+    }
+
+    // Validación del precio
+    if (!values.price) {
+        errors.price = "El precio es obligatorio";
+    } else if (Number(values.price) <= 0) {
+        errors.price = "El precio debe ser mayor que cero";
+   
+    }
+    //validacion por bodega
+    if (!values.storeId) {
+        errors.storeId = "El ID de la bodega es obligatorio";
+    } else if (!/^[A-Za-z0-9]+$/.test(values.storeId)) {
+        errors.storeId = "El ID de la bodega solo puede contener letras y números";
+    }
+    //validacion por imagen
+    if (!values.image) {
+        errors.image = "La imagen es obligatoria";
+    } else if (!/\.(jpg|png|)$/i.test(values.image)) {
+        errors.image = "La imagen debe ser en formato jpg, png ";
+    }
+    return errors;
+}
+
+  

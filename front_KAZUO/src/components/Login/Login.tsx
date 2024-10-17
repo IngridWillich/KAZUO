@@ -82,7 +82,7 @@ const Login = () => {
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                 });
-                // router.push("/");
+                router.push("/");
             // } catch (error) {
             //     Swal.fire({
             //         title: 'Error',

@@ -28,9 +28,19 @@ export interface userData {
         company: string;
  }
 
- export interface IProduct {
-    id: number;
+ export interface IProduct{
     name: string;
-    price: number;
-    quantity: number;
-}
+    quantity: string;
+    price: string;
+    image: string;
+    minStock: string;
+    storeId: string;
+  }
+
+  export interface IProductsErrors { [key: string]: string | undefined;
+    name?: string;
+    quantity?: string;
+    price?: string
+    minStock?: string;
+    storeId?: string;
+  }
