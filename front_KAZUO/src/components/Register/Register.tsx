@@ -108,7 +108,7 @@ const Register = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg mt-6 mb-6 rounded-lg">
         <h2 className="text-2xl font-bold text-center text-gray-700 uppercase">
-          Registrarse
+          Regístrate
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
@@ -197,7 +197,7 @@ const Register = () => {
               htmlFor="company"
               className="block text-sm font-bold text-gray-700"
             >
-              Compañía de la empresa:
+              Nombre de la empresa:
             </label>
             <input
               type="text"

@@ -1,6 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/Login/page": "app/Login/page.js",
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/page": "app/page.js"
+  "/Contacto/page": "app/Contacto/page.js",
+  "/Planes/page": "app/Planes/page.js"
 }
