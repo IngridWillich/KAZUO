@@ -159,7 +159,7 @@ const Login = () => {
         <p className="text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}
           <Link
-            href="/register"
+            href="/Register"
             className="text-indigo-400 hover:text-indigo-500"
           >
             Regístrate aquí

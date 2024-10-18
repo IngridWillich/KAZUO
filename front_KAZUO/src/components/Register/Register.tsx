@@ -182,7 +182,7 @@ const Register = () => {
             </div>
             <div className="space-y-2">
               <label htmlFor="company" className="block text-sm font-bold text-gray-700">
-                Compañía de la empresa:
+                Nombre de la Empresa:
               </label>
               <input
                 type="text"
