@@ -26,20 +26,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       `Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`
     );
   }, [isLoggedIn]); //VERIFICANDO SI LA SESION SE INICIO
-  const login = async (email: string, password: string) => {
-    //FUNCION DE PRUEBA, ESTO DEBE CONECTAR CON EL BACK
-    const mockUserData: userData = {
-      id: 1,
-      email: email,
-      password: password,
-      name: "Prueba Uno",
-      company: "Empresa de prueba",
-    };
-    setIsLoggedIn(true);
-    setUserData(mockUserData);
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userData", JSON.stringify(mockUserData));
+  const login = async (loginData: any) => {
+    try{
+      setIsLoggedIn(true);
+      setUserData(loginData);
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userData", JSON.stringify(loginData));
+
+    } catch (error){
+      console.error("Error de login", error);
+      throw error;
+    }
   };
+
   const logout = () => {
     setIsLoggedIn(false);
     setUserData(null);

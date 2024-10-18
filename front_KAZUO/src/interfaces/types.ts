@@ -18,8 +18,8 @@ export interface IRegisterProps {
    
 }
 
-
 export type TRegisterError = Partial<IRegisterProps>;
+
 
 export interface userData {
         id: number;  
@@ -29,19 +29,27 @@ export interface userData {
         company: string;
  }
 
- export interface IProduct {
-    id: number;
+ export interface IProduct{
     name: string;
-    price: number;
-    quantity: number;
+    quantity: string;
+    price: string;
     image: string;
-    minStock: number;
-    storeId: number
-}
+    minStock: string;
+    storeId: string;
+  }
+
+  export interface IProductsErrors { [key: string]: string | undefined;
+    name?: string;
+    quantity?: string;
+    price?: string
+    minStock?: string;
+    storeId?: string;
+  }
 
 export interface AppContextType {
     isLoggedIn: boolean;
   userData: userData | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (loginData: any) => Promise<void>;
   logout: () => void;
   }
+
