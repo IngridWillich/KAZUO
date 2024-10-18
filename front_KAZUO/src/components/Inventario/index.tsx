@@ -6,7 +6,7 @@ import { FaPencilAlt } from 'react-icons/fa';
 import { useAppContext } from '@/context/AppContext';
 
 export default function Inventario() {
-// const {userData}=useAuth();
+
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
