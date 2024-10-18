@@ -71,13 +71,14 @@ export function validateRegisterForm(values: IRegisterProps): TRegisterError {
   if (!values.company) {
     errors.company = "El nombre de la compañia es obligatorio";
   }
-  if (values.confirmPass || values.password) {
-    if (values.password !== values.confirmPass) {
-      errors.confirmPass = "Las contraseñas no coinciden";
-    }
+  if (!values.password) {
+    errors.password = "La contraseña es obligatoria";
+  } else if (values.password !== values.confirmPass) {
+    errors.confirmPass = "Las contraseñas no coinciden";
   }
+
   return errors;
-}
+};
 
 // Función de validación del formulario
 export function validateProductForm(values: IProduct): IProductsErrors {
@@ -92,7 +93,7 @@ export function validateProductForm(values: IProduct): IProductsErrors {
   } else if (/[^a-zA-Z0-9\s]/.test(values.name)) {
       errors.name = "El nombre del producto solo puede contener letras y números";
   }
-
+  
   // Validación de la cantidad
   if (!values.quantity) {
       errors.quantity = "La cantidad es obligatoria";
