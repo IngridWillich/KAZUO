@@ -1,13 +1,9 @@
 {
-<<<<<<< HEAD
   "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/login/page": "app/login/page.js",
-  "/gestioninventario/page": "app/gestioninventario/page.js",
-  "/register/page": "app/register/page.js",
-  "/Nosotros/page": "app/Nosotros/page.js"
-=======
   "/Contacto/page": "app/Contacto/page.js",
+  "/Login/page": "app/Login/page.js",
+  "/page": "app/page.js",
+  "/Register/page": "app/Register/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js",
   "/Planes/page": "app/Planes/page.js"
->>>>>>> f2dc6c34b1300419fea3afd239b722b4e7a27726
 }

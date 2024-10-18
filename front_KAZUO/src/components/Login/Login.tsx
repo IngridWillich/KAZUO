@@ -86,7 +86,7 @@ const Login: React.FC = () => {
             icon: "success",
             confirmButtonText: "Aceptar",
           });
-          router.push("/gestioninventario");
+          router.push("/GestionInventario");
           console.log(response)
         }
       } catch (error) {
