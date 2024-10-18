@@ -11,15 +11,25 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/Login/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Login/page.js"
+      "static/chunks/app/login/page.js"
     ],
-    "/GestionInventario/page": [
+    "/gestioninventario/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/GestionInventario/page.js"
+      "static/chunks/app/gestioninventario/page.js"
+    ],
+    "/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/register/page.js"
+    ],
+    "/Nosotros/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Nosotros/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
