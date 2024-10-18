@@ -49,7 +49,7 @@ export interface userData {
 export interface AppContextType {
     isLoggedIn: boolean;
   userData: userData | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (loginData: any) => Promise<void>;
   logout: () => void;
   }
 

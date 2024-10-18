@@ -9,7 +9,8 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 
-const Login = () => {
+const Login: React.FC = () => {
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
   const initialState = {
     email: "",
@@ -68,7 +69,7 @@ const Login = () => {
     if (Object.keys(currentErrors).length === 0) {
       console.log("Datos del formulario:", dataUser);
       try {
-        const response = await fetch("http://localhost:8080/auth/signin", {
+        const response = await fetch(`${kazuo_back}/auth/signin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -77,14 +78,16 @@ const Login = () => {
         });
 
         if (response.ok) {
-            await login(dataUser.email, dataUser.password);
+            const loginData = await response.json();
+            await login(loginData);
           Swal.fire({
             title: "¡Inicio de sesión exitoso!",
             text: "Te has iniciado sesión correctamente.",
             icon: "success",
             confirmButtonText: "Aceptar",
           });
-          router.push("/Homee");
+          router.push("/GestionInventario");
+          console.log(response)
         }
       } catch (error) {
         Swal.fire({

@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
   const initialState: IRegisterProps = {
     email: "",
@@ -61,7 +62,7 @@ const Register = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch("http://localhost:8080/auth/signup", {
+        const response = await fetch(`${kazuo_back}/auth/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
