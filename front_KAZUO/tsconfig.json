@@ -25,7 +25,9 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "target": "es2015",         // Añadido
+    "downlevelIteration": true   // Añadido
   },
   "include": [
     "next-env.d.ts",
