@@ -3,15 +3,28 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAppContext();
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.push("/");
-  };
+  const handleLogout =async  () => {
+        const result = await Swal.fire({
+        title: "¿Estás seguro que quieres cerrar sesión?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, cerrar sesión",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (result.isConfirmed) {
+        logout();
+        router.push("/");
+      }
+    };
 
   return (
     <header className="container mx-auto px-4 py-6 flex items-center justify-between">

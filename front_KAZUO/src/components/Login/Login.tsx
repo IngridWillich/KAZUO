@@ -87,7 +87,14 @@ const Login: React.FC = () => {
             confirmButtonText: "Aceptar",
           });
           router.push("/GestionInventario");
-          console.log(response)
+          console.log(loginData)
+        }else{
+          Swal.fire({
+            title: "Error",
+            text: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
         }
       } catch (error) {
         Swal.fire({
@@ -99,7 +106,7 @@ const Login: React.FC = () => {
       }
     }
   };
-
+ 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
@@ -166,6 +173,15 @@ const Login: React.FC = () => {
             className="text-indigo-400 hover:text-indigo-500"
           >
             Regístrate aquí
+          </Link>
+        </p>
+        <p className="text-center text-sm text-gray-600">
+          ¿Olvidaste la contraseña?{" "}
+          <Link
+            href="/RecoverPass"
+            className="text-indigo-400 hover:text-indigo-500"
+          >
+            Recuperala aquí
           </Link>
         </p>
       </div>

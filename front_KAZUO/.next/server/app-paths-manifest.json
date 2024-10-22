@@ -1,9 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/Contacto/page": "app/Contacto/page.js",
   "/Login/page": "app/Login/page.js",
-  "/page": "app/page.js",
-  "/Register/page": "app/Register/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Planes/page": "app/Planes/page.js"
+  "/UpdatePass/page": "app/UpdatePass/page.js",
+  "/Register/page": "app/Register/page.js",
+  "/page": "app/page.js"
 }
