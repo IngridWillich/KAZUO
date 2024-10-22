@@ -14,6 +14,7 @@ export default function Inventario() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { userData } = useAppContext();
   const router = useRouter();
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchProducts = async () => {
     try {
@@ -65,6 +66,29 @@ export default function Inventario() {
       console.log(handleImageUpload);
     }
   };
+  // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const formData = new FormData();
+  //     formData.append('image', file);
+  
+  //     try {
+  //       const response = await fetch(`${kazuo_back}/userImage`, {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
+  
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setProfileImage(data.imageUrl);
+  //       } else {
+  //         console.error('Error al subir la imagen');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error al subir la imagen:', error);
+  //     }
+  //   }
+  // };
 
   const handlePencilClick = () => {
     if (fileInputRef.current) {
