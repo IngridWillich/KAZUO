@@ -96,7 +96,6 @@ const Register = () => {
           confirmButtonText: "Aceptar",
         });
       }
-      console.log(dataUser);
     }
 
     

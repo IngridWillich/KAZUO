@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 
 const Login: React.FC = () => {
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const initialState = {
     email: "",
@@ -60,6 +60,35 @@ const Login: React.FC = () => {
     setErrors(updatedErrors);
   };
 
+  const encryptPassword = async (
+    password: string,
+    key: CryptoKey
+  ): Promise<ArrayBuffer> => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const iv = window.crypto.getRandomValues(new Uint8Array(12)); // Vector de inicialización de 12 bytes
+    return await window.crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv,
+      },
+      key,
+      data
+    );
+  };
+
+  // Función para generar una clave criptográfica
+  const generateKey = async (): Promise<CryptoKey> => {
+    return await window.crypto.subtle.generateKey(
+      {
+        name: "AES-GCM",
+        length: 256,
+      },
+      true,
+      ["encrypt", "decrypt"]
+    );
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -67,19 +96,22 @@ const Login: React.FC = () => {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      console.log("Datos del formulario:", dataUser);
       try {
+        const key = await generateKey();
+        const encryptedPassword = await encryptPassword(dataUser.password, key);
+        const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
         const response = await fetch(`${kazuo_back}/auth/signin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataUser),
+          // body: JSON.stringify({...dataUser, password: encryptedPasswordBase64}),
         });
 
         if (response.ok) {
-            const loginData = await response.json();
-            await login(loginData);
+          const loginData = await response.json();
+          await login(loginData);
           Swal.fire({
             title: "¡Inicio de sesión exitoso!",
             text: "Te has iniciado sesión correctamente.",
@@ -87,7 +119,14 @@ const Login: React.FC = () => {
             confirmButtonText: "Aceptar",
           });
           router.push("/GestionInventario");
-          console.log(response)
+          console.log(loginData);
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
         }
       } catch (error) {
         Swal.fire({
@@ -96,6 +135,8 @@ const Login: React.FC = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+      } finally {
+        console.log("Datos del formulario:", dataUser);
       }
     }
   };
@@ -166,6 +207,15 @@ const Login: React.FC = () => {
             className="text-indigo-400 hover:text-indigo-500"
           >
             Regístrate aquí
+          </Link>
+        </p>
+        <p className="text-center text-sm text-gray-600">
+          ¿Olvidaste la contraseña?{" "}
+          <Link
+            href="/RecoverPass"
+            className="text-indigo-400 hover:text-indigo-500"
+          >
+            Recuperala aquí
           </Link>
         </p>
       </div>
