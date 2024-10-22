@@ -21,35 +21,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
     ],
-    "/Nosotros/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Nosotros/page.js"
-    ],
-    "/Planes/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Planes/page.js"
-    ],
-    "/UpdatePass/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/UpdatePass/page.js"
-    ],
-    "/RecoverPass/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/RecoverPass/page.js"
-    ],
-    "/Soluciones/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Soluciones/page.js"
-    ],
-    "/Contacto/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Contacto/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

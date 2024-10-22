@@ -60,6 +60,32 @@ const Login: React.FC = () => {
     setErrors(updatedErrors);
   };
 
+  const encryptPassword = async (password: string, key: CryptoKey): Promise<ArrayBuffer> => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const iv = window.crypto.getRandomValues(new Uint8Array(12)); // Vector de inicialización de 12 bytes
+    return await window.crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv,
+      },
+      key,
+      data
+    );
+  };
+
+  // Función para generar una clave criptográfica
+  const generateKey = async (): Promise<CryptoKey> => {
+    return await window.crypto.subtle.generateKey(
+      {
+        name: "AES-GCM",
+        length: 256,
+      },
+      true,
+      ["encrypt", "decrypt"]
+    );
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -67,14 +93,17 @@ const Login: React.FC = () => {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      console.log("Datos del formulario:", dataUser);
       try {
+        // const key = await generateKey();
+        // const encryptedPassword = await encryptPassword(dataUser.password, key);
+        // const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
         const response = await fetch(`${kazuo_back}/auth/signin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataUser),
+          // body: JSON.stringify({...dataUser, password: encryptedPasswordBase64}),
         });
 
         if (response.ok) {
@@ -103,6 +132,8 @@ const Login: React.FC = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+      } finally{
+        console.log("Datos del formulario:", dataUser);
       }
     }
   };
