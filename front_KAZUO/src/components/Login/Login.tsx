@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 
 const Login: React.FC = () => {
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const initialState = {
     email: "",
@@ -60,7 +60,10 @@ const Login: React.FC = () => {
     setErrors(updatedErrors);
   };
 
-  const encryptPassword = async (password: string, key: CryptoKey): Promise<ArrayBuffer> => {
+  const encryptPassword = async (
+    password: string,
+    key: CryptoKey
+  ): Promise<ArrayBuffer> => {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     const iv = window.crypto.getRandomValues(new Uint8Array(12)); // Vector de inicialización de 12 bytes
@@ -94,9 +97,9 @@ const Login: React.FC = () => {
 
     if (Object.keys(currentErrors).length === 0) {
       try {
-        // const key = await generateKey();
-        // const encryptedPassword = await encryptPassword(dataUser.password, key);
-        // const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
+        const key = await generateKey();
+        const encryptedPassword = await encryptPassword(dataUser.password, key);
+        const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
         const response = await fetch(`${kazuo_back}/auth/signin`, {
           method: "POST",
           headers: {
@@ -107,8 +110,8 @@ const Login: React.FC = () => {
         });
 
         if (response.ok) {
-            const loginData = await response.json();
-            await login(loginData);
+          const loginData = await response.json();
+          await login(loginData);
           Swal.fire({
             title: "¡Inicio de sesión exitoso!",
             text: "Te has iniciado sesión correctamente.",
@@ -116,8 +119,8 @@ const Login: React.FC = () => {
             confirmButtonText: "Aceptar",
           });
           router.push("/GestionInventario");
-          console.log(loginData)
-        }else{
+          console.log(loginData);
+        } else {
           Swal.fire({
             title: "Error",
             text: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
@@ -132,12 +135,12 @@ const Login: React.FC = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
-      } finally{
+      } finally {
         console.log("Datos del formulario:", dataUser);
       }
     }
   };
- 
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
