@@ -1,21 +1,21 @@
 "use client";
-import { IProduct } from '@/interfaces/types';
-import { useEffect, useState, useRef } from 'react';
-import { FaPencilAlt } from 'react-icons/fa';
-import { useAppContext } from '@/context/AppContext';
-import { useRouter } from 'next/navigation'; // Importa useRouter
+import { IProduct } from "@/interfaces/types";
+import { useEffect, useState, useRef } from "react";
+import { FaPencilAlt } from "react-icons/fa";
+import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 
 interface Bodega {
   id: number;
   name: string;
-  category: string;
+  categoryName: string;
 }
 
 export default function Inventario() {
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
-  const [newProduct, setNewProduct] = useState({ name: '', quantity: 0 });
+  const [newProduct, setNewProduct] = useState({ name: "", quantity: 0 });
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [bodegas, setBodegas] = useState<Bodega[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -31,7 +31,7 @@ export default function Inventario() {
       setLowStockProducts(data.lowStockProducts);
       setBodegas(data.bodegas);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
     }
   };
 
@@ -45,7 +45,7 @@ export default function Inventario() {
         const response = await fetch(`${kazuo_back}/product`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(newProduct),
         });
@@ -53,12 +53,15 @@ export default function Inventario() {
         if (response.ok) {
           const updatedProducts = await response.json();
           setProducts(updatedProducts);
-          setNewProduct({ name: '', quantity: 0 });
+          setNewProduct({ name: "", quantity: 0 });
         } else {
-          console.error('Failed to add product');
+          console.error("Failed to add product");
         }
       } catch (error) {
-        console.error('Error adding product:', error);
+        console.error("Error adding product:", error);
+        setProducts([]);
+        setLowStockProducts([]);
+        setBodegas([]);
       }
     }
   };
@@ -73,6 +76,30 @@ export default function Inventario() {
       reader.readAsDataURL(file);
     }
   };
+
+  // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const formData = new FormData();
+  //     formData.append('image', file);
+  
+  //     try {
+  //       const response = await fetch(`${kazuo_back}/userImage`, {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
+  
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setProfileImage(data.imageUrl);
+  //       } else {
+  //         console.error('Error al subir la imagen');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error al subir la imagen:', error);
+  //     }
+  //   }
+  // };
 
   const handlePencilClick = () => {
     if (fileInputRef.current) {
@@ -137,16 +164,12 @@ export default function Inventario() {
       </div>
 
       {/* Mostrar mensaje o bodegas */}
-      {bodegas.length === 0 ? (
-        <div className="text-center text-gray-600 text-lg mt-4">
-          Aún no tienes bodegas creadas.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+      {bodegas && bodegas.length > 0 ? (
+       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
           {bodegas.map((bodega) => (
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
-              <p className="text-gray-500 mb-4">Categoría: {bodega.category}</p>
+              <p className="text-gray-500 mb-4">Categoría: {bodega.categoryName}</p>
               <div className="flex justify-between">
                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
                   Modificar
@@ -157,6 +180,10 @@ export default function Inventario() {
               </div>
             </div>
           ))}
+        </div>
+      ) : (
+        <div className="text-center text-gray-600 text-lg mt-4">
+          Aún no tienes bodegas creadas.
         </div>
       )}
     </div>

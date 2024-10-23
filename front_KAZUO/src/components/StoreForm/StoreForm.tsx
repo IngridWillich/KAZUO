@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const StoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [nombreBodega, setNombreBodega] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
 
@@ -16,15 +16,15 @@ const StoreForm = () => {
   };
 
   const handleNombreBodegaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNombreBodega(e.target.value);
+    setName(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     const dataUser = {
-      nombreBodega,
-      categoria: selectedCategory,
+      name,
+      categoryName: selectedCategory,
     };
 
     try {
@@ -55,6 +55,7 @@ const StoreForm = () => {
         confirmButtonText: "Aceptar",
       });
     }
+    console.log(dataUser);
   };
 
   return (
@@ -67,16 +68,16 @@ const StoreForm = () => {
           {/* Campo para el nombre de la bodega */}
           <div className="space-y-2">
             <label
-              htmlFor="nombreBodega"
+              htmlFor="name"
               className="block text-sm font-medium text-gray-700"
             >
               Nombre de la Bodega:
             </label>
             <input
               type="text"
-              name="nombreBodega"
-              id="nombreBodega"
-              value={nombreBodega}
+              name="name"
+              id="name"
+              value={name}
               onChange={handleNombreBodegaChange}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Ingrese el nombre de la bodega"
@@ -86,14 +87,14 @@ const StoreForm = () => {
           {/* Desplegable para seleccionar categoría */}
           <div className="space-y-2">
             <label
-              htmlFor="categoria"
+              htmlFor="categoryName"
               className="block text-sm font-medium text-gray-700"
             >
               Seleccione su categoría:
             </label>
             <select
-              name="categoria"
-              id="categoria"
+              name="categoryName"
+              id="categoryName"
               value={selectedCategory}
               onChange={handleCategoryChange}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
