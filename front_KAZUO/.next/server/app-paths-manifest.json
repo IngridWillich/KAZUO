@@ -1,8 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/GestionInventario/page": "app/GestionInventario/page.js",
   "/Login/page": "app/Login/page.js",
-  "/Nosotros/page": "app/Nosotros/page.js",
-  "/UpdatePass/page": "app/UpdatePass/page.js"
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/RecoverPass/page": "app/RecoverPass/page.js",
+  "/UpdatePass/page": "app/UpdatePass/page.js",
+  "/page": "app/page.js"
 }

@@ -5,9 +5,9 @@ import React from "react";
 const UpdatePass = () => {
   return (
     <div>
-      <ProtectedRoutes>
+      {/* <ProtectedRoutes> */}
         <UpdatePassForm />
-      </ProtectedRoutes>
+      {/* </ProtectedRoutes> */}
     </div>
   );
 };
