@@ -18,7 +18,20 @@ export interface IRegisterProps {
    
 }
 
+export interface IUpdatePassProps{
+  newPassword: string;
+  confirmNewPass: string;
+}
+
+export interface IUpdatePassError {
+  newPassword?: string;
+  confirmNewPass?: string;
+  oldPassword?: string;
+}
+
 export type TRegisterError = Partial<IRegisterProps>;
+
+export type TUpdatePassError = Partial<IUpdatePassProps>;
 
 
 export interface userData {
