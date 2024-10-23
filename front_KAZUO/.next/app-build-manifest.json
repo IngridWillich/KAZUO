@@ -21,25 +21,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
     ],
-    "/Register/page": [
+    "/storeform/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Register/page.js"
-    ],
-    "/Planes/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Planes/page.js"
-    ],
-    "/RecoverPass/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/RecoverPass/page.js"
-    ],
-    "/UpdatePass/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/UpdatePass/page.js"
+      "static/chunks/app/storeform/page.js"
     ]
   }
 }
