@@ -98,7 +98,7 @@ const Register = () => {
         });
    
       }
-
+      
     }
 
     

@@ -1,6 +1,13 @@
 {
+<<<<<<< HEAD
   "/Register/page": "app/Register/page.js",
   "/Login/page": "app/Login/page.js",
   "/storeform/page": "app/storeform/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js"
+=======
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/Register/page": "app/Register/page.js",
+  "/Login/page": "app/Login/page.js",
+  "/storeform/page": "app/storeform/page.js"
+>>>>>>> 203df086b429017acd69393ecd6de2a7dcb57101
 }
