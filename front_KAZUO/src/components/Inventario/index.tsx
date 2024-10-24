@@ -1,3 +1,4 @@
+
 "use client";
 import { IProduct } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
@@ -108,7 +109,26 @@ export default function Inventario() {
   };
 
   const handleNavigateToCreateProduct = (route: string) => {
-   
+      if (userData) {
+        const bodega: Bodega[] = JSON.parse(localStorage.getItem("store") || "[]");
+        
+        const newBodega: Bodega = {
+          id: Date.now(), // o un id único que uses
+          name: "Nombre de la bodega", // Cambia esto por el nombre que desees
+          categoryName: "Categoría de la bodega", // Cambia esto por la categoría deseada
+        };
+    
+        const storeExist = bodega.some((item: Bodega) => item.id === newBodega.id);
+    
+        if (storeExist) {
+          alert("Esta bodega ya existe en tu lista.");
+        } else {
+          bodega.push(newBodega);
+          localStorage.setItem("store", JSON.stringify(bodega));
+          fetchProducts(); // Vuelve a obtener las bodegas para actualizar la vista
+        }
+      }
+    
     router.push(route); // Cambia la ruta según necesites
   };
 
@@ -148,12 +168,7 @@ export default function Inventario() {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">Gestión de Inventario</h2>
         <div className="space-x-4">
-          <button 
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded" 
-            onClick={handleAddProduct}
-          >
-            Crear Producto
-          </button>
+         
           <button 
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
             onClick={()=>  handleNavigateToCreateProduct ("/storeform") } 
