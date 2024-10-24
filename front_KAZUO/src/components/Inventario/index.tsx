@@ -1,70 +1,48 @@
 "use client";
-import { IProduct } from "@/interfaces/types";
+import { ICategory, IProduct, IStore } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 
-interface Bodega {
-  id: number;
-  name: string;
-  categoryName: string;
-}
-
-export default function Inventario() {
+const Inventario: React.FC = () => {
   const [activeTab, setActiveTab] = useState("stock");
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
-  const [newProduct, setNewProduct] = useState({ name: "", quantity: 0 });
+  // const [products, setProducts] = useState<IProduct[]>([]);
+  // const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
+  // const [newProduct, setNewProduct] = useState({ name: "", quantity: 0 });
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [bodegas, setBodegas] = useState<Bodega[]>([]);
+  const [store, setStore] = useState<IStore[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { userData } = useAppContext();
   const router = useRouter(); // Inicializa useRouter
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
-  
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch (`${kazuo_back}/product`)
-      const data = await response.json();
-      setProducts(data.products);
-      setLowStockProducts(data.lowStockProducts);
-      setBodegas(data.bodegas);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  // const handleAddProduct = async () => {
+  //   if (newProduct.name && newProduct.quantity > 0) {
+  //     try {
+  //       const response = await fetch(`${kazuo_back}/product`, {
+  //         method: 'POST',
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(newProduct),
+  //       });
 
-  const handleAddProduct = async () => {
-    if (newProduct.name && newProduct.quantity > 0) {
-      try {
-        const response = await fetch(`${kazuo_back}/product`, {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newProduct),
-        });
-
-        if (response.ok) {
-          const updatedProducts = await response.json();
-          setProducts(updatedProducts);
-          setNewProduct({ name: "", quantity: 0 });
-        } else {
-          console.error("Failed to add product");
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-        setProducts([]);
-        setLowStockProducts([]);
-        setBodegas([]);
-      }
-    }
-  };
+  //       if (response.ok) {
+  //         const updatedProducts = await response.json();
+  //         setProducts(updatedProducts);
+  //         setNewProduct({ name: "", quantity: 0 });
+  //       } else {
+  //         console.error("Failed to add product");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error adding product:", error);
+  //       setProducts([]);
+  //       setLowStockProducts([]);
+  //       setBodegas([]);
+  //     }
+  //   }
+  // };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -82,13 +60,13 @@ export default function Inventario() {
   //   if (file) {
   //     const formData = new FormData();
   //     formData.append('image', file);
-  
+
   //     try {
   //       const response = await fetch(`${kazuo_back}/userImage`, {
   //         method: 'POST',
   //         body: formData,
   //       });
-  
+
   //       if (response.ok) {
   //         const data = await response.json();
   //         setProfileImage(data.imageUrl);
@@ -107,10 +85,31 @@ export default function Inventario() {
     }
   };
 
-  const handleNavigateToCreateProduct = (route: string) => {
-   
-    router.push(route); // Cambia la ruta según necesites
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        const response = await fetch(`${kazuo_back}/store`);
+        const data = await response.json();
+        setStore(data);
+        console.log({ data });
+      } catch (error) {
+        console.error("No se pudo cargar las bodegas ", error);
+      }
+    };
+    fetchStores();
+  }, []);
+
+  const handleNavigateToCreateStore = () => {
+    if (userData) {
+      router.push("/storeform");
+    } else {
+      router.push("/login");
+    }
   };
+
+  const getCategoryName: ICategory[] = JSON.parse(
+    localStorage.getItem("Categorias") || "[]"
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -120,7 +119,11 @@ export default function Inventario() {
         <div className="relative flex items-center justify-center mb-4">
           <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
             {profileImage ? (
-              <img src={profileImage} alt="Profile" className="object-cover w-full h-full" />
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="object-cover w-full h-full"
+              />
             ) : (
               <span className="text-gray-500">No image</span>
             )}
@@ -139,42 +142,55 @@ export default function Inventario() {
             onChange={handleImageUpload}
           />
         </div>
-        <p><strong>Nombre: </strong>{userData?.name}</p>
-        <p><strong>Email: </strong>{userData?.email}</p>
-        <p><strong>Plan:</strong> Kazuo Pro</p>
+        <p>
+          <strong>Nombre: </strong>
+          {userData?.name}
+        </p>
+        <p>
+          <strong>Email: </strong>
+          {userData?.email}
+        </p>
+        <p>
+          <strong>Plan:</strong> Kazuo Pro
+        </p>
       </div>
 
       {/* Encabezado de Inventario */}
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">Gestión de Inventario</h2>
+        <h2 className="text-2xl font-bold text-gray-800">
+          Gestión de Inventario
+        </h2>
         <div className="space-x-4">
-          <button 
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded" 
-            onClick={handleAddProduct}
-          >
-            Crear Producto
-          </button>
-          <button 
+          <button
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            onClick={()=>  handleNavigateToCreateProduct ("/storeform") } // Cambia la ruta según necesites
+            onClick={handleNavigateToCreateStore}
           >
-            Crear Bodega 
+            Crear Bodega
           </button>
         </div>
       </div>
 
       {/* Mostrar mensaje o bodegas */}
-      {bodegas && bodegas.length > 0 ? (
-       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
-          {bodegas.map((bodega) => (
+      {store && store.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+          {store.map((bodega) => (
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
-              <p className="text-gray-500 mb-4">Categoría: {bodega.categoryName}</p>
+              <p className="text-gray-500 mb-4">
+                Categoría: {(() => {
+    const categoriaEncontrada = getCategoryName.find(cat => String(cat.id) === String(bodega.categoryId));
+    return categoriaEncontrada ? categoriaEncontrada.name : 'Categoría no encontrada';
+  })()}
+
+              </p>
               <div className="flex justify-between">
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                   Modificar
                 </button>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                  Eliminar
+                </button>
+                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
                   Entrar
                 </button>
               </div>
@@ -188,22 +204,7 @@ export default function Inventario() {
       )}
     </div>
   );
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+};
 
 // "use client";
 // import { IProduct } from '@/interfaces/types';
@@ -278,13 +279,11 @@ export default function Inventario() {
 //     }
 //   };
 
-
-
 //   return (
 //     <div className="min-h-screen flex flex-col bg-gray-50">
 //       <main className="flex-grow container mx-auto px-4 py-8">
 //         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-         
+
 //           {/* Card de Información de Usuario */}
 //           <div className="bg-white shadow-md rounded-md p-4 md:col-span-1 relative">
 //             <h2 className="text-xl font-semibold mb-4">Información de Usuario</h2>
@@ -300,7 +299,7 @@ export default function Inventario() {
 //                 )}
 //               </div>
 
-//               <div 
+//               <div
 //                 className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600"
 //                 onClick={handlePencilClick}
 //               >
@@ -321,13 +320,11 @@ export default function Inventario() {
 //             <p><strong>Plan:</strong> Kazuo Pro</p>
 //           </div>
 
-          
 //           <div className="bg-white shadow-md rounded-md p-4 md:col-span-2">
 //             <div className="flex justify-between items-center mb-4">
 //               <h2 className="text-xl font-semibold">Gestión de Inventario</h2>
 //             </div>
 
-            
 //             <div className="mb-4">
 //               <input
 //                 type="text"
@@ -351,7 +348,6 @@ export default function Inventario() {
 //               </button>
 //             </div>
 
-            
 //             <div>
 //               <div className="flex space-x-4 border-b">
 //                 <button
@@ -408,3 +404,4 @@ export default function Inventario() {
 //     </div>
 //   );
 // }
+export default Inventario;
