@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { categoriesToPreLoad } from "@/interfaces/Category";
+import { useEffect, useState } from "react";
+// import ICategory, { categoriesToPreLoad } from "@/interfaces/Category";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { ICategory } from "@/interfaces/types";
 
 const StoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [name, setName] = useState<string>("");
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
+
+useEffect(() => {
+  const handlefetchCategories =  async () => {
+    try{
+      const response = await fetch(`${kazuo_back}/category`);
+      const dataCategory = await response.json();
+      localStorage.setItem("Categorias", JSON.stringify(dataCategory));
+    }catch(error){
+      console.log(error);
+    }
+  };
+  handlefetchCategories();
+}, []);
+
+
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -22,7 +38,7 @@ const StoreForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    const dataUser = {
+    const dataStore = {
       name,
       categoryName: selectedCategory,
     };
@@ -33,7 +49,7 @@ const StoreForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataUser),
+        body: JSON.stringify(dataStore),
       });
 
       if (response.ok) {
@@ -55,8 +71,9 @@ const StoreForm = () => {
         confirmButtonText: "Aceptar",
       });
     }
-    console.log(dataUser);
   };
+
+  const categoriesFromStorage: ICategory[] = JSON.parse(localStorage.getItem("Categorias") || "[]");
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -102,7 +119,7 @@ const StoreForm = () => {
               <option value="" disabled>
                 Seleccione una categoría
               </option>
-              {categoriesToPreLoad.map((category) => (
+              {categoriesFromStorage.map((category: ICategory) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
                 </option>
