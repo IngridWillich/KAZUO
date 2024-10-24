@@ -1,8 +1,5 @@
 {
-  "/page": "app/page.js",
-  "/Login/page": "app/Login/page.js",
-  "/RecoverPass/page": "app/RecoverPass/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Register/page": "app/Register/page.js",
-  "/UpdatePass/page": "app/UpdatePass/page.js"
+  "/Login/page": "app/Login/page.js",
+  "/storeform/page": "app/storeform/page.js"
 }
