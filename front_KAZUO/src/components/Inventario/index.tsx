@@ -35,7 +35,14 @@ export default function Inventario() {
       console.error("Error fetching products:", error);
     }
   };
-
+  const fetchBodegas = async () => {  
+    
+      const response = await fetch (`${kazuo_back}/store`)
+      const data = await response.json();
+      setBodegas(data);
+    console.log(bodegas)
+  };
+  
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -109,25 +116,25 @@ export default function Inventario() {
   };
 
   const handleNavigateToCreateProduct = (route: string) => {
-      if (userData) {
-        const bodega: Bodega[] = JSON.parse(localStorage.getItem("store") || "[]");
+      // if (userData) {
+      //   const bodega: Bodega[] = JSON.parse(localStorage.getItem("store") || "[]");
         
-        const newBodega: Bodega = {
-          id: Date.now(), // o un id único que uses
-          name: "Nombre de la bodega", // Cambia esto por el nombre que desees
-          categoryName: "Categoría de la bodega", // Cambia esto por la categoría deseada
-        };
+      //   const newBodega: Bodega = {
+      //     id: Date.now(), // o un id único que uses
+      //     name: "Nombre de la bodega", // Cambia esto por el nombre que desees
+      //     categoryName: "Categoría de la bodega", // Cambia esto por la categoría deseada
+      //   };
     
-        const storeExist = bodega.some((item: Bodega) => item.id === newBodega.id);
+      //   const storeExist = bodega.some((item: Bodega) => item.id === newBodega.id);
     
-        if (storeExist) {
-          alert("Esta bodega ya existe en tu lista.");
-        } else {
-          bodega.push(newBodega);
-          localStorage.setItem("store", JSON.stringify(bodega));
-          fetchProducts(); // Vuelve a obtener las bodegas para actualizar la vista
-        }
-      }
+      //   if (storeExist) {
+      //     alert("Esta bodega ya existe en tu lista.");
+      //   } else {
+      //     bodega.push(newBodega);
+      //     localStorage.setItem("store", JSON.stringify(bodega));
+      //     fetchProducts(); // Vuelve a obtener las bodegas para actualizar la vista
+      //   }
+      // }
     
     router.push(route); // Cambia la ruta según necesites
   };
@@ -171,8 +178,9 @@ export default function Inventario() {
          
           <button 
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            onClick={()=>  handleNavigateToCreateProduct ("/storeform") } 
-          >
+            // onClick={()=>  handleNavigateToCreateProduct ("/storeform") 
+            onClick={fetchBodegas}
+          > 
             Crear Bodega 
           </button>
         </div>

@@ -1,7 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/Login/page": "app/Login/page.js",
-  "/Register/page": "app/Register/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/storeform/page": "app/storeform/page.js"
+  "/Login/page": "app/Login/page.js"
 }
