@@ -68,3 +68,15 @@ export interface AppContextType {
   logout: () => void;
   }
 
+  export interface IStore {
+    id: string;
+    name: string;
+    categoryName: string;
+    categoryId: "string";
+  }
+
+  export interface ICategory{
+    id: string;
+    name: string;
+  }
+
