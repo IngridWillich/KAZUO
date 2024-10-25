@@ -97,16 +97,13 @@ const Login: React.FC = () => {
 
     if (Object.keys(currentErrors).length === 0) {
       try {
-        const key = await generateKey();
-        const encryptedPassword = await encryptPassword(dataUser.password, key);
-        const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
         const response = await fetch(`${kazuo_back}/auth/signin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataUser),
-          // body: JSON.stringify({...dataUser, password: encryptedPasswordBase64}),
+          // body: JSON.stringify({...dataUser, password: encryptPassword}),
         });
 
         if (response.ok) {

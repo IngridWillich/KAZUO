@@ -217,33 +217,22 @@ const Inventario: React.FC = () => {
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
               <p className="text-gray-500 mb-4">
-                Categoría:{bodega.categoryName}
-                {(() => {
-                  const categoriaEncontrada = getCategoryName.find(
-                    (cat) => String(cat.id) === String(bodega.categoryId)
-                  );
-                  return categoriaEncontrada
-                    ? categoriaEncontrada.name
-                    : "mouse";
-                })()}
+                Categoría: {(() => {
+    const categoriaEncontrada = getCategoryName.find(cat => String(cat.id) === String(bodega.categoryId));
+    return categoriaEncontrada ? categoriaEncontrada.name : 'Categoría no encontrada';
+  })()}
+
               </p>
               <div className="flex justify-between">
-                <div className="flex justify-center align-baseline">
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" >
-                    <Link href="/EditStoreForm">
-                      Modificar
-                    </Link>
-                  </button>
-                  <FaTimes
-                    className="text-red-500 border-spacing-20 hover:text-red-600 cursor-pointer mt-1 pl-4 text-4xl"
-                    onClick={() => handleDeleteStore(bodega.id)}
-                  />
-                </div>
-                <Link href={'/Products'}>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                  Modificar
+                </button>
+                <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                  Eliminar
+                </button>
                 <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
                   Entrar
                 </button>
-                </Link>
               </div>
             </div>
           ))}
