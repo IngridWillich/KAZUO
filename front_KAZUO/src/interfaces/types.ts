@@ -45,11 +45,11 @@ export interface userData {
 
  export interface IProduct{
     name: string;
-    quantity: string;
-    price: string;
-    image: string;
-    minStock: string;
-    storeId: string;
+    quantity: number;
+    price: number;
+    image?: string;
+    minStock: number;
+    storeId?: string;
   }
 
   export interface IProductsErrors { [key: string]: string | undefined;
