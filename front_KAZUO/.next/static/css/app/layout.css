@@ -1354,6 +1354,11 @@ video {
     color:rgb(250 204 21 / var(--tw-text-opacity));
     
 }
+  .text-indigo-400 {
+    --tw-text-opacity:1;
+    color:rgb(129 140 248 / var(--tw-text-opacity));
+    
+}
   .underline {
     text-decoration-line:underline;
     
@@ -1470,6 +1475,11 @@ video {
   .hover\:text-pink-700:hover {
     --tw-text-opacity:1;
     color:rgb(190 24 93 / var(--tw-text-opacity));
+    
+}
+  .hover\:text-indigo-500:hover {
+    --tw-text-opacity:1;
+    color:rgb(99 102 241 / var(--tw-text-opacity));
     
 }
   .hover\:underline:hover {
