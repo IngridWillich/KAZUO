@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
+    "@react-oauth/google": "^0.12.1",
     "autoprefixer": "^10.4.19",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "icons": "^1.0.0",
     "js": "^0.1.0",
+    "jwt-decode": "^4.0.0",
     "next": "^14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18",
@@ -22,6 +25,7 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
+    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
