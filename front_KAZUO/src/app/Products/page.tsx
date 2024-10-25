@@ -1,10 +1,13 @@
 import Products from '@/components/Products/Products'
+import ProtectedRoutesProducts from '@/context/ProtectedRoutesProducts'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <Products/>
+      <ProtectedRoutesProducts>
+        <Products />
+      </ProtectedRoutesProducts>
     </div>
   )
 }

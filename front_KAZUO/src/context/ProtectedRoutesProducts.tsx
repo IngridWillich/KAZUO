@@ -3,7 +3,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoutesProducts = ({ children }: { children: React.ReactNode }) => {
   const { isLoggedIn } = useAppContext();
   const router = useRouter();
 
@@ -11,11 +11,11 @@ const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
     if (!isLoggedIn) {
       router.push("/Login");
     } else if (isLoggedIn) {
-      router.push("/GestionInventario")
+      router.push("/Products")
     } 
   }, [isLoggedIn, router]);
 
   return isLoggedIn ? <>{children}</> : null;
 };
 
-export default ProtectedRoutes;
+export default ProtectedRoutesProducts;

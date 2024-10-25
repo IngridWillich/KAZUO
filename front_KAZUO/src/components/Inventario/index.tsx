@@ -217,14 +217,14 @@ const Inventario: React.FC = () => {
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
               <p className="text-gray-500 mb-4">
-                Categoría:{" "}
+                Categoría:{bodega.categoryName}
                 {(() => {
                   const categoriaEncontrada = getCategoryName.find(
                     (cat) => String(cat.id) === String(bodega.categoryId)
                   );
                   return categoriaEncontrada
                     ? categoriaEncontrada.name
-                    : "Categoría no encontrada";
+                    : "mouse";
                 })()}
               </p>
               <div className="flex justify-between">
@@ -239,9 +239,11 @@ const Inventario: React.FC = () => {
                     onClick={() => handleDeleteStore(bodega.id)}
                   />
                 </div>
+                <Link href={'/Products'}>
                 <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
                   Entrar
                 </button>
+                </Link>
               </div>
             </div>
           ))}
