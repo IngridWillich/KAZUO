@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/GestionInventario/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/GestionInventario/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -16,20 +16,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/Login/page.js"
     ],
-    "/GestionInventario/page": [
+    "/storeform/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/GestionInventario/page.js"
-    ],
-    "/UpdatePass/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/UpdatePass/page.js"
+      "static/chunks/app/storeform/page.js"
     ],
     "/Nosotros/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Nosotros/page.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/Register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Register/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

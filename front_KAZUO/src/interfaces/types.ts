@@ -21,6 +21,7 @@ export interface IRegisterProps {
 export interface IUpdatePassProps{
   newPassword: string;
   confirmNewPass: string;
+  token?: string;
 }
 
 export interface IUpdatePassError {
@@ -64,5 +65,17 @@ export interface AppContextType {
   userData: userData | null;
   login: (loginData: any) => Promise<void>;
   logout: () => void;
+  }
+
+  export interface IStore {
+    id: string;
+    name: string;
+    categoryName: string;
+    categoryId: "string";
+  }
+
+  export interface ICategory{
+    id: string;
+    name: string;
   }
 
