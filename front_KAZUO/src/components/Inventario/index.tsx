@@ -177,11 +177,15 @@ const Inventario: React.FC = () => {
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
               <p className="text-gray-500 mb-4">
-                Categoría: {(() => {
-    const categoriaEncontrada = getCategoryName.find(cat => String(cat.id) === String(bodega.categoryId));
-    return categoriaEncontrada ? categoriaEncontrada.name : 'Categoría no encontrada';
-  })()}
-
+                Categoría:{" "}
+                {(() => {
+                  const categoriaEncontrada = getCategoryName.find(
+                    (cat) => String(cat.id) === String(bodega.categoryId)
+                  );
+                  return categoriaEncontrada
+                    ? categoriaEncontrada.name
+                    : "Categoría no encontrada";
+                })()}
               </p>
               <div className="flex justify-between">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
