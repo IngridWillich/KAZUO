@@ -1,6 +1,6 @@
 {
-  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/page": "app/page.js",
   "/Login/page": "app/Login/page.js",
-  "/storeform/page": "app/storeform/page.js",
-  "/page": "app/page.js"
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/EditStoreForm/page": "app/EditStoreForm/page.js"
 }

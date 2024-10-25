@@ -5,6 +5,7 @@ import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import Link from "next/link";
 
 
 const Inventario: React.FC = () => {
@@ -56,6 +57,7 @@ const Inventario: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
+  
 
   // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   //   const file = event.target.files?.[0];
@@ -222,8 +224,10 @@ const Inventario: React.FC = () => {
 
               </p>
               <div className="flex justify-between">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" >
+               <Link href= "/EditStoreForm"> 
                   Modificar
+                  </Link>
                 </button>
                 <FaTimes
                   className="text-red-500 hover:text-red-600 cursor-pointer text-xl"

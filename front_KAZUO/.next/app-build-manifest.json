@@ -11,20 +11,20 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/GestionInventario/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/GestionInventario/page.js"
-    ],
     "/Login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Login/page.js"
     ],
-    "/storeform/page": [
+    "/GestionInventario/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/storeform/page.js"
+      "static/chunks/app/GestionInventario/page.js"
+    ],
+    "/EditStoreForm/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/EditStoreForm/page.js"
     ]
   }
 }
