@@ -4,22 +4,31 @@ import { TRegisterError, IRegisterProps, IUpdatePassProps, TUpdatePassError } fr
 import { validateRegisterForm, validateUpdatePass } from "@/helpers/validate";
 import Swal from "sweetalert2";
 // import { register } from "@/helpers/auth.helper";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const UpdatePassForm = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const initialState: IUpdatePassProps = {
     newPassword: "",
     confirmNewPass: "",
+    token: token || "",
   };
 
-  const [dataUpdatedPass, setDataUpdatedPass] = useState<IUpdatePassProps>(initialState);
+  const [dataUpdatedPass, setDataUpdatedPass] = useState<IUpdatePassProps>({
+    newPassword: "",
+    confirmNewPass: "",
+    token: token || "",
+  });
   const [errors, setErrors] = useState<TUpdatePassError>(initialState);
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({
     newPassword: false,
     confirmNewPass: false,
+    token: token ? true : false,
   });
+  
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
@@ -56,7 +65,7 @@ const UpdatePassForm = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch(`${kazuo_back}/auth/updatePass`, {
+        const response = await fetch(`${kazuo_back}/auth/reset-password`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -76,7 +85,9 @@ const UpdatePassForm = () => {
             newPassword: false,
             confirmNewPass: false,
             name: false,
-          });
+          },
+        );
+        router.push("/Login")
         } else {
           throw new Error("Respuesta no exitosa del servidor");
         }

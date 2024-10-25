@@ -21,6 +21,7 @@ export interface IRegisterProps {
 export interface IUpdatePassProps{
   newPassword: string;
   confirmNewPass: string;
+  token?: string;
 }
 
 export interface IUpdatePassError {
@@ -40,6 +41,7 @@ export interface userData {
         password: string;
         name: string;
         company: string;
+        token: string;
  }
 
  export interface IProduct{

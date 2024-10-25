@@ -103,7 +103,7 @@ const Login: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataUser),
-          // body: JSON.stringify({...dataUser, password: encryptedPasswordBase64}),
+          // body: JSON.stringify({...dataUser, password: encryptPassword}),
         });
 
         if (response.ok) {

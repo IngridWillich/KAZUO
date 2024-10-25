@@ -6,3 +6,4 @@ export const mockUserData = {
   export const simulateLogin = (email: string, password: string) => {
     return email === mockUserData.email && password === mockUserData.password;
   };
+  

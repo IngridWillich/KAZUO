@@ -59,6 +59,7 @@ const Register = () => {
     event.preventDefault();
     const validationErrors = validateRegisterForm(dataUser);
     setErrors(validationErrors);
+    console.log (dataUser)
 
     if (Object.keys(validationErrors).length === 0) {
       try {
@@ -95,7 +96,9 @@ const Register = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+   
       }
+
     }
 
     

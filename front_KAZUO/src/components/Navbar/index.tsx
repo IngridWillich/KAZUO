@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import path from "path";
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAppContext();
@@ -19,6 +20,8 @@ export default function Navbar() {
         confirmButtonText: "Sí, cerrar sesión",
         cancelButtonText: "Cancelar",
       });
+
+// if (path =  "/UpdatePass")
 
       if (result.isConfirmed) {
         logout();
