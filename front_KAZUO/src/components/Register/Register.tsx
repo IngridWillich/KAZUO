@@ -56,52 +56,52 @@
 //     });
 //   };
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const validationErrors = validateRegisterForm(dataUser);
-  //   setErrors(validationErrors);
+//   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+//     event.preventDefault();
+//     const validationErrors = validateRegisterForm(dataUser);
+//     setErrors(validationErrors);
 
-  //   if (Object.keys(validationErrors).length === 0) {
-  //     try {
-  //       const response = await fetch(`${kazuo_back}/auth/signup`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(dataUser),
-  //       });
-  //       if (response.ok) {
-  //         Swal.fire({
-  //           title: "¡Te has registrado exitosamente!",
-  //           text: "Ahora puedes iniciar sesión.",
-  //           icon: "success",
-  //           confirmButtonText: "Aceptar",
-  //         });
-  //         setDataUser(initialState);
-  //         setTouched({
-  //           email: false,
-  //           password: false,
-  //           confirmPass: false,
-  //           name: false,
-  //           company: false,
-  //         });
-  //         router.push("/Login");
-  //       } else {
-  //         throw new Error("Respuesta no exitosa del servidor");
-  //       }
-  //     } catch (error) {
-  //       Swal.fire({
-  //         title: "Error al hacer tu registro",
-  //         text: "Inténtalo nuevamente",
-  //         icon: "error",
-  //         confirmButtonText: "Aceptar",
-  //       });
-  //     }
-  //     console.log(dataUser);
-  //   }
+//     if (Object.keys(validationErrors).length === 0) {
+//       try {
+//         const response = await fetch(`${kazuo_back}/auth/signup`, {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify(dataUser),
+//         });
+//         if (response.ok) {
+//           Swal.fire({
+//             title: "¡Te has registrado exitosamente!",
+//             text: "Ahora puedes iniciar sesión.",
+//             icon: "success",
+//             confirmButtonText: "Aceptar",
+//           });
+//           setDataUser(initialState);
+//           setTouched({
+//             email: false,
+//             password: false,
+//             confirmPass: false,
+//             name: false,
+//             company: false,
+//           });
+//           router.push("/Login");
+//         } else {
+//           throw new Error("Respuesta no exitosa del servidor");
+//         }
+//       } catch (error) {
+//         Swal.fire({
+//           title: "Error al hacer tu registro",
+//           text: "Inténtalo nuevamente",
+//           icon: "error",
+//           confirmButtonText: "Aceptar",
+//         });
+//       }
+//       console.log(dataUser);
+//     }
 
     
-  // };
+//   };
 
 //   const isFormValid =
 //     Object.keys(errors).length === 0 && Object.values(touched).every((t) => t);
@@ -300,69 +300,6 @@ const Register = () => {
     );
   };
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const validationErrors = validateRegisterForm(dataUser);
-  //   setErrors(validationErrors);
-  //   console.log (dataUser)
-
-  //   if (Object.keys(validationErrors).length === 0) {
-  //     try {
-  //       // Generar la clave para encriptar las contraseñas
-  //       const key = await generateKey();
-
-  //       // Encriptar la contraseña principal
-  //       const encryptedPassword = await encryptPassword(dataUser.password, key);
-  //       const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
-
-  //       // Encriptar la confirmación de la contraseña
-  //       const encryptedConfirmPass = await encryptPassword(dataUser.confirmPass, key);
-  //       const encryptedConfirmPassBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedConfirmPass)));
-
-  //       // Enviar los datos al servidor con ambas contraseñas encriptadas
-  //       const response = await fetch(`${kazuo_back}/auth/signup`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           ...dataUser,
-  //           password: encryptedPasswordBase64,  // Enviamos la contraseña encriptada
-  //           confirmPass: encryptedConfirmPassBase64,  // Enviamos la confirmación de la contraseña encriptada
-  //         }),
-  //       });
-
-  //       if (response.ok) {
-  //         Swal.fire({
-  //           title: "¡Te has registrado exitosamente!",
-  //           text: "Ahora puedes iniciar sesión.",
-  //           icon: "success",
-  //           confirmButtonText: "Aceptar",
-  //         });
-  //         setDataUser(initialState);
-  //         setTouched({
-  //           email: false,
-  //           password: false,
-  //           confirmPass: false,
-  //           name: false,
-  //           company: false,
-  //         });
-  //         router.push("/Login");
-  //       } else {
-  //         throw new Error("Respuesta no exitosa del servidor");
-  //       }
-  //     } catch (error) {
-  //       Swal.fire({
-  //         title: "Error al hacer tu registro",
-  //         text: "Inténtalo nuevamente",
-  //         icon: "error",
-  //         confirmButtonText: "Aceptar",
-  //       });
-   
-  //     }
-  //   }
-  // };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const validationErrors = validateRegisterForm(dataUser);
@@ -370,13 +307,30 @@ const Register = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
+        // Generar la clave para encriptar las contraseñas
+        const key = await generateKey();
+
+        // Encriptar la contraseña principal
+        const encryptedPassword = await encryptPassword(dataUser.password, key);
+        const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
+
+        // Encriptar la confirmación de la contraseña
+        const encryptedConfirmPass = await encryptPassword(dataUser.confirmPass, key);
+        const encryptedConfirmPassBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedConfirmPass)));
+
+        // Enviar los datos al servidor con ambas contraseñas encriptadas
         const response = await fetch(`${kazuo_back}/auth/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(dataUser),
+          body: JSON.stringify({
+            ...dataUser,
+            password: encryptedPasswordBase64,  // Enviamos la contraseña encriptada
+            confirmPass: encryptedConfirmPassBase64,  // Enviamos la confirmación de la contraseña encriptada
+          }),
         });
+
         if (response.ok) {
           Swal.fire({
             title: "¡Te has registrado exitosamente!",
@@ -404,10 +358,7 @@ const Register = () => {
           confirmButtonText: "Aceptar",
         });
       }
-      console.log(dataUser);
     }
-
-    
   };
 
   const isFormValid =
@@ -520,4 +471,5 @@ const Register = () => {
       </div>
     );
     }
-    export default Register; 
+    export default Register;  
+
