@@ -1,8 +1,7 @@
 {
-  "/Login/page": "app/Login/page.js",
   "/page": "app/page.js",
+  "/Login/page": "app/Login/page.js",
   "/Soluciones/page": "app/Soluciones/page.js",
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Planes/page": "app/Planes/page.js",
+  "/Register/page": "app/Register/page.js",
   "/Contacto/page": "app/Contacto/page.js"
 }

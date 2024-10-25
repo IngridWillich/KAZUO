@@ -509,8 +509,10 @@ const Login = () => {
   useEffect(() => {
     const handleAuthenticationComplete = async () => {
       if (isAuthenticated && user) {
+        console.log("User authenticated:", user);
         try {
           const accessToken = await getAccessTokenSilently();
+          console.log("Access token:", accessToken);
           const response = await fetch(`${kazuo_back}/auth/google-login`, {
             method: 'POST',
             headers: {
@@ -529,9 +531,11 @@ const Login = () => {
               text: "Has iniciado sesión con Google exitosamente.",
               icon: "success",
               confirmButtonText: "Aceptar",
-            });
+            }).then(() => {
+              
+              router.push("/Soluciones");
+            })
 
-            router.push("/Soluciones");
           } else {
             throw new Error("Error al procesar el inicio de sesión con Google");
           }
@@ -544,6 +548,8 @@ const Login = () => {
             confirmButtonText: "Aceptar",
           });
         }
+      }else{
+        console.log("Usuario no autenticado");
       }
     };
 
@@ -637,7 +643,7 @@ const Login = () => {
             confirmButtonText: "Aceptar",
           });
 
-          router.push("/dashboard");
+          router.push("/Soluciones");
         } else {
           throw new Error("Respuesta no exitosa del servidor");
         }
