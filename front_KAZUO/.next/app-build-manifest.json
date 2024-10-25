@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/Login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/Login/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,10 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/Login/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Login/page.js"
+      "static/chunks/app/page.js"
     ],
     "/Soluciones/page": [
       "static/chunks/webpack.js",
@@ -26,10 +26,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
     ],
-    "/_not-found/page": [
+    "/Planes/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/Planes/page.js"
+    ],
+    "/Contacto/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Contacto/page.js"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { ILoginError, ILoginProps } from "@/interfaces/types";
+import { ILoginError, ILoginProps, IUpdatePassProps, TUpdatePassError } from "@/interfaces/types";
 import { IRegisterProps, TRegisterError } from "@/interfaces/types";
 import {IProduct,IProductsErrors} from "@/interfaces/types";
 
@@ -75,6 +75,42 @@ export function validateRegisterForm(values: IRegisterProps): TRegisterError {
     errors.password = "La contraseña es obligatoria";
   } else if (values.password !== values.confirmPass) {
     errors.confirmPass = "Las contraseñas no coinciden";
+  }
+
+  return errors;
+};
+
+export function validateEmail(email: string): boolean {
+  return /\S+@\S+\.\S+/.test(email);
+}
+
+export function validateUpdatePass(values: IUpdatePassProps): TUpdatePassError {
+  const errors: TUpdatePassError = {};
+
+  
+
+  // Validación de contraseña
+  if (!values.newPassword) {
+    errors.newPassword = "La contraseña es obligatoria";
+  } else if (values.newPassword.length < 8) {
+    errors.newPassword = "La contraseña debe tener al menos 8 caracteres";
+  } else if (!/[A-Z]/.test(values.newPassword)) {
+    errors.newPassword =
+      "La contraseña debe contener al menos una letra mayúscula";
+  } else if (!/[a-z]/.test(values.newPassword)) {
+    errors.newPassword =
+      "La contraseña debe contener al menos una letra minúscula";
+  } else if (!/[0-9]/.test(values.newPassword)) {
+    errors.newPassword = "La contraseña debe contener al menos un número";
+  } else if (!/[!@#$%^&*]/.test(values.newPassword)) {
+    errors.newPassword =
+      "La contraseña debe contener al menos un carácter especial (!@#$%^&*)";
+  }
+  
+  if (!values.newPassword) {
+    errors.newPassword = "La contraseña es obligatoria";
+  } else if (values.newPassword !== values.confirmNewPass) {
+    errors.confirmNewPass = "Las contraseñas no coinciden";
   }
 
   return errors;
