@@ -41,15 +41,17 @@ export interface userData {
         password: string;
         name: string;
         company: string;
+        token: string;
  }
 
  export interface IProduct{
+  id?: string;
     name: string;
     quantity: number;
     price: number;
-    image?: string;
+    imgUrl?: string;
     minStock: number;
-    storeId?: string;
+    categoryName: string;
   }
 
   export interface IProductsErrors { [key: string]: string | undefined;
@@ -57,7 +59,7 @@ export interface userData {
     quantity?: string;
     price?: string
     minStock?: string;
-    storeId?: string;
+    categoryName?: string;
   }
 
 export interface AppContextType {
