@@ -616,19 +616,28 @@ const Login = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
+<<<<<<< HEAD
+        const response = await fetch(`${kazuo_back}/auth/signin`, {
+=======
         const key = await generateKey();
         const encryptedPassword = await encryptPassword(dataUser.password, key);
         const encryptedPasswordBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
 
         const response = await fetch(`${kazuo_back}/auth/login`, {
+>>>>>>> 6d0fe2a5eea2855b679261e1b210469f59a507db
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+<<<<<<< HEAD
+          body: JSON.stringify(dataUser),
+          // body: JSON.stringify({...dataUser, password: encryptPassword}),
+=======
           body: JSON.stringify({
             ...dataUser,
             password: encryptedPasswordBase64,
           }),
+>>>>>>> 6d0fe2a5eea2855b679261e1b210469f59a507db
         });
 
         if (response.ok) {
