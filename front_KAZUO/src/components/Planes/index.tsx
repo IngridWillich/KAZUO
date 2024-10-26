@@ -1,23 +1,12 @@
-import Stripe from "stripe";
 import ButtonCheckout from "../ButtonCheckout";
 
 async function loadPrices() {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  
-  // Listar todos los precios
-  const prices = await stripe.prices.list({
-    expand: ['data.product'], // Expandimos los productos para acceder a sus propiedades
-  });
-
-  // Filtrar los precios que están activos y cuyos productos también estén activos
-  const activePrices = prices.data.filter(
-    (price) => price.active && price.product && (price.product as Stripe.Product).active
-  );
-
-  // Ordenar por `unit_amount`
-  const sortedPrices = activePrices.sort((a, b) => a.unit_amount! - b.unit_amount!);
-  
-  return sortedPrices;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prices`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch prices');
+  }
+  const prices = await res.json();
+  return prices;
 }
 
 export default async function Planes() {
@@ -25,14 +14,14 @@ export default async function Planes() {
   return (
     <div className="flex justify-center max-w-screen m-24">
       <div className="flex gap-x-2">
-        {prices && prices.map((price) => {
+        {prices && prices.map((price: any) => {
           return (
             <div key={price.id} className="bg-slate-300 mb-2 p-10 text-black">
               <h3 className="font-bold">{price.nickname}</h3>
               <h2 className="font-extrabold text-2xl text-blue-950 mb-3">
-                {price.unit_amount! / 100}$
+                {(price.unit_amount! / 100).toFixed(2)}$ {/* Formato a 2 decimales */}
               </h2>
-              <ButtonCheckout priceId={price.id} /> {/* petición al back para que envie un checkout */}
+              <ButtonCheckout priceId={price.id} />
             </div>
           );
         })}
@@ -40,6 +29,8 @@ export default async function Planes() {
     </div>
   );
 }
+
+
 
 
     //     <div>

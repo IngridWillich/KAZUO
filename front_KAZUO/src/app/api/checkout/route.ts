@@ -5,10 +5,10 @@ export async function POST(request: Request) {
     const { priceId } = await request.json()
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
     const session = await stripe.checkout.sessions.create({
-        mode: 'subscription', //pago recurrente, pero también esta subcription
-        payment_method_types: ['card'], // card es el general
+        mode: 'subscription', 
+        payment_method_types: ['card'],
         line_items: [
-            { // acá podemos ajustar la cantidad, precio. Ya que cada cosa y lista representa un producto. Pero nosotros ya tenemos integrado esto por el priceId
+            { 
                 price: priceId,
                 quantity: 1
             }

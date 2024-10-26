@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -68,7 +53,7 @@ const EditStoreForm = () => {
     e.preventDefault();
 
     const dataStore = {
-    //   id: storeId,
+      id: storeId,
       name,
       categoryName: selectedCategory,
     };
