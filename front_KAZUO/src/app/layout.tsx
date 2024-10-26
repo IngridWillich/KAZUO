@@ -5,7 +5,9 @@ import Navbar from "../components/Navbar";
 import ShowComponents from "../components/ShowComponents";
 import Footer from "../components/Footer";
 import { AppProvider } from "@/context/AppContext";
-
+import { Auth0Provider } from "@auth0/auth0-react";
+import { useRouter } from "next/navigation";
+import ClientLayout from "./ClientLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,16 +25,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         {/* <AuthProvider> */}
-        <AppProvider>
-        <ShowComponents>
-        <Navbar/>
-        </ShowComponents>
-        {children}
-        <Footer />
-        </AppProvider>
-{/* </AuthProvider> */}
+        <ClientLayout>
+          <AppProvider>
+            <ShowComponents>
+              <Navbar />
+            </ShowComponents>
+            {children}
+            <Footer />
+          </AppProvider>
+        </ClientLayout>
+        {/* </AuthProvider> */}
       </body>
     </html>
   );
 }
-

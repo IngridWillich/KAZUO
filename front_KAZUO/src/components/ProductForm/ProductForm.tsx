@@ -4,8 +4,9 @@ import { IProduct } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import { IProductsErrors } from "@/interfaces/types";
 
-export const ProductForm: React.FC = () => {
+ const ProductForm: React.FC = () => {
   const [formData, setFormData] = useState<IProduct>({
+    id:0,
     name: "",
     quantity: "",
     price: "",
