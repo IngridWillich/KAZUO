@@ -4,8 +4,6 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { userData } from "@/interfaces/types";
 import { AppContextType } from "@/interfaces/types";
 
-
-
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -29,13 +27,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   }, [isLoggedIn]); //VERIFICANDO SI LA SESION SE INICIO
   const login = async (loginData: any) => {
-    try{
+    try {
       setIsLoggedIn(true);
       setUserData(loginData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(loginData));
-
-    } catch (error){
+    } catch (error) {
       console.error("Error de login", error);
       throw error;
     }
@@ -46,6 +43,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     setUserData(null);
     localStorage.setItem("isLoggedIn", "false");
     localStorage.removeItem("userData");
+    localStorage.removeItem("token"); 
   };
   const value = {
     isLoggedIn,
