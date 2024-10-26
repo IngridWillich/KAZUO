@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 
 
-const Inventario: React.FC = () => {
+export const Inventario: React.FC = () => {
   const [activeTab, setActiveTab] = useState("stock");
   // const [products, setProducts] = useState<IProduct[]>([]);
   // const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
@@ -110,7 +110,8 @@ const Inventario: React.FC = () => {
             "Content-Type": "application/json",
           },
         });
-  
+        console.log (response)
+        
         if (response.ok) {
           setStore((prevStore) =>
             prevStore.filter((bodega) => bodega.id !== storeId)
@@ -150,7 +151,8 @@ const Inventario: React.FC = () => {
   const getCategoryName: ICategory[] = JSON.parse(
     localStorage.getItem("Categorias") || "[]"
   );
-
+  console.log (store)
+  
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       {/* Información de Usuario */}
@@ -204,13 +206,15 @@ const Inventario: React.FC = () => {
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
             onClick={handleNavigateToCreateStore}
-          >
+            >
             Crear Bodega
           </button>
         </div>
       </div>
 
-      {/* Mostrar mensaje o bodegas */}
+      
+     
+      
       {store && store.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
           {store.map((bodega) => (

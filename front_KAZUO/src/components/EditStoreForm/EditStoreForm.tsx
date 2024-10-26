@@ -1,3 +1,8 @@
+
+
+
+
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -5,12 +10,12 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { ICategory } from "@/interfaces/types";
 
-const EditStoreForm = () => {
+export const EditStoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [storeId, setStoreId] = useState<string>("");
   const [categoriesFromStorage, setCategoriesFromStorage] = useState<ICategory[]>([]); // Estado para almacenar las categorías
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
 
   useEffect(() => {
@@ -30,10 +35,11 @@ const EditStoreForm = () => {
       handleFetchCategories();
 
       const storeData = JSON.parse(localStorage.getItem("StoreToEdit") || "{}");
-      if (storeData && storeData.id && storeData.name && storeData.categoryName) {
-        setStoreId(storeData.id || ""); // Asegura que nunca sea undefined
-        setName(storeData.name || ""); // Asegura que nunca sea undefined
-        setSelectedCategory(storeData.categoryName || ""); // Asegura que nunca sea undefined
+      console.log (storeData)
+      if (storeData && storeData.id) { 
+        setStoreId(storeData.id || "");
+        setName(storeData.name || name)// Usa el valor actual de name si storeData.name no existe
+        setSelectedCategory(storeData.categoryName || selectedCategory); // Usa el valor actual de selectedCategory si no existe en storeData
       }
 
       const storedCategories = JSON.parse(localStorage.getItem("Categorias") || "[]");
@@ -53,13 +59,12 @@ const EditStoreForm = () => {
     e.preventDefault();
 
     const dataStore = {
-    //   id: storeId,
+      id: storeId,
       name,
-      categoryName: selectedCategory,
+      categoryId: selectedCategory,
     };
 
-    try {
-      const response = await fetch(`${kazuo_back}/store/${storeId}`, {
+    try {const response = await fetch(`${kazuo_back}/store/${storeId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -153,13 +158,6 @@ const EditStoreForm = () => {
 };
 
 export default EditStoreForm;
-
-
-
-
-
-
-
 
 
 

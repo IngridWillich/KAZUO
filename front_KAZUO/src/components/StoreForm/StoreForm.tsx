@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { ICategory } from "@/interfaces/types";
 
-const StoreForm = () => {
+export const StoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [name, setName] = useState<string>("");
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL
