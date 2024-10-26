@@ -9,7 +9,13 @@ const EditStoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [storeId, setStoreId] = useState<string>("");
+<<<<<<< HEAD
   const [categoriesFromStorage, setCategoriesFromStorage] = useState<ICategory[]>([]); // Estado para almacenar las categorías
+=======
+  const [categoriesFromStorage, setCategoriesFromStorage] = useState<
+    ICategory[]
+  >([]);
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
@@ -19,7 +25,11 @@ const EditStoreForm = () => {
         const response = await fetch(`${kazuo_back}/category`);
         const dataCategory = await response.json();
         localStorage.setItem("Categorias", JSON.stringify(dataCategory));
+<<<<<<< HEAD
         setCategoriesFromStorage(dataCategory); // Almacena en el estado
+=======
+        setCategoriesFromStorage(dataCategory);
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
       } catch (error) {
         console.log(error);
       }
@@ -30,13 +40,28 @@ const EditStoreForm = () => {
       handleFetchCategories();
 
       const storeData = JSON.parse(localStorage.getItem("StoreToEdit") || "{}");
+<<<<<<< HEAD
       if (storeData && storeData.id && storeData.name && storeData.categoryName) {
+=======
+      if (
+        storeData &&
+        storeData.id &&
+        storeData.name &&
+        storeData.categoryName
+      ) {
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         setStoreId(storeData.id || ""); // Asegura que nunca sea undefined
         setName(storeData.name || ""); // Asegura que nunca sea undefined
         setSelectedCategory(storeData.categoryName || ""); // Asegura que nunca sea undefined
       }
 
+<<<<<<< HEAD
       const storedCategories = JSON.parse(localStorage.getItem("Categorias") || "[]");
+=======
+      const storedCategories = JSON.parse(
+        localStorage.getItem("Categorias") || "[]"
+      );
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
       setCategoriesFromStorage(storedCategories);
     }
   }, [kazuo_back]);
@@ -53,7 +78,10 @@ const EditStoreForm = () => {
     e.preventDefault();
 
     const dataStore = {
+<<<<<<< HEAD
       id: storeId,
+=======
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
       name,
       categoryName: selectedCategory,
     };
@@ -65,9 +93,14 @@ const EditStoreForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataStore),
+<<<<<<< HEAD
      
       });
  
+=======
+      });
+
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
       if (response.ok) {
         Swal.fire({
           title: "¡Bodega actualizada!",
@@ -86,8 +119,14 @@ const EditStoreForm = () => {
         icon: "error",
         confirmButtonText: "Aceptar",
       });
+<<<<<<< HEAD
     }
     finally {console.log(dataStore)}
+=======
+    } finally {
+      console.log(dataStore);
+    }
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   };
 
   return (
@@ -153,6 +192,7 @@ const EditStoreForm = () => {
 };
 
 export default EditStoreForm;
+<<<<<<< HEAD
 
 
 
@@ -318,3 +358,5 @@ export default EditStoreForm;
 // };
 
 // export default EditStoreForm;
+=======
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db

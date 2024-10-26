@@ -6,20 +6,21 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Link from "next/link";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
 
 const Inventario: React.FC = () => {
   const [activeTab, setActiveTab] = useState("stock");
-  // const [products, setProducts] = useState<IProduct[]>([]);
-  // const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
-  // const [newProduct, setNewProduct] = useState({ name: "", quantity: 0 });
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [store, setStore] = useState<IStore[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { userData } = useAppContext();
-  const router = useRouter(); // Inicializa useRouter
+  const router = useRouter();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
+<<<<<<< HEAD
   // const handleAddProduct = async () => {
   //   if (newProduct.name && newProduct.quantity > 0) {
   //     try {
@@ -47,6 +48,8 @@ const Inventario: React.FC = () => {
   //   }
   // };
 
+=======
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -58,6 +61,7 @@ const Inventario: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
 
   // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   //   const file = event.target.files?.[0];
@@ -83,13 +87,18 @@ const Inventario: React.FC = () => {
   //   }
   // };
 
+=======
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   const handlePencilClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   const handleDeleteStore = async (storeId: string) => {
     const confirmed = await Swal.fire({
       title: "¿Estás seguro que desea eliminar la bodega?",
@@ -117,7 +126,15 @@ const Inventario: React.FC = () => {
           );
           Swal.fire("Eliminado", "La bodega ha sido eliminada.", "success");
         } else {
+<<<<<<< HEAD
           Swal.fire("Error", "No se pudo eliminar la bodega. Verifica el servidor.", "error");
+=======
+          Swal.fire(
+            "Error",
+            "No se pudo eliminar la bodega. Verifica el servidor.",
+            "error"
+          );
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         }
       } catch (error) {
         Swal.fire("Error", "Ocurrió un error al eliminar la bodega.", "error");
@@ -246,4 +263,8 @@ const Inventario: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Inventario
+=======
+export default Inventario;
+>>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
