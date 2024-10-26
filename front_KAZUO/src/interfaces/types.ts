@@ -1,49 +1,49 @@
 export interface ILoginProps {
   email: string;
-  password: string; 
+  password: string;
+  name?: string
 }
 
 export interface ILoginError {
-  email?: string; 
-  password?: string; 
+  email?: string;
+  password?: string;
 }
-
 
 export interface IRegisterProps {
-  email: string; 
+  email: string;
   password: string;
-  confirmPass: string; 
-  name: string; 
+  confirmPass: string;
+  name: string;
   company: string;
- 
 }
 
-export interface IUpdatePassProps{
-newPassword: string;
-confirmNewPass: string;
-token?: string;
+export interface IUpdatePassProps {
+  newPassword: string;
+  confirmNewPass: string;
+  token?: string;
 }
 
 export interface IUpdatePassError {
-newPassword?: string;
-confirmNewPass?: string;
-oldPassword?: string;
+  newPassword?: string;
+  confirmNewPass?: string;
+  oldPassword?: string;
 }
 
 export type TRegisterError = Partial<IRegisterProps>;
 
 export type TUpdatePassError = Partial<IUpdatePassProps>;
 
-
 export interface userData {
-      id: number;  
-      email: string; 
-      password: string;
-      name: string;
-      company: string;
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  company: string;
+  token: string;
 }
 
-export interface IProduct{
+export interface IProduct {
+  id: string;
   name: string;
   quantity: string;
   price: string;
@@ -52,19 +52,20 @@ export interface IProduct{
   storeId: string;
 }
 
-export interface IProductsErrors { [key: string]: string | undefined;
+export interface IProductsErrors {
+  [key: string]: string | undefined;
   name?: string;
   quantity?: string;
-  price?: string
+  price?: string;
   minStock?: string;
   storeId?: string;
 }
 
 export interface AppContextType {
   isLoggedIn: boolean;
-userData: userData | null;
-login: (loginData: any) => Promise<void>;
-logout: () => void;
+  userData: userData | null;
+  login: (loginData: any) => Promise<void>;
+  logout: () => void;
 }
 
 export interface IStore {
@@ -74,7 +75,7 @@ export interface IStore {
   categoryId: "string";
 }
 
-export interface ICategory{
+export interface ICategory {
   id: string;
   name: string;
 }

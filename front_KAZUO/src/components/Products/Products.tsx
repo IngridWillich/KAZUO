@@ -17,7 +17,6 @@ export default function Products() {
   const { userData } = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -27,7 +26,6 @@ export default function Products() {
             Authorization: `Bearer ${userData?.token}`,
             "Content-Type": "application/json",
           },
-          
         });
 
         if (!response.ok) {
@@ -50,17 +48,6 @@ export default function Products() {
   const handleCreateNewProduct = () => {
     router.push("/AddNewProduct");
   };
-
-  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       setProfileImage(reader.result as string);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
   const handlePencilClick = () => {
     if (fileInputRef.current) {
@@ -89,29 +76,6 @@ export default function Products() {
               Agregar Producto
             </button>
           </div>
-
-          {/* <div className="mb-6">
-            <input
-              type="text"
-              className="border p-2 rounded w-1/2 mr-2"
-              placeholder="Nombre del Producto"
-              value={newProduct.name}
-              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-            />
-            <input
-              type="number"
-              className="border p-2 rounded w-1/4 mr-2"
-              placeholder="Cantidad"
-              value={newProduct.quantity}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (value >= 0) {
-                  setNewProduct({ ...newProduct, quantity: value });
-                }
-              }}
-            /> */}
-
-          {/* </div> */}
 
           <div className="mb-4">
             <div className="flex space-x-4 border-b pb-2">

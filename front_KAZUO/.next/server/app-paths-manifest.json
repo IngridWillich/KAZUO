@@ -1,8 +1,9 @@
 {
-  "/Login/page": "app/Login/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Nosotros/page": "app/Nosotros/page.js",
+  "/storeform/page": "app/storeform/page.js",
   "/Products/page": "app/Products/page.js",
   "/AddNewProduct/page": "app/AddNewProduct/page.js",
+  "/Planes/page": "app/Planes/page.js",
   "/page": "app/page.js"
 }
