@@ -21,11 +21,6 @@ export default function Navbar() {
       cancelButtonText: "Cancelar",
     });
 
-<<<<<<< HEAD
-    // if (path =  "/UpdatePass")
-
-=======
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
     if (result.isConfirmed) {
       logout();
       router.push("/");
@@ -63,14 +58,10 @@ export default function Navbar() {
             <button onClick={handleLogout} className="px-4 py-2 text-gray-600">
               Cerrar sesión
             </button>
-<<<<<<< HEAD
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md" onClick={() => handleOnClick("/GestionInventario")}>
-=======
             <button
               className="px-4 py-2 bg-blue-600 text-white rounded-md"
               onClick={() => handleOnClick("/GestionInventario")}
             >
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
               Gestion de inventario
             </button>
           </>
