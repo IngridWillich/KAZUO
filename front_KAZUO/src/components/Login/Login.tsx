@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
 
 const Login: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -169,7 +170,7 @@ const Login: React.FC = () => {
             icon: "success",
             confirmButtonText: "Aceptar",
           });
-          router.push("/GestionInventario");
+          router.push(`/GestionInventario`);
         } else {
           Swal.fire({
             title: "Error",

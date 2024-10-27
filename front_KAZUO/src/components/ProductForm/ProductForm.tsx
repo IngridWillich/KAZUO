@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { IProduct } from "@/interfaces/types";
+import { IEditStoreProps, IProduct } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import { IProductsErrors } from "@/interfaces/types";
 
-const ProductForm: React.FC = () => {
+const ProductForm: React.FC<IEditStoreProps> = ({storeId}) => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState<IProduct>({
     name: "",
@@ -65,7 +65,7 @@ const ProductForm: React.FC = () => {
           token = parsedUserData.token;
         }
 
-        const response = await fetch(`${kazuo_back}/product`, {
+        const response = await fetch(`${kazuo_back}/product/${storeId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

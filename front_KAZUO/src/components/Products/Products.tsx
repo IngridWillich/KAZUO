@@ -1,11 +1,11 @@
 "use client";
-import { IProduct } from "@/interfaces/types";
+import { IEditStoreProps, IProduct } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
 import productosTest from "@/helpers/product.helper";
 import { useRouter } from "next/navigation";
 
-export default function Products() {
+const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState("stock");
@@ -155,4 +155,6 @@ export default function Products() {
       </main>
     </div>
   );
-}
+};
+
+export default Products

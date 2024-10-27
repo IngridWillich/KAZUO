@@ -88,10 +88,10 @@ const Register = () => {
         } else {
           throw new Error("Respuesta no exitosa del servidor");
         }
-      } catch (error) {
+      } catch (response) {
         Swal.fire({
           title: "Error al hacer tu registro",
-          text: "Inténtalo nuevamente",
+          text: "Intentalo de nuevo",
           icon: "error",
           confirmButtonText: "Aceptar",
         });

@@ -2,6 +2,8 @@ export interface ILoginProps {
   email: string;
   password: string;
   name?: string
+  userId?: string;
+  token?: string;
 }
 
 export interface ILoginError {
@@ -43,7 +45,7 @@ export interface userData {
 }
 
 export interface IProduct {
-  id: string;
+  id?: string;
   name: string;
   quantity: string;
   price: string;
@@ -78,4 +80,12 @@ export interface IStore {
 export interface ICategory {
   id: string;
   name: string;
+}
+
+export interface IEditStoreProps{
+  storeId: string;
+}
+
+export interface InventarioProps {
+  userId: string;
 }
