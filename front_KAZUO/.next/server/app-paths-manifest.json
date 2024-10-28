@@ -1,5 +1,11 @@
 {
   "/GestionInventario/page": "app/GestionInventario/page.js",
+<<<<<<< HEAD
   "/storeform/page": "app/storeform/page.js",
   "/Login/page": "app/Login/page.js"
+=======
+  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
+  "/page": "app/page.js",
+  "/Products/[storeId]/page": "app/Products/[storeId]/page.js"
+>>>>>>> 4fa252904c1dec3d388a4c46540b30a73ba7daad
 }
