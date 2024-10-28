@@ -920,10 +920,13 @@ video {
     grid-template-columns:repeat(1, minmax(0, 1fr));
     
 }
+<<<<<<< HEAD
   .grid-cols-5 {
     grid-template-columns:repeat(5, minmax(0, 1fr));
     
 }
+=======
+>>>>>>> 9055c4e4b5a850e7022fda43b4089e52fcf5e734
   .flex-col {
     flex-direction:column;
     

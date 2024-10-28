@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/Products/[storeId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/Products/[storeId]/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,10 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/Login/page": [
+    "/AddNewProduct/[storeId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Login/page.js"
+      "static/chunks/app/AddNewProduct/[storeId]/page.js"
     ],
     "/Register/page": [
       "static/chunks/webpack.js",
@@ -41,10 +41,29 @@
       "static/chunks/main-app.js",
       "static/chunks/app/storeform/page.js"
     ],
+<<<<<<< HEAD
+=======
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/Login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Login/page.js"
+    ],
+    "/Register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Register/page.js"
+    ],
+>>>>>>> 9055c4e4b5a850e7022fda43b4089e52fcf5e734
     "/storeform/[storeId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/storeform/[storeId]/page.js"
+<<<<<<< HEAD
     ],
     "/Products/[storeId]/page": [
       "static/chunks/webpack.js",
@@ -55,6 +74,8 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/AddNewProduct/[storeId]/page.js"
+=======
+>>>>>>> 9055c4e4b5a850e7022fda43b4089e52fcf5e734
     ]
   }
 }
