@@ -12,6 +12,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<IProduct>({
+    
     name: "",
     quantity: 0,
     price: 0,

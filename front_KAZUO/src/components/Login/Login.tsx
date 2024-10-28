@@ -39,6 +39,7 @@ const Login: React.FC = () => {
     const handleAuthenticationComplete = async () => {
       if (isAuthenticated && user) {
         console.log("User authenticated:", user);
+        
         try {
           const accessToken = await getAccessTokenSilently();
           console.log("Access token:", accessToken);
@@ -190,13 +191,14 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    loginWithRedirect({
-      authorizationParams: {
-        connection: "google-oauth2",
-      },
-    });
-  };
+  // const handleGoogleLogin = () => {
+  //   loginWithRedirect({
+  //     authorizationParams: {
+  //       connection: "google-oauth2",
+  //     },
+  //   });
+  // };
+  const handleGoogleLogin = () => loginWithRedirect();
 
   const isFormValid =
     Object.keys(errors).length === 0 && Object.values(touched).every((t) => t);

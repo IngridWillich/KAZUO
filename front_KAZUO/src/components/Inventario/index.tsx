@@ -6,15 +6,24 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Link from "next/link";
+<<<<<<< HEAD
 import React from "react";
+=======
+import { useAuth0 } from "@auth0/auth0-react";
+>>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [store, setStore] = useState<IStore[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { userData } = useAppContext();
+
+
+  const {user, isAuthenticated}=useAuth0()
   const router = useRouter();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+
+
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -142,15 +151,21 @@ const getCategoryName = (categoryId: string) => {
         <div className="relative flex items-center justify-center mb-4">
           <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
             {profileImage ? (
-              <img
-                src={profileImage}
-                alt="Profile"
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <span className="text-gray-500">No image</span>
-            )}
-          </div>
+             <img
+             src={profileImage}
+             alt="Profile"
+             className="object-cover w-full h-full"
+           />
+         ) : user?.picture ? (
+           <img
+             src={user.picture}
+             alt="Profile"
+             className="object-cover w-full h-full"
+           />
+         ) : (
+           <span className="text-gray-500">No image</span>
+         )}
+       </div>
           <div
             className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600"
             onClick={handlePencilClick}
@@ -165,13 +180,16 @@ const getCategoryName = (categoryId: string) => {
             onChange={handleImageUpload}
           />
         </div>
+      
         <p>
+          
           <strong>Nombre: </strong>
-          {userData?.name}
+          {isAuthenticated ? user?.name : userData?.name} 
+          
         </p>
         <p>
           <strong>Email: </strong>
-          {userData?.email}
+          {isAuthenticated ? user?.email : userData?.email}
         </p>
         <p>
           <strong>Plan:</strong> Kazuo Pro
