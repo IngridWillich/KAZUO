@@ -43,13 +43,14 @@ export interface userData {
 }
 
 export interface IProduct {
-  id: number;
+  id?: string
   name: string;
-  quantity: string;
-  price: string;
-  image: string;
-  minStock: string;
+  quantity: number;
+  price: number;
+  minStock: number;
   storeId: string;
+  userId: string;
+  //  storeName: string
 }
 
 export interface IProductsErrors {
@@ -58,7 +59,6 @@ export interface IProductsErrors {
   quantity?: string;
   price?: string;
   minStock?: string;
-  storeId?: string;
 }
 
 export interface AppContextType {

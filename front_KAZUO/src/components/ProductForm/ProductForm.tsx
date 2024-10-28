@@ -1,26 +1,45 @@
-"use client";
-import { useState } from "react";
-import { IProduct } from "@/interfaces/types";
-import { validateProductForm } from "@/helpers/validate";
-import { IProductsErrors } from "@/interfaces/types";
+"use client"
 
- const ProductForm: React.FC = () => {
+import { useState } from "react";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import { IProduct, IProductsErrors } from "@/interfaces/types";
+import { validateProductForm } from "@/helpers/validate";
+
+const ProductForm: React.FC = () => {
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
+
   const [formData, setFormData] = useState<IProduct>({
-    id:0,
     name: "",
-    quantity: "",
-    price: "",
-    image: "",
-    minStock: "",
+    quantity: 0,
+    price: 0,
+    minStock: 0,
     storeId: "",
+    userId: "",
   });
+
   const [errors, setErrors] = useState<IProductsErrors>({});
 
+  // Verificar si todos los campos están completos
+  const areFieldsFilled = () => {
+    return (
+      formData.name &&
+      formData.quantity &&
+      formData.price &&
+      formData.minStock
+    );
+  };
+
+
   const validateField = (name: string, value: string) => {
-    const validationErrors = validateProductForm({ ...formData, [name]: value });
+    const validationErrors = validateProductForm({
+      ...formData,
+      [name]: value,
+    });
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: validationErrors[name] || '', 
+      [name]: validationErrors[name] || "",
     }));
   };
 
@@ -30,140 +49,167 @@ import { IProductsErrors } from "@/interfaces/types";
       ...prevState,
       [name]: value,
     }));
-
-    // Validar el campo actual
     validateField(name, value);
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // Validar el campo que ha perdido el foco
     validateField(name, value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
 
-    // Solo proceder si no hay errores
     if (Object.keys(validationErrors).length === 0) {
-      console.log(JSON.stringify(formData));
-      // Aquí enviarías normalmente los datos a tu backend
+
+      let userId = "";
+      const userData = localStorage.getItem("userData");
+      if (userData) {
+        const parsedUserData = JSON.parse(userData);
+        userId = parsedUserData.id
+      }
+      const dataToSend = {
+        ...formData,
+        quantity: Number(formData.quantity),
+        price: Number(formData.price),
+        minStock: Number(formData.minStock),
+        userId: userId,
+        // storeId: storeId
+      };
+
+      try {
+        const response = await fetch(`${kazuo_back}/product`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        if (response.ok) {
+          Swal.fire({
+            title: "¡Producto creado!",
+            text: "El producto se ha creado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+          router.push("/Products");
+        } else {
+          const errorData = await response.json();
+          console.error("Error en la respuesta del servidor:", errorData);
+          throw new Error(errorData.message || "Error al crear el producto");
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo crear el producto. Por favor, inténtalo de nuevo.",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 w-full max-w-md mx-auto bg-white text-black p-4"
-    >
-      <div>
-        <h1>REGISTAR PRODUCTO</h1>
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="name">Nombre</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          className="border border-gray-300 rounded-sm w-fit"
-          required
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.name && <p className="text-red-600">{errors.name}</p>}
-      </div>
-  
-      <div className="flex flex-col">
-        <label htmlFor="quantity">Cantidad</label>
-        <input
-          type="number"
-          id="quantity"
-          name="quantity"
-          className="border border-gray-300 rounded-sm w-fit"
-          min="0" // Asegura que no se pueden ingresar números negativos
-          required
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.quantity && <p className="text-red-600">{errors.quantity}</p>}
-      </div>
-  
-      <div className="flex flex-col">
-        <label htmlFor="price">Precio</label>
-        <input
-          type="number"
-          id="price"
-          name="price"
-          className="border border-gray-300 rounded-sm w-fit"
-          min="0" // Asegura que no se pueden ingresar números negativos
-          required
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.price && <p className="text-red-600">{errors.price}</p>}
-      </div>
-  
-      <div className="flex flex-col">
-        <label htmlFor="image">Imagen</label>
-        <input
-          type="text"
-          id="image"
-          name="image"
-          className="border border-gray-300 rounded-sm w-fit"
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.image && <p className="text-red-600">{errors.image}</p>}
-      </div>
-  
-      <div className="flex flex-col">
-        <label htmlFor="minStock">Cantidad Mínima</label>
-        <input
-          type="number"
-          id="minStock"
-          name="minStock"
-          className="border border-gray-300 rounded-sm w-fit"
-          min="0" // Asegura que no se pueden ingresar números negativos
-          required
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.minStock && <p className="text-red-600">{errors.minStock}</p>}
-      </div>
-  
-      <div className="flex flex-col">
-        <label htmlFor="storeId">Bodega</label>
-        <input
-          type="number"
-          id="storeId"
-          name="storeId"
-          className="border border-gray-300 rounded-sm w-fit"
-          min="0" // Asegura que no se pueden ingresar números negativos
-          required
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        {errors.storeId && <p className="text-red-600">{errors.storeId}</p>}
-      </div>
-  
-      <div className="flex flex-row justify-center gap-8">
-        <button
-          type="submit"
-          className="bg-blue-600 text-white hover:bg-blue-700 w-fit h-auto p-2 rounded-md"
-        >
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-bold text-center text-blue-700">
           Registrar
-        </button>
-        <button
-          type="button"
-          className="border border-blue-600 text-blue-600 hover:bg-blue-50 w-fit h-auto p-2 rounded-md"
-        >
-          Cancelar
-        </button>
-      </div>
-    </form>
-  );
-}
+        </h2>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              Nombre del Producto:
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={formData.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingrese el nombre del producto"
+              required
+            />
+            {errors.name && <p className="text-red-600">{errors.name}</p>}
+          </div>
 
-export default ProductForm;
+          <div className="space-y-2">
+            <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+              Cantidad:
+            </label>
+            <input
+              type="number"
+              name="quantity"
+              id="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingrese la cantidad"
+              min="0"
+              required
+            />
+            {errors.quantity && <p className="text-red-600">{errors.quantity}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+              Precio:
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                name="price"
+                id="price"
+                value={formData.price}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Ingrese el precio"
+                min="0"
+                required
+              />
+              <span className="ml-2 text-gray-500">USD</span>
+            </div>
+            {errors.price && <p className="text-red-600">{errors.price}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="minStock" className="block text-sm font-medium text-gray-700">
+              Cantidad Mínima:
+            </label>
+            <input
+              type="number"
+              name="minStock"
+              id="minStock"
+              value={formData.minStock}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingrese la cantidad mínima"
+              min="0"
+              required
+            />
+            {errors.minStock && <p className="text-red-600">{errors.minStock}</p>}
+          </div>
+
+          <button
+            type="submit"
+            disabled={!areFieldsFilled()}
+            className={`w-full py-2 px-4 text-white rounded-md ${areFieldsFilled() ? "bg-blue-500 hover:bg-blue-900" : "bg-gray-300 cursor-not-allowed"
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+          >
+            Registrar Producto
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+export default ProductForm
