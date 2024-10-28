@@ -57,7 +57,7 @@ const ProductForm: React.FC = () => {
     validateField(name, value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit= async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
