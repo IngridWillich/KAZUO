@@ -1,5 +1,5 @@
 "use client";
-import { ICategory, IProduct, IStore } from "@/interfaces/types";
+import { ICategory, IEditStoreProps, InventarioProps, IProduct, IStore } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { useAppContext } from "@/context/AppContext";
@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Inventario: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("stock");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [store, setStore] = useState<IStore[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -39,7 +38,7 @@ const Inventario: React.FC = () => {
     }
   };
 
-  const handleDeleteStore = async (storeId: string) => {
+  const handleDeleteStore = async (event: React.MouseEvent<HTMLButtonElement>, storeId: string) => {
     const confirmed = await Swal.fire({
       title: "¿Estás seguro que desea eliminar la bodega?",
       text: "No podrás deshacer esta acción.",
@@ -80,16 +79,32 @@ const Inventario: React.FC = () => {
 
   useEffect(() => {
     const fetchStores = async () => {
+      if(userData){
+        const userId = userData.id;
+      
       try {
-        const response = await fetch(`${kazuo_back}/store`);
-        const data = await response.json();
-        setStore(data);
-        console.log({ data });
+        const response = await fetch(`${kazuo_back}/store/user/${userId}`);
+        const dataStore = await response.json();
+        setStore(dataStore);
+        console.log(dataStore)
       } catch (error) {
         console.error("No se pudo cargar las bodegas ", error);
       }
+    }
     };
     fetchStores();
+  }, []);
+  useEffect(() => {
+    const handlefetchCategories = async () => {
+      try {
+        const response = await fetch(`${kazuo_back}/category`);
+        const dataCategory = await response.json();
+        localStorage.setItem("Categorias", JSON.stringify(dataCategory));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handlefetchCategories();
   }, []);
 
   const handleNavigateToCreateStore = () => {
@@ -100,9 +115,29 @@ const Inventario: React.FC = () => {
     }
   };
 
-  const getCategoryName: ICategory[] = JSON.parse(
+const handleNavigateToEditStore = (event: React.MouseEvent<HTMLButtonElement>, storeId: string) => {
+  if (userData) {
+    router.push(`/storeform/${storeId}`);
+  } else {
+    router.push("/login");
+  }
+};
+
+const handleNavigateToStorePage = (event: React.MouseEvent<HTMLButtonElement>, storeId: string) => {
+  if (userData) {
+    router.push(`/Products/${storeId}`);
+  } else {
+    router.push("/login");
+  }
+};
+
+const getCategoryName = (categoryId: string) => {
+  const categoriesFromStorage: ICategory[] = JSON.parse(
     localStorage.getItem("Categorias") || "[]"
   );
+  const category = categoriesFromStorage.find(cat => cat.id === categoryId);
+  return category ? category.name : "Categoría no encontrada";
+};
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -179,24 +214,16 @@ const Inventario: React.FC = () => {
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
               <p className="text-gray-500 mb-4">
-                Categoría:{" "}
-                {(() => {
-                  const categoriaEncontrada = getCategoryName.find(
-                    (cat) => String(cat.id) === String(bodega.categoryId)
-                  );
-                  return categoriaEncontrada
-                    ? categoriaEncontrada.name
-                    : "Categoría no encontrada";
-                })()}
+                Categoría: {getCategoryName(bodega.categoryId)}
               </p>
               <div className="flex justify-between">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={(e)=>handleNavigateToEditStore(e, bodega.id)}>
                   Modificar
                 </button>
-                <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded" onClick={(e) => handleDeleteStore(e, bodega.id)}>
                   Eliminar
                 </button>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"onClick={(e) => handleNavigateToStorePage(e, bodega.id)}> 
                   Entrar
                 </button>
               </div>

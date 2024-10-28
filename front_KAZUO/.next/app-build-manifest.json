@@ -16,10 +16,22 @@
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
     ],
+<<<<<<< HEAD
     "/Login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Login/page.js"
+=======
+    "/Products/[storeId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Products/[storeId]/page.js"
+    ],
+    "/AddNewProduct/[storeId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/AddNewProduct/[storeId]/page.js"
+>>>>>>> 4fa252904c1dec3d388a4c46540b30a73ba7daad
     ]
   }
 }

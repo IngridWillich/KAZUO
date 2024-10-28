@@ -5,7 +5,7 @@ function inventario() {
   return (
     <div>
       <ProtectedRoutes>
-        <Inventario />
+        <Inventario/>
       </ProtectedRoutes>
     </div>
   );
