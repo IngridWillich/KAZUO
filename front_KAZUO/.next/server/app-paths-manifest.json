@@ -1,9 +1,5 @@
 {
-  "/Ubicacion/page": "app/Ubicacion/page.js",
-  "/Planes/page": "app/Planes/page.js",
-  "/Contacto/page": "app/Contacto/page.js",
-  "/Nosotros/page": "app/Nosotros/page.js",
   "/page": "app/page.js",
-  "/Soluciones/page": "app/Soluciones/page.js",
-  "/GestionInventario/page": "app/GestionInventario/page.js"
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/Login/page": "app/Login/page.js"
 }
