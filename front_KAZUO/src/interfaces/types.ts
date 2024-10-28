@@ -42,16 +42,17 @@ export interface userData {
   name: string;
   company: string;
   token: string;
+  userId: string;
 }
 
 export interface IProduct {
   id?: string;
   name: string;
-  quantity: string;
-  price: string;
-  image: string;
-  minStock: string;
+  quantity: number;
+  price: number;
+  minStock: number;
   storeId: string;
+  userId: string
 }
 
 export interface IProductsErrors {

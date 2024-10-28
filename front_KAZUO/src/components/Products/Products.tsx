@@ -46,7 +46,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   }, [userData]);
 
   const handleCreateNewProduct = () => {
-    router.push("/AddNewProduct");
+    router.push(`/AddNewProduct/${storeId}`);
   };
 
   const handlePencilClick = () => {
@@ -158,3 +158,4 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
 };
 
 export default Products
+

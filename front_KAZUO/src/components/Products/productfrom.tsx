@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
+import { IProduct, IProductsErrors } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 
-const ProductForm : React.FC<IEditStoreProps>= ({storeId}) => {
+const ProductForm : React.FC= () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
@@ -15,8 +15,8 @@ const ProductForm : React.FC<IEditStoreProps>= ({storeId}) => {
     quantity: 0,
     price: 0,
     minStock: 0,
-    storeId: storeId,
-    userId: "",
+    // storeId: "",
+    UserId: "",
   });
 
   const [errors, setErrors] = useState<IProductsErrors>({});
@@ -57,31 +57,30 @@ const ProductForm : React.FC<IEditStoreProps>= ({storeId}) => {
     validateField(name, value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    console.log(storeId);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-
+    if (Object.keys(validationErrors).length === 0) {   
+      
+      
       let userId = "";
       const userData = localStorage.getItem("userData");
         if (userData) {
           const parsedUserData = JSON.parse(userData);
-          userId = parsedUserData.id
+          userId = parsedUserData.userId
         }
-      const dataToSend = {
-        ...formData,
-        quantity: Number(formData.quantity),
-        price: Number(formData.price),
-        minStock: Number(formData.minStock),
-        userId: userId,
-        storeId: storeId
+        const dataToSend = {
+       ...formData,
+        quantity:Number(formData.quantity),
+        price: Number (formData.price),
+        minStock:Number(formData.minStock),
+        user: userId,
       };
 
         try {
-        const response = await fetch(`${kazuo_back}/product`, {
+        const response = await fetch(${kazuo_back}/product, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +95,7 @@ const ProductForm : React.FC<IEditStoreProps>= ({storeId}) => {
             icon: "success",
             confirmButtonText: "Aceptar",
           });
-          router.push(`/Products/${storeId}`);
+          router.push("/Products");
         } else {
           const errorData = await response.json();
           console.error("Error en la respuesta del servidor:", errorData);

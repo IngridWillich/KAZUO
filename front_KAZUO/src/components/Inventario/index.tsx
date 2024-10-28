@@ -1,5 +1,5 @@
 "use client";
-import { ICategory, InventarioProps, IProduct, IStore } from "@/interfaces/types";
+import { ICategory, IEditStoreProps, InventarioProps, IProduct, IStore } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { useAppContext } from "@/context/AppContext";
