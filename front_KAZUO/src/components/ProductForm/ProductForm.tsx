@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
+import * as XLSX from "xlsx";
 
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -38,6 +39,63 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       [name]: validationErrors[name] || "",
     }));
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const file = e.target.files?.[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = (event) =>{
+        const data = new Uint8Array(event.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, {type: "array"});
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+
+        const productsData: IProduct[] = XLSX.utils.sheet_to_json(worksheet);
+        console.log(storeId);
+        console.log(localStorage.getItem("userData"));
+const userId = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!).id : "";
+const productsToSend = productsData.map(product => ({
+  ...product,
+  storeId: storeId,
+  userId: userId
+}));
+
+handleBulkUpload(productsToSend);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
+  const handleBulkUpload = async (products: IProduct[]) => {
+    try {
+      const response = await fetch(`${kazuo_back}/products/bulk`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(products),
+      });
+      if(response.ok){
+        Swal.fire({
+          title: "Productos Añadidos con exito",
+          text: "Los productos han sido almacenados",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
+        router.push(`/Products/${storeId}`);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "No se pudo cargar los productos");
+      }
+    } catch (error){
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo cargar los productos. Por favor, inténtalo de nuevo.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -220,6 +278,8 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
           >
             Registrar Producto
           </button>
+          <p>O</p>
+          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange}/>
         </form>
       </div>
     </div>

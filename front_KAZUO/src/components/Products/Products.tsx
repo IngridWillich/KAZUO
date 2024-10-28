@@ -32,6 +32,10 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
         }
 
         const data = await response.json();
+        const sortedProducts = data.sort((a: IProduct, b: IProduct) => 
+          a.name.localeCompare(b.name)
+        );
+        // setProducts(sortedProducts);
         setProducts(data);
       } catch (error) {
         console.error("Error:", error);
