@@ -12,11 +12,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<IProduct>({
-<<<<<<< HEAD
-    id: "",
-=======
     
->>>>>>> 4fa252904c1dec3d388a4c46540b30a73ba7daad
     name: "",
     quantity: 0,
     price: 0,
