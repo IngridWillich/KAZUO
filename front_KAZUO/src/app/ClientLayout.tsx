@@ -18,11 +18,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   return (
     <Auth0Provider
-    domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN || ""}
-    clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || ""}
-    redirectUri={typeof window !== 'undefined' ? window.location.origin : ''}
-
-    onRedirectCallback={onRedirectCallback}
+      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN || ""}
+      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || ""}
+      authorizationParams={{
+        redirectUri:
+          typeof window !== "undefined" ? window.location.origin : "",
+      }}
+      onRedirectCallback={onRedirectCallback}
     >
       <AppProvider>{children}</AppProvider>
     </Auth0Provider>

@@ -98,24 +98,18 @@ export default function Footer() {
           <h3 className="font-bold text-lg mb-4">Kazuo</h3>
           <ul className="space-y-2">
             <li><a href="/Nosotros" className="hover:underline">Quiénes somos</a></li>
-            <li><a href="#" className="hover:underline">Centro de prensa</a></li>
-            <li><a href="#" className="hover:underline">Ubicación</a></li>
-            <li><a href="#" className="hover:underline">Trabaja con nosotros</a></li>
+            <li><a href="/Ubicacion" className="hover:underline">Ubicación</a></li>
+           
             <li><a href="#" className="hover:underline">Términos y condiciones</a></li>
-            <li><a href="#" className="hover:underline">Kazuo fundaciones</a></li>
-            <li><a href="#" className="hover:underline">Contáctanos</a></li>
+            <li><a href="/Contacto" className="hover:underline">Contáctanos</a></li>
           </ul>
         </div>
         
         <div>
           <h3 className="font-bold text-lg mb-4">Soluciones</h3>
           <ul className="space-y-2">
-            <li><a href="/Soluciones" className="hover:underline">Sistema de gestión</a></li>
-            <li><a href="#" className="hover:underline">Facturación electrónica</a></li>
-            <li><a href="#" className="hover:underline">Tienda Online</a></li>
-            <li><a href="#" className="hover:underline">Punto de venta</a></li>
-            <li><a href="#" className="hover:underline">Alegra para contadores</a></li>
-            <li><a href="#" className="hover:underline">Integraciones</a></li>
+            <li><a href="/Soluciones" className="hover:underline">Sistema de gestión</a></li>    
+                        <li><a href="#" className="hover:underline">Integraciones</a></li>
             <li><a href="#" className="hover:underline">API desarrolladores</a></li>
           </ul>
         </div>

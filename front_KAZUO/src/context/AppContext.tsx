@@ -1,16 +1,95 @@
+// "use client";
+
+// import React, { createContext, useState, useContext, useEffect } from "react";
+// import { userData } from "@/interfaces/types";
+// import { AppContextType } from "@/interfaces/types";
+//  ///
+// import { useAuth0 } from "@auth0/auth0-react";
+
+// const AppContext = createContext<AppContextType | undefined>(undefined);
+
+// export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
+//   children,
+// }) => {
+
+//   //
+//   const {logout: logoutAuth0,user, isAuthenticated} = useAuth0();
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [userData, setUserData] = useState<userData | null>(null);
+
+//   useEffect(() => {
+//     const storedLoginStatus = localStorage.getItem("isLoggedIn");
+//     const storedUserData = localStorage.getItem("userData");
+//     if (storedLoginStatus === "true" && storedUserData) {
+//       setIsLoggedIn(true);
+//       setUserData(JSON.parse(storedUserData));
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     console.log(
+//       `Estado de la sesión: ${isLoggedIn  ? "Iniciada" : "No iniciada"}`
+//     );
+//   }, [isLoggedIn]); //VERIFICANDO SI LA SESION SE INICIO
+
+
+
+
+//   const login = async (loginData: any) => {
+//     try {
+//       setIsLoggedIn(true);
+//       setUserData(loginData);
+//       localStorage.setItem("isLoggedIn", "true");
+//       localStorage.setItem("userData", JSON.stringify(loginData));
+//     } catch (error) {
+//       console.error("Error de login", error);
+//       throw error;
+//     }
+//   };
+
+//   const logout = () => {
+//     setIsLoggedIn(false);
+//     setUserData(null);
+//     localStorage.setItem("isLoggedIn", "false");
+//     localStorage.removeItem("userData");
+//     localStorage.removeItem("token"); 
+//     //cierro sesion con google si esta autenticado
+//     logoutAuth0();
+//     window.location.href = window.location.origin;
+
+
+//   };
+
+
+//   const value = {
+//     isLoggedIn,
+//     userData,
+//     login,
+//     logout,
+//   };
+//   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+// };
+
+// export const useAppContext = () => {
+//   const context = useContext(AppContext);
+//   if (context === undefined) {
+//     throw new Error("Error de contexto");
+//   }
+//   return context;
+// };
 "use client";
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { userData } from "@/interfaces/types";
 import { AppContextType } from "@/interfaces/types";
-
-
+import { useAuth0 } from "@auth0/auth0-react";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { logout: logoutAuth0, user, isAuthenticated } = useAuth0();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<userData | null>(null);
 
@@ -24,18 +103,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    console.log(
-      `Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`
-    );
-  }, [isLoggedIn]); //VERIFICANDO SI LA SESION SE INICIO
+    console.log(`Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`);
+    if (isAuthenticated && user) {
+      const newUserData: userData = {
+        id: parseInt(user.sub?.split('|')[1] || "0", 10), // Convertir el ID de string a number, manejar el caso undefined
+        password: "", // Manejar según tus necesidades
+        company: user.email || "", // Usar el email o algún otro campo como compañía
+        token: "", // Establecer el token si lo tienes
+        email: user.email || "", // Asegúrate de incluir el email
+        name: user.name || "", // Asegúrate de incluir el nombre
+      };
+
+      setIsLoggedIn(true);
+      setUserData(newUserData);
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userData", JSON.stringify(newUserData));
+    }
+  }, [isAuthenticated, user]); // Incluido isAuthenticated y user
+
   const login = async (loginData: any) => {
-    try{
+    try {
       setIsLoggedIn(true);
       setUserData(loginData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(loginData));
-
-    } catch (error){
+    } catch (error) {
       console.error("Error de login", error);
       throw error;
     }
@@ -46,13 +138,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     setUserData(null);
     localStorage.setItem("isLoggedIn", "false");
     localStorage.removeItem("userData");
+    localStorage.removeItem("token");
+    // Cerrar sesión con Auth0
+    logoutAuth0();
+    window.location.href = window.location.origin;
   };
+
   const value = {
     isLoggedIn,
     userData,
     login,
     logout,
   };
+
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
