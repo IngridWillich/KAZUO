@@ -14,15 +14,8 @@ const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if ( !isLoggedIn && !isAuthenticated && !userData) {
       router.push("/Login");
-<<<<<<< HEAD
-    } else if (isLoggedIn) {
-      router.push("/GestionInventario")
-    } 
-  }, [isLoggedIn, router]);
-=======
     }
   }, [isLoggedIn, isAuthenticated,router]);
->>>>>>> 4fa252904c1dec3d388a4c46540b30a73ba7daad
 
   return (isLoggedIn || isAuthenticated) ? <>{children}</> : null;
 };
