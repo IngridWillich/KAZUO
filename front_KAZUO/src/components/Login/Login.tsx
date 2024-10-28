@@ -1,19 +1,4 @@
 "use client";
-<<<<<<< HEAD
-
-import { useState, useEffect } from "react";
-import { ILoginError, ILoginProps } from "@/interfaces/types";
-import { validateLoginForm } from "@/helpers/validate";
-// import { login } from "@/helpers/auth.helper";
-import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
-import Link from "next/link";
-import { useAppContext } from "@/context/AppContext";
-
-const Login: React.FC = () => {
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
-=======
 
 import { useState, useEffect } from "react";
 import { ILoginError, ILoginProps } from "@/interfaces/types";
@@ -29,7 +14,6 @@ const Login: React.FC = () => {
   const router = useRouter();
   const { loginWithRedirect, user, isAuthenticated, getAccessTokenSilently } =
     useAuth0();
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   const initialState = {
     email: "",
     password: "",
@@ -43,14 +27,6 @@ const Login: React.FC = () => {
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const { login } = useAppContext();
-<<<<<<< HEAD
-
-  useEffect(() => {
-    const hasErrors = Object.keys(errors).length > 0;
-    const isEmptyField = !dataUser.email || !dataUser.password;
-    setIsButtonDisabled(hasErrors || isEmptyField);
-  }, [errors, dataUser]);
-=======
 
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -104,7 +80,6 @@ const Login: React.FC = () => {
     };
     handleAuthenticationComplete();
   }, [isAuthenticated, user, getAccessTokenSilently, router, kazuo_back]);
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
@@ -171,46 +146,30 @@ const Login: React.FC = () => {
 
     if (Object.keys(currentErrors).length === 0) {
       try {
-<<<<<<< HEAD
-=======
         const key = await generateKey();
         const encryptedPassword = await encryptPassword(dataUser.password, key);
         const encryptedPasswordBase64 = btoa(
           String.fromCharCode(...new Uint8Array(encryptedPassword))
         );
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         const response = await fetch(`${kazuo_back}/auth/signin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataUser),
-<<<<<<< HEAD
-          // body: JSON.stringify({...dataUser, password: encryptPassword}),
-=======
           // body: JSON.stringify({...dataUser, password: encryptedPasswordBase64}),
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         });
 
         if (response.ok) {
           const loginData = await response.json();
           await login(loginData);
           Swal.fire({
-<<<<<<< HEAD
-            title: "¡Inicio de sesión exitoso!",
-            text: "Te has iniciado sesión correctamente.",
-=======
             title: `¡Bienvenido, ${loginData.name}!`,
             text: "Has iniciado sesión correctamente.",
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
             icon: "success",
             confirmButtonText: "Aceptar",
           });
           router.push("/GestionInventario");
-<<<<<<< HEAD
-          console.log(loginData);
-=======
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         } else {
           Swal.fire({
             title: "Error",
@@ -232,8 +191,6 @@ const Login: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleGoogleLogin = () => {
     loginWithRedirect({
       authorizationParams: {
@@ -245,15 +202,12 @@ const Login: React.FC = () => {
   const isFormValid =
     Object.keys(errors).length === 0 && Object.values(touched).every((t) => t);
 
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center text-gray-700">
           INICIAR SESIÓN
         </h2>
-<<<<<<< HEAD
-=======
         <div>
           <button
             onClick={handleGoogleLogin}
@@ -293,7 +247,6 @@ const Login: React.FC = () => {
             <span className="px-2 bg-white text-gray-500">O</span>
           </div>
         </div>
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label

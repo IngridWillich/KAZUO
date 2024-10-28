@@ -1,46 +1,40 @@
-"use client";
-
-import React from "react";
+'use client'
+import React from 'react';
 
 interface ButtonCheckoutProps {
-  priceId: string; // Declaramos explícitamente el tipo de priceId
+  priceId: string;
 }
 
-const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({
-  priceId: prod_R5KtXUYt04c4IL,
-}) => {
+const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({ priceId }) => {
   const handleCheckout = async () => {
     try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        body: JSON.stringify({ priceId: prod_R5KtXUYt04c4IL }),
-        headers: {
-          "Content-Type": "application/json",
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
+      const res = await fetch(`api/checkout`, {
+      method: 'POST',
+        body: JSON.stringify({ priceId }),
+          headers: {
+        'Content-Type': 'application/json',
         },
-      });
+    });
 
-      // Verificar si la respuesta es válida antes de intentar parsearla
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await res.json();
-      window.location.href = data.url;
-    } catch (error) {
-      console.error("Error during checkout:", error);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`Error: ${errorData.message || 'Unknown error'}`);
     }
-  };
 
-  return (
-    <div>
-      <button
-        className="bg-blue-700 px-4 py-2 rounded-xl text-zinc-50"
-        onClick={handleCheckout}
-      >
-        Buy
-      </button>
-    </div>
-  );
+    const data = await res.json();
+    window.location.href = data.url; // Redirige al usuario a la URL de checkout
+  } catch (error) {
+    console.error('Error during checkout:', error);
+    alert('Hubo un problema al iniciar el proceso de checkout. Inténtalo de nuevo.');
+  }
+};
+
+return (
+  <button className="bg-blue-700 px-4 py-2 rounded-xl text-zinc-50" onClick={handleCheckout}>
+    Buy
+  </button>
+);
 };
 
 export default ButtonCheckout;

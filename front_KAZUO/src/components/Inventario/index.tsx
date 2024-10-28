@@ -6,10 +6,6 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Link from "next/link";
-<<<<<<< HEAD
-
-=======
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
 
 const Inventario: React.FC = () => {
   const [activeTab, setActiveTab] = useState("stock");
@@ -20,85 +16,43 @@ const Inventario: React.FC = () => {
   const router = useRouter();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
-<<<<<<< HEAD
-  // const handleAddProduct = async () => {
-  //   if (newProduct.name && newProduct.quantity > 0) {
-  //     try {
-  //       const response = await fetch(${kazuo_back}/product, {
-  //         method: 'POST',
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(newProduct),
-  //       });
-
-  //       if (response.ok) {
-  //         const updatedProducts = await response.json();
-  //         setProducts(updatedProducts);
-  //         setNewProduct({ name: "", quantity: 0 });
-  //       } else {
-  //         console.error("Failed to add product");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error adding product:", error);
-  //       setProducts([]);
-  //       setLowStockProducts([]);
-  //       setBodegas([]);
-  //     }
-  //   }
-  // };
-
-=======
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      try {
+        const response = await fetch(`${kazuo_back}/files/uploadProfileImage/`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+          body: formData,
+        });
+        console.log(response);
+        if (response.ok) {
+          const data = await response.json();
+          setProfileImage(data.imageUrl);
+        } else {
+          // Agregar más detalles al mensaje de error
+          const errorData = await response.json();
+          console.error("Error al subir la imagen:", errorData);
+          Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
+        }
+      } catch (error) {
+        console.error("Error al subir la imagen:", error);
+        Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
+      }
     }
   };
-
-<<<<<<< HEAD
-
-  // const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const formData = new FormData();
-  //     formData.append('image', file);
-
-  //     try {
-  //       const response = await fetch(${kazuo_back}/userImage, {
-  //         method: 'POST',
-  //         body: formData,
-  //       });
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         setProfileImage(data.imageUrl);
-  //       } else {
-  //         console.error('Error al subir la imagen');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error al subir la imagen:', error);
-  //     }
-  //   }
-  // };
-
-=======
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
+  
   const handlePencilClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
   const handleDeleteStore = async (storeId: string) => {
     const confirmed = await Swal.fire({
       title: "¿Estás seguro que desea eliminar la bodega?",
@@ -126,15 +80,11 @@ const Inventario: React.FC = () => {
           );
           Swal.fire("Eliminado", "La bodega ha sido eliminada.", "success");
         } else {
-<<<<<<< HEAD
-          Swal.fire("Error", "No se pudo eliminar la bodega. Verifica el servidor.", "error");
-=======
           Swal.fire(
             "Error",
             "No se pudo eliminar la bodega. Verifica el servidor.",
             "error"
           );
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db
         }
       } catch (error) {
         Swal.fire("Error", "Ocurrió un error al eliminar la bodega.", "error");
@@ -163,10 +113,6 @@ const Inventario: React.FC = () => {
       router.push("/login");
     }
   };
-
-  const getCategoryName: ICategory[] = JSON.parse(
-    localStorage.getItem("Categorias") || "[]"
-  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -233,13 +179,7 @@ const Inventario: React.FC = () => {
           {store.map((bodega) => (
             <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
-              <p className="text-gray-500 mb-4">
-                Categoría: {(() => {
-    const categoriaEncontrada = getCategoryName.find(cat => String(cat.id) === String(bodega.categoryId));
-    return categoriaEncontrada ? categoriaEncontrada.name : 'Categoría no encontrada';
-  })()}
-
-              </p>
+              <p className="text-gray-500 mb-4">Categoría no encontrada</p>
               <div className="flex justify-between">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                   Modificar
@@ -263,8 +203,4 @@ const Inventario: React.FC = () => {
   );
 };
 
-<<<<<<< HEAD
-export default Inventario
-=======
 export default Inventario;
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db

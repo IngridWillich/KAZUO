@@ -32,10 +32,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserData(loginData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(loginData));
-    } catch (error) {
+  } catch (error) {
       console.error("Error de login", error);
       throw error;
-    }
+  }
   };
 
   const logout = () => {

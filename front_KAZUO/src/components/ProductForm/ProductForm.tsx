@@ -7,6 +7,7 @@ import { IProductsErrors } from "@/interfaces/types";
 const ProductForm: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState<IProduct>({
+    id: "",
     name: "",
     quantity: "",
     price: "",
