@@ -156,19 +156,14 @@ export function validateProductForm(values: IProduct): IProductsErrors {
 
   }
 
-  // Validación del ID de la tienda
-  if (!values.storeId) {
-      errors.storeId = "El ID de la bodega es obligatorio";
-  } else if (!/^[A-Za-z0-9]+$/.test(values.storeId)) {
-      errors.storeId = "El ID de la bodega solo puede contener letras y números";
-  }
+  // // Validación del ID de la tienda
+  // if (!values.storeId) {
+  //     errors.storeId = "El ID de la bodega es obligatorio";
+  // } else if (!/^[A-Za-z0-9]+$/.test(values.storeId)) {
+  //     errors.storeId = "El ID de la bodega solo puede contener letras y números";
+  // }
 
-  // Validación de la imagen
-  if (!values.image) {
-      errors.image = "La imagen es obligatoria";
-  } else if (!/\.(jpg|jpeg|png|gif)$/i.test(values.image)) {
-      errors.image = "La imagen debe ser en formato jpg,png ";
-  }
+
 
   return errors;
 }

@@ -33,7 +33,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         company: user.email || "", // Usar el email o algún otro campo como compañía
         token: "", // Establecer el token si lo tienes
         email: user.email || "", // Asegúrate de incluir el email
-        name: user.name || "", // Asegúrate de incluir el nombre
+        name: user.name || "",
+        userId: ""
       };
 
       setIsLoggedIn(true);
