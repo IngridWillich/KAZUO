@@ -1,16 +1,9 @@
 {
   "pages": {
-<<<<<<< HEAD
-    "/Products/[storeId]/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Products/[storeId]/page.js"
-=======
-    "/Ubicacion/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Ubicacion/page.js"
->>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -18,49 +11,20 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-<<<<<<< HEAD
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-=======
-    "/Soluciones/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Soluciones/page.js"
-    ],
-    "/Planes/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Planes/page.js"
-    ],
-    "/Contacto/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Contacto/page.js"
-    ],
-    "/Nosotros/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Nosotros/page.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
->>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
-      "static/chunks/app/page.js"
-    ],
     "/GestionInventario/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
-<<<<<<< HEAD
+    ],
+    "/Products/[storeId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Products/[storeId]/page.js"
     ],
     "/AddNewProduct/[storeId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/AddNewProduct/[storeId]/page.js"
-=======
->>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
     ]
   }
 }

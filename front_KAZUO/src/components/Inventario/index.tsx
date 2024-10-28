@@ -6,11 +6,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Link from "next/link";
-<<<<<<< HEAD
-import React from "react";
-=======
 import { useAuth0 } from "@auth0/auth0-react";
->>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);

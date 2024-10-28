@@ -936,17 +936,12 @@ video {
     grid-template-columns:repeat(1, minmax(0, 1fr));
     
 }
-<<<<<<< HEAD
-  .grid-cols-5 {
-    grid-template-columns:repeat(5, minmax(0, 1fr));
-=======
   .grid-cols-2 {
     grid-template-columns:repeat(2, minmax(0, 1fr));
     
 }
-  .flex-row {
-    flex-direction:row;
->>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
+  .grid-cols-5 {
+    grid-template-columns:repeat(5, minmax(0, 1fr));
     
 }
   .flex-col {
@@ -1185,16 +1180,6 @@ video {
   .bg-white {
     --tw-bg-opacity:1;
     background-color:rgb(255 255 255 / var(--tw-bg-opacity));
-    
-}
-  .bg-red-100 {
-    --tw-bg-opacity:1;
-    background-color:rgb(254 226 226 / var(--tw-bg-opacity));
-    
-}
-  .bg-red-700 {
-    --tw-bg-opacity:1;
-    background-color:rgb(185 28 28 / var(--tw-bg-opacity));
     
 }
   .fill-current {

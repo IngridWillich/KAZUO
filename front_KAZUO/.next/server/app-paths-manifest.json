@@ -1,15 +1,6 @@
 {
-<<<<<<< HEAD
-  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
-  "/page": "app/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js",
   "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
-=======
-  "/Ubicacion/page": "app/Ubicacion/page.js",
-  "/Planes/page": "app/Planes/page.js",
-  "/Contacto/page": "app/Contacto/page.js",
-  "/Nosotros/page": "app/Nosotros/page.js",
   "/page": "app/page.js",
-  "/Soluciones/page": "app/Soluciones/page.js",
->>>>>>> 173e2335df96372e3d0740454c9c5da279949bc6
-  "/GestionInventario/page": "app/GestionInventario/page.js"
+  "/Products/[storeId]/page": "app/Products/[storeId]/page.js"
 }
