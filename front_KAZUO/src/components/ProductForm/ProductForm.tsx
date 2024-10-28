@@ -81,7 +81,7 @@ const ProductForm : React.FC<IEditStoreProps>= ({storeId}) => {
       };
 
         try {
-        const response = await fetch(`${kazuo_back}/product`, {
+        const response = await fetch(`${kazuo_back}/products`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

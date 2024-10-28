@@ -20,7 +20,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${kazuo_back}/product`, {
+        const response = await fetch(`${kazuo_back}/products/store/${storeId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${userData?.token}`,
