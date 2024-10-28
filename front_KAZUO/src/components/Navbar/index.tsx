@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import path from "path";
 
+
 export default function Navbar() {
   const { isLoggedIn, logout } = useAppContext();
   const router = useRouter();
