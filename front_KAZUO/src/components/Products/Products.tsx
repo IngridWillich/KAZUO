@@ -2,8 +2,9 @@
 import { IEditStoreProps, IProduct } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
-import productosTest from "@/helpers/product.helper";
 import { useRouter } from "next/navigation";
+import { faTrash} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
@@ -11,8 +12,6 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
-  const [newProduct, setNewProduct] = useState({ name: "", quantity: 0 });
-  const [profileImage, setProfileImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { userData } = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -20,7 +19,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${kazuo_back}/product`, {
+        const response = await fetch(`${kazuo_back}/products/store/${storeId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${userData?.token}`,
@@ -44,6 +43,17 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
       fetchProducts();
     }
   }, [userData]);
+
+  useEffect(() => {
+    const filterLowStockProducts = () => {
+      const lowStock = products.filter(
+        (product) => Number(product.quantity) <= Number(product.minStock)
+      );
+      setLowStockProducts(lowStock);
+    };
+
+    filterLowStockProducts();
+  }, [products]);
 
   const handleCreateNewProduct = () => {
     router.push(`/AddNewProduct/${storeId}`);
@@ -87,41 +97,43 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
               >
                 Stock
               </button>
-              <button
+              {/* <button
                 className={`py-2 px-4 ${
                   activeTab === "low" ? "border-b-2 border-blue-600" : ""
                 }`}
                 onClick={() => setActiveTab("low")}
               >
                 Bajo Stock
-              </button>
+              </button> */}
             </div>
           </div>
 
           {activeTab === "stock" && (
             <div className="mt-4">
               <div className="bg-gray-100 rounded-md p-4">
-                <div className="flex justify-between font-medium">
+                <div className="grid grid-cols-5 font-medium border-b pb-2">
                   <span>Nombre</span>
                   <span>Cantidad</span>
-                  <span>Precio de entrada</span>
-                  <span>Precio de venta</span>
+                  <span>Precio</span>
                   <span>Cantidad minima</span>
                 </div>
                 {products && products.length > 0 ? (
                   products.map((product) => (
                     <div
                       key={product.id}
-                      className="flex justify-between py-2 border-t"
+                      className="grid grid-cols-5 py-2 border-t items-center"
                     >
-                      <span>{product.name}</span>
-                      <span>{product.quantity}</span>
-                      <span>{product.price}</span>
-                      <span>{product.minStock}</span>
+                      <span className="text-center">{product.name}</span>
+                        <span className="text-center">{product.quantity}</span>
+                        <span className="text-center">{product.price} USD</span>
+                        <span className="text-center text-red-600 font-bold">{product.minStock}</span>
+                        <span className="text-center">
+                        <FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-600 cursor-pointer" />
+                        </span>
                     </div>
                   ))
                 ) : (
-                  <div>No hay productos en este inventario</div>
+                  <div className="text-center py-4">No hay productos en este inventario</div>
                 )}
               </div>
             </div>

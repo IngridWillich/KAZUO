@@ -163,12 +163,7 @@ export function validateProductForm(values: IProduct): IProductsErrors {
   //     errors.storeId = "El ID de la bodega solo puede contener letras y números";
   // }
 
-  // // Validación de la imagen
-  // if (!values.image) {
-  //     errors.image = "La imagen es obligatoria";
-  // } else if (!/\.(jpg|jpeg|png|gif)$/i.test(values.image)) {
-  //     errors.image = "La imagen debe ser en formato jpg,png ";
-  // }
+
 
   return errors;
 }

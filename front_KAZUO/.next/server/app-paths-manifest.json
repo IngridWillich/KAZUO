@@ -1,7 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/storeform/page": "app/storeform/page.js",
+  "/Login/page": "app/Login/page.js",
+  "/Register/page": "app/Register/page.js",
   "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
-  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js"
+  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
+  "/storeform/page": "app/storeform/page.js"
 }
