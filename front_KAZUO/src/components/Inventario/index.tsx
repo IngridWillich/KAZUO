@@ -24,14 +24,44 @@ const Inventario: React.FC = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Vista previa en el frontend
       const reader = new FileReader();
       reader.onload = () => {
-        setProfileImage(reader.result as string);
+        setProfileImage(reader.result as string); // Mostrar la imagen como vista previa
       };
       reader.readAsDataURL(file);
+  
+      // Subida al servidor
+      const formData = new FormData();
+      formData.append("image", file); // Cambia 'file' por 'image' para que coincida con el backend
+  
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      
+      fetch(`${kazuo_back}/files/uploadProfileImage`, { // Endpoint del backend
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // Agrega el token en el header
+        },
+        body: formData,
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            setProfileImage(data.imageUrl); // Actualiza la imagen de perfil con la URL del servidor
+          } else {
+            const errorData = await response.json();
+            console.error("Error al subir la imagen:", errorData);
+            Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
+          }
+        })
+        .catch((error) => {
+          console.error("Error al subir la imagen:", error);
+          Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
+        });
     }
   };
-
+  
+  
   const handlePencilClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();

@@ -187,6 +187,8 @@ const Login: React.FC = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+      } finally {
+        console.log("Datos del formulario:", dataUser);
       }
     }
   };
