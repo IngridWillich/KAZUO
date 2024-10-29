@@ -43,7 +43,7 @@ export interface userData {
 }
 
 export interface IProduct {
-  id?: string
+  id?: string;
   name: string;
   quantity: number;
   price: number;
