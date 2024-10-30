@@ -1,0 +1,15 @@
+{
+<<<<<<< HEAD
+  "/_not-found/page": "app/_not-found/page.js",
+  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
+  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
+  "/page": "app/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+=======
+  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
+  "/page": "app/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/Ubicacion/page": "app/Ubicacion/page.js",
+>>>>>>> bf875bf345e705092f5fb7c64d8b3f2f871a039f
+  "/Planes/page": "app/Planes/page.js"
+}
