@@ -1,16 +1,17 @@
 "use client";
-import { IProduct } from "@/interfaces/types";
+import { IEditStoreProps, IProduct } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function Products() {
+const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [currencySettings, setCurrencySettings] = useState<{ [key: string]: string }>({});
+  const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
   const { userData } = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,7 +31,7 @@ export default function Products() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${kazuo_back}/product`, {
+        const response = await fetch(`${kazuo_back}/products/store/${storeId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${userData?.token}`,
@@ -43,6 +44,10 @@ export default function Products() {
         }
 
         const data = await response.json();
+        const sortedProducts = data.sort((a: IProduct, b: IProduct) => 
+          a.name.localeCompare(b.name)
+        );
+        // setProducts(sortedProducts);
         setProducts(data);
       } catch (error) {
         console.error("Error:", error);
@@ -55,8 +60,20 @@ export default function Products() {
     }
   }, [userData]);
 
+  useEffect(() => {
+    const filterLowStockProducts = () => {
+      const lowStock = products.filter(
+        (product) => Number(product.quantity) <= Number(product.minStock)
+      );
+      setLowStockProducts(lowStock);
+    };
+
+    filterLowStockProducts();
+  }, [products]);
+  
+
   const handleCreateNewProduct = () => {
-    router.push("/AddNewProduct");
+    router.push(`/AddNewProduct/${storeId}`);
   };
 
   const handleCurrencyChange = (productId: string, newCurrency: string) => {
@@ -88,6 +105,14 @@ export default function Products() {
               >
                 Stock
               </button>
+              {/* <button
+                className={`py-2 px-4 ${
+                  activeTab === "low" ? "border-b-2 border-blue-600" : ""
+                }`}
+                onClick={() => setActiveTab("low")}
+              >
+                Bajo Stock
+              </button> */}
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
 
 const Login: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -38,6 +39,7 @@ const Login: React.FC = () => {
     const handleAuthenticationComplete = async () => {
       if (isAuthenticated && user) {
         console.log("User authenticated:", user);
+        
         try {
           const accessToken = await getAccessTokenSilently();
           console.log("Access token:", accessToken);
@@ -169,7 +171,7 @@ const Login: React.FC = () => {
             icon: "success",
             confirmButtonText: "Aceptar",
           });
-          router.push("/GestionInventario");
+          router.push(`/GestionInventario`);
         } else {
           Swal.fire({
             title: "Error",
@@ -185,17 +187,20 @@ const Login: React.FC = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+      } finally {
+        console.log("Datos del formulario:", dataUser);
       }
     }
   };
 
-  const handleGoogleLogin = () => {
-    loginWithRedirect({
-      authorizationParams: {
-        connection: "google-oauth2",
-      },
-    });
-  };
+  // const handleGoogleLogin = () => {
+  //   loginWithRedirect({
+  //     authorizationParams: {
+  //       connection: "google-oauth2",
+  //     },
+  //   });
+  // };
+  const handleGoogleLogin = () => loginWithRedirect();
 
   const isFormValid =
     Object.keys(errors).length === 0 && Object.values(touched).every((t) => t);

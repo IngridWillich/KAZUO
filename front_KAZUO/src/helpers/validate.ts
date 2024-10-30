@@ -163,6 +163,7 @@ export function validateProductForm(values: IProduct): IProductsErrors {
   //     errors.storeId = "El ID de la bodega solo puede contener letras y números";
   // }
 
- 
+
+
   return errors;
 }

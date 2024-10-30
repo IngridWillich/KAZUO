@@ -3,10 +3,11 @@ import { useState } from "react";
 import { TRegisterError, IRegisterProps } from "@/interfaces/types";
 import { validateRegisterForm } from "@/helpers/validate";
 import Swal from "sweetalert2";
+// import { register } from "@/helpers/auth.helper";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
   const initialState: IRegisterProps = {
     email: "",
@@ -88,15 +89,18 @@ const Register = () => {
         } else {
           throw new Error("Respuesta no exitosa del servidor");
         }
-      } catch (error) {
+      } catch (response) {
         Swal.fire({
           title: "Error al hacer tu registro",
-          text: "Inténtalo nuevamente",
+          text: "Intentalo de nuevo",
           icon: "error",
           confirmButtonText: "Aceptar",
         });
       }
+
     }
+
+    
   };
 
   const isFormValid =

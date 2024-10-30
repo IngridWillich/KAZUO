@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { ICategory } from "@/interfaces/types";
+import { headers } from "next/headers";
 
 export const StoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -11,18 +12,9 @@ export const StoreForm = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
-  useEffect(() => {
-    const handlefetchCategories = async () => {
-      try {
-        const response = await fetch(`${kazuo_back}/category`);
-        const dataCategory = await response.json();
-        localStorage.setItem("Categorias", JSON.stringify(dataCategory));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    handlefetchCategories();
-  }, []);
+  const categoriesFromStorage: ICategory[] = JSON.parse(
+    localStorage.getItem("Categorias") || "[]"
+  );
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -35,20 +27,35 @@ export const StoreForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const userData = localStorage.getItem("userData");
+    let userId = "";
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      userId = parsedUserData.id;
+    }
+
+    let token = "";
+   if (userData) {
+     const parsedUserData = JSON.parse(userData);
+     token = parsedUserData.token; // Ensure this token is valid
+   }
+
     const dataStore = {
       name,
       categoryName: selectedCategory,
+      userId: userId,
     };
-
+   
     try {
-      const response = await fetch(`${kazuo_back}/store/bodega`, {
+      const response = await fetch(`${kazuo_back}/store/bodega/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(dataStore),
       });
-
+      console.log(dataStore);
       if (response.ok) {
         Swal.fire({
           title: "¡Bodega creada!",
@@ -69,10 +76,6 @@ export const StoreForm = () => {
       });
     }
   };
-
-  const categoriesFromStorage: ICategory[] = JSON.parse(
-    localStorage.getItem("Categorias") || "[]"
-  );
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">

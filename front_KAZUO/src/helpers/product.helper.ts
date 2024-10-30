@@ -5,7 +5,8 @@
 //       name: "Camiseta de algodón",
 //       quantity: 100,
 //       price: 19.99,
-//       minStock: 20
+//       minStock: 20,
+//       categoryName:
 //     },
 //     {
 //       name: "Pantalón vaquero",
