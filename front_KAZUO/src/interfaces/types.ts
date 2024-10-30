@@ -52,7 +52,7 @@ export interface IProduct {
   price: number;
   minStock: number;
   storeId: string;
-  UserId: string
+  userId: string
 }
 
 export interface IProductsErrors {

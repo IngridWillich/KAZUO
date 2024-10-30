@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/Contacto/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Contacto/page.js"
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,9 +11,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-<<<<<<< HEAD
-    "/GestionInventario/page": [
-=======
     "/Login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -24,62 +21,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
     ],
-    "/storeform/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/storeform/page.js"
-    ],
-    "/Register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Register/page.js"
-    ],
-    "/storeform/[storeId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/storeform/[storeId]/page.js"
-    ],
     "/Products/[storeId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Products/[storeId]/page.js"
     ],
     "/AddNewProduct/[storeId]/page": [
->>>>>>> bf875bf345e705092f5fb7c64d8b3f2f871a039f
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/AddNewProduct/[storeId]/page.js"
     ],
-<<<<<<< HEAD
+    "/storeform/[storeId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/storeform/[storeId]/page.js"
+    ],
+    "/Products/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Products/page.js"
+    ],
     "/storeform/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/storeform/page.js"
-    ],
-    "/EditStoreForm/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/EditStoreForm/page.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-=======
-    "/Ubicacion/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Ubicacion/page.js"
->>>>>>> bf875bf345e705092f5fb7c64d8b3f2f871a039f
-    ],
-    "/Register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-<<<<<<< HEAD
-      "static/chunks/app/Register/page.js"
-=======
-      "static/chunks/app/Planes/page.js"
->>>>>>> bf875bf345e705092f5fb7c64d8b3f2f871a039f
     ]
   }
 }

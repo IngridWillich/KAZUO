@@ -70,6 +70,7 @@ const Register = () => {
           },
           body: JSON.stringify(dataUser),
         });
+      
         if (response.ok) {
           Swal.fire({
             title: "¡Te has registrado exitosamente!",

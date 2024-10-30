@@ -18,7 +18,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     price: 0,
     minStock: 0,
     storeId: storeId,
-    UserId: "",
+    userId: "",
   });
 
   const [errors, setErrors] = useState<IProductsErrors>({});
@@ -66,19 +66,19 @@ handleBulkUpload(productsToSend);
       reader.readAsArrayBuffer(file);
     }
   };
-
   const handleBulkUpload = async (products: IProduct[]) => {
     try {
-      const response = await fetch(`${kazuo_back}/products/bulk`, {
+      const response = await fetch(`${kazuo_back}/product/bulk`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(products),
       });
-      if(response.ok){
+  
+      if (response.ok) {
         Swal.fire({
-          title: "Productos Añadidos con exito",
+          title: "Productos Añadidos con éxito",
           text: "Los productos han sido almacenados",
           icon: "success",
           confirmButtonText: "Aceptar",
@@ -88,7 +88,7 @@ handleBulkUpload(productsToSend);
         const errorData = await response.json();
         throw new Error(errorData.message || "No se pudo cargar los productos");
       }
-    } catch (error){
+    } catch (error) {
       Swal.fire({
         title: "Error",
         text: "No se pudo cargar los productos. Por favor, inténtalo de nuevo.",
@@ -96,8 +96,8 @@ handleBulkUpload(productsToSend);
         confirmButtonText: "Aceptar",
       });
     }
-  }
-
+  };
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -106,17 +106,17 @@ handleBulkUpload(productsToSend);
     }));
     validateField(name, value);
   };
-
+  
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     validateField(name, value);
   };
-
-  const handleSubmit= async (e: React.FormEvent) => {
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
-
+  
     if (Object.keys(validationErrors).length === 0) {
       let userId = "";
       const userData = localStorage.getItem("userData");
@@ -124,6 +124,7 @@ handleBulkUpload(productsToSend);
         const parsedUserData = JSON.parse(userData);
         userId = parsedUserData.id;
       }
+  
       const dataToSend = {
         ...formData,
         quantity: Number(formData.quantity),
@@ -132,16 +133,16 @@ handleBulkUpload(productsToSend);
         userId: userId,
         storeId: storeId,
       };
-
+  
       try {
-        const response = await fetch(`${kazuo_back}/products`, {
+        const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataToSend),
         });
-
+  
         if (response.ok) {
           Swal.fire({
             title: "¡Producto creado!",
@@ -165,7 +166,7 @@ handleBulkUpload(productsToSend);
       }
     }
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
@@ -287,5 +288,4 @@ handleBulkUpload(productsToSend);
   );
 };
 
-
-export default ProductForm
+export default ProductForm;
