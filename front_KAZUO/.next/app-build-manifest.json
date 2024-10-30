@@ -25,6 +25,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/AddNewProduct/[storeId]/page.js"
+    ],
+    "/Login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Login/page.js"
+    ],
+    "/storeform/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/storeform/page.js"
     ]
   }
 }

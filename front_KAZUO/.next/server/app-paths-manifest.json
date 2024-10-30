@@ -1,6 +1,8 @@
 {
+  "/page": "app/page.js",
+  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
   "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
-  "/page": "app/page.js",
-  "/Products/[storeId]/page": "app/Products/[storeId]/page.js"
+  "/Login/page": "app/Login/page.js",
+  "/storeform/page": "app/storeform/page.js"
 }

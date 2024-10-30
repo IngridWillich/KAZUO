@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
@@ -12,22 +12,40 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<IProduct>({
-    
     name: "",
     quantity: 0,
-    price: 0,
+    unids: "",
+    maxCapacity: 0,
+    inPrice: 0,
+    bange: "",
+    outPrice: 0,
     minStock: 0,
-    storeId: storeId,
     userId: "",
+    storeId: "",
   });
+  const [selectedCurrency, setSelectedCurrency] = useState("USD")
+  const [exchangeRates, setExchangeRates] = useState<{[key: string]: number }>({}); 
 
   const [errors, setErrors] = useState<IProductsErrors>({});
 
   // Verificar si todos los campos están completos
   const areFieldsFilled = () => {
     return (
-      formData.name && formData.quantity && formData.price && formData.minStock
+      formData.name &&
+      formData.quantity &&
+      formData.inPrice &&
+      formData.minStock &&
+      formData.outPrice &&
+      formData.unids &&
+      formData.maxCapacity &&
+      formData.bange
     );
+  };
+
+  const convertPrice = (price: number, fromCurrency: string, toCurrency: string) => {
+    if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency]) return price;
+    const priceInUSD = price / exchangeRates[fromCurrency];
+    return priceInUSD * exchangeRates[toCurrency];
   };
 
   const validateField = (name: string, value: string) => {
@@ -41,27 +59,63 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const downloadTemplate = () => {
+    const fileId = '1e1xuwETRuSMJK1-p6hJa8fWTb8Xj3y6j';
+    const exportUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=xlsx`;
+    
+    fetch(exportUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "plantilla.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      })
+      .catch(error => {
+        console.error('Error al descargar la plantilla:', error);
+        alert('Error al descargar la plantilla. Por favor, intente nuevamente.');
+      });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if(file){
+    if (file) {
       const reader = new FileReader();
-      reader.onload = (event) =>{
+      reader.onload = (event) => {
         const data = new Uint8Array(event.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, {type: "array"});
+        const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
 
-        const productsData: IProduct[] = XLSX.utils.sheet_to_json(worksheet);
-        console.log(storeId);
-        console.log(localStorage.getItem("userData"));
-const userId = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!).id : "";
-const productsToSend = productsData.map(product => ({
-  ...product,
-  storeId: storeId,
-  userId: userId
-}));
+        const range = XLSX.utils.decode_range("B4:I1000");
+        const productsData: IProduct[] = [];
+        for (let R = range.s.r + 1; R <= range.e.r; ++R) {
+          const row = {
+            name: worksheet[XLSX.utils.encode_cell({ r: R, c: 1 })]?.v,
+            quantity: worksheet[XLSX.utils.encode_cell({ r: R, c: 2 })]?.v,
+            unids: worksheet[XLSX.utils.encode_cell({ r: R, c: 3 })]?.v,
+            maxCapacity: worksheet[XLSX.utils.encode_cell({ r: R, c: 4 })]?.v,
+            inPrice: worksheet[XLSX.utils.encode_cell({ r: R, c: 5 })]?.v,
+            bange: worksheet[XLSX.utils.encode_cell({ r: R, c: 6 })]?.v,
+            outPrice: worksheet[XLSX.utils.encode_cell({ r: R, c: 7 })]?.v,
+            minStock: worksheet[XLSX.utils.encode_cell({ r: R, c: 8 })]?.v,
+          };
+          if (row.name) productsData.push(row as IProduct);
+        }
+        const userId = localStorage.getItem("userData")
+          ? JSON.parse(localStorage.getItem("userData")!).id
+          : "";
+        const productsToSend = productsData.map((product) => ({
+          ...product,
+          storeId: storeId,
+          userId: userId,
+        }));
 
-handleBulkUpload(productsToSend);
+        handleBulkUpload(productsToSend);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -69,14 +123,14 @@ handleBulkUpload(productsToSend);
 
   const handleBulkUpload = async (products: IProduct[]) => {
     try {
-      const response = await fetch(`${kazuo_back}/products/bulk`, {
+      const response = await fetch(`${kazuo_back}/product/bulk`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(products),
       });
-      if(response.ok){
+      if (response.ok) {
         Swal.fire({
           title: "Productos Añadidos con exito",
           text: "Los productos han sido almacenados",
@@ -88,7 +142,7 @@ handleBulkUpload(productsToSend);
         const errorData = await response.json();
         throw new Error(errorData.message || "No se pudo cargar los productos");
       }
-    } catch (error){
+    } catch (error) {
       Swal.fire({
         title: "Error",
         text: "No se pudo cargar los productos. Por favor, inténtalo de nuevo.",
@@ -96,14 +150,38 @@ handleBulkUpload(productsToSend);
         confirmButtonText: "Aceptar",
       });
     }
-  }
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        setExchangeRates(data.rates);
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
+  
+    fetchExchangeRates();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+if(name === 'bange'){
+  setSelectedCurrency(value)
+const newPrice = convertPrice(formData.outPrice,formData.bange, value );
+setFormData(prevState => ({
+  ...prevState,
+  [name]: value,
+  outPrice: newPrice
+}))
+} else {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+  }
     validateField(name, value);
   };
 
@@ -116,6 +194,8 @@ handleBulkUpload(productsToSend);
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
+    console.log(formData)
+    console.log(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
       let userId = "";
@@ -127,14 +207,16 @@ handleBulkUpload(productsToSend);
       const dataToSend = {
         ...formData,
         quantity: Number(formData.quantity),
-        price: Number(formData.price),
+        inPrice: Number(formData.inPrice),
+        maxCapacity: Number(formData.maxCapacity),
+        outPrice: Number(formData.outPrice),
         minStock: Number(formData.minStock),
         userId: userId,
         storeId: storeId,
       };
 
       try {
-        const response = await fetch(`${kazuo_back}/products`, {
+        const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -164,7 +246,7 @@ handleBulkUpload(productsToSend);
         });
       }
     }
-  };
+  };  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -220,28 +302,112 @@ handleBulkUpload(productsToSend);
 
           <div className="space-y-2">
             <label
-              htmlFor="price"
+              htmlFor="unids"
               className="block text-sm font-medium text-gray-700"
             >
-              Precio:
+              Unidad de medida:
             </label>
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-              $
-            </span>
             <input
-              type="number"
-              name="price"
-              id="price"
-              value={formData.price}
+              type="string"
+              name="unids"
+              id="unids"
+              value={formData.unids}
               onChange={handleChange}
               onBlur={handleBlur}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Ingrese el precio"
-              min="0"
+              placeholder="Ingresa el valor como lo cuentas"
               required
             />
-            <span className="ml-2 text-gray-500">USD</span>
-            {errors.price && <p className="text-red-600">{errors.price}</p>}
+            {/*ESPACIO PARA LA VALIDACION*/}
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="maxCapacity"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Capacidad maxima:
+            </label>
+            <input
+              type="number"
+              name="maxCapacity"
+              id="maxCapacity"
+              value={formData.maxCapacity}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingresa la capacidad maxima de almacenamiento"
+              required
+            />
+            {/*ESPACIO PARA LA VALIDACION*/}
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="inPrice"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Precio de compra:
+            </label>
+            <input
+              type="number"
+              name="inPrice"
+              id="inPrice"
+              value={formData.inPrice}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingresa el valor por el que lo compraste"
+              required
+            />
+            {/*ESPACIO PARA LA VALIDACION*/}
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="bange"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Moneda de uso:
+            </label>
+            <select
+    name="bange"
+    id="bange"
+    value={formData.bange}
+    onChange={handleChange}
+    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+    required
+  >
+    <option value="">Seleccione una moneda</option>
+    <option value="USD">USD</option>
+    <option value="MXN">MXN</option>
+    <option value="BOB">BOB</option>
+    <option value="ARS">ARS</option>
+    <option value="COP">COP</option>
+    <option value="EUR">EUR</option>
+  </select>
+            {/*ESPACIO PARA LA VALIDACION*/}
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="outPrice"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Valor de venta ({formData.bange}):
+            </label>
+            <input
+              type="number"
+              name="outPrice"
+              id="outPrice"
+              value={Number(formData.outPrice).toFixed(2)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingresa el valor de venta"
+              required
+            />
+            {/*ESPACIO PARA LA VALIDACION*/}
           </div>
 
           <div className="space-y-2">
@@ -280,7 +446,13 @@ handleBulkUpload(productsToSend);
             Registrar Producto
           </button>
           <p>O</p>
-          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange}/>
+          <button
+            onClick={downloadTemplate}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Descargar Plantilla
+          </button>
+          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
         </form>
       </div>
     </div>
