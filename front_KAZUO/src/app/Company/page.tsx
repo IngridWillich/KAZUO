@@ -8,10 +8,10 @@ function company() {
     
     return (
         <div>
-          <ProtectedRoutes>
-            
+          
+           
           <Company />
-          </ProtectedRoutes>
+     
 
         </div>
     );

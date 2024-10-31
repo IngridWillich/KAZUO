@@ -7,10 +7,10 @@ function companyregister() {
     
     return (
         <div>
-          <ProtectedRoutes>
+          
 
           <CompanyRegistrationForm />
-          </ProtectedRoutes>
+          
         </div>
     );
 }
