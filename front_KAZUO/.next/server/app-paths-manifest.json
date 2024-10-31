@@ -1,12 +1,6 @@
 {
-<<<<<<< HEAD
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Login/page": "app/Login/page.js"
-=======
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
-  "/page": "app/page.js",
-  "/Products/[storeId]/page": "app/Products/[storeId]/page.js"
->>>>>>> 4fa252904c1dec3d388a4c46540b30a73ba7daad
+  "/Login/page": "app/Login/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js"
 }

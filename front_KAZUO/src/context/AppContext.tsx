@@ -41,6 +41,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserData(newUserData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(newUserData));
+      localStorage.setItem("token", userData?.token!);
     }
   }, [isAuthenticated, user]); // Incluido isAuthenticated y user
 
@@ -50,10 +51,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserData(loginData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(loginData));
-    } catch (error) {
+  } catch (error) {
       console.error("Error de login", error);
       throw error;
-    }
+  }
   };
 
   const logout = () => {

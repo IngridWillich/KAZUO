@@ -1,9 +1,9 @@
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[14].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src\\app\\layout.tsx","import":"Inter","arguments":[{"subsets":["latin"]}],"variableName":"inter"} ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src\\app\\layout.tsx","import":"Inter","arguments":[{"subsets":["latin"]}],"variableName":"inter"} ***!
   \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* cyrillic-ext */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -12,7 +12,7 @@
 }
 /* cyrillic */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -21,7 +21,7 @@
 }
 /* greek-ext */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -30,7 +30,7 @@
 }
 /* greek */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -39,7 +39,7 @@
 }
 /* vietnamese */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -48,7 +48,7 @@
 }
 /* latin-ext */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -57,18 +57,18 @@
 }
 /* latin */
 @font-face {
-  font-family: '__Inter_d65c78';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
   src: url(/_next/static/media/a34f9d1faa5f3315-s.p.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}@font-face {font-family: '__Inter_Fallback_d65c78';src: local("Arial");ascent-override: 90.49%;descent-override: 22.56%;line-gap-override: 0.00%;size-adjust: 107.06%
-}.__className_d65c78 {font-family: '__Inter_d65c78', '__Inter_Fallback_d65c78';font-style: normal
+}@font-face {font-family: 'Inter Fallback';src: local("Arial");ascent-override: 90.49%;descent-override: 22.56%;line-gap-override: 0.00%;size-adjust: 107.06%
+}.__className_d65c78 {font-family: 'Inter', 'Inter Fallback';font-style: normal
 }
 
 /*!*****************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./src/app/globals.css ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./src/app/globals.css ***!
   \*****************************************************************************************************************************************************************************************************************************************************************/
 
 body {
@@ -764,12 +764,20 @@ video {
     margin-left:2rem;
     
 }
+  .mr-1 {
+    margin-right:0.25rem;
+    
+}
   .mr-2 {
     margin-right:0.5rem;
     
 }
   .mr-4 {
     margin-right:1rem;
+    
+}
+  .mt-1 {
+    margin-top:0.25rem;
     
 }
   .mt-12 {
@@ -806,6 +814,10 @@ video {
 }
   .flex {
     display:flex;
+    
+}
+  .inline-flex {
+    display:inline-flex;
     
 }
   .grid {
@@ -896,6 +908,10 @@ video {
     max-width:80rem;
     
 }
+  .max-w-lg {
+    max-width:32rem;
+    
+}
   .max-w-md {
     max-width:28rem;
     
@@ -930,6 +946,10 @@ video {
 }
   .cursor-pointer {
     cursor:pointer;
+    
+}
+  .appearance-none {
+    appearance:none;
     
 }
   .grid-cols-1 {
@@ -1082,9 +1102,18 @@ video {
     border-color:rgb(29 78 216 / var(--tw-border-opacity));
     
 }
+  .border-gray-200 {
+    --tw-border-opacity:1;
+    border-color:rgb(229 231 235 / var(--tw-border-opacity));
+    
+}
   .border-gray-300 {
     --tw-border-opacity:1;
     border-color:rgb(209 213 219 / var(--tw-border-opacity));
+    
+}
+  .border-transparent {
+    border-color:transparent;
     
 }
   .bg-\[\#d7e6bb\] {
@@ -1162,6 +1191,11 @@ video {
     background-color:rgb(17 24 39 / var(--tw-bg-opacity));
     
 }
+  .bg-green-500 {
+    --tw-bg-opacity:1;
+    background-color:rgb(34 197 94 / var(--tw-bg-opacity));
+    
+}
   .bg-green-600 {
     --tw-bg-opacity:1;
     background-color:rgb(22 163 74 / var(--tw-bg-opacity));
@@ -1170,6 +1204,11 @@ video {
   .bg-red-500 {
     --tw-bg-opacity:1;
     background-color:rgb(239 68 68 / var(--tw-bg-opacity));
+    
+}
+  .bg-red-600 {
+    --tw-bg-opacity:1;
+    background-color:rgb(220 38 38 / var(--tw-bg-opacity));
     
 }
   .bg-slate-300 {
@@ -1260,6 +1299,11 @@ video {
     padding-bottom:1rem;
     
 }
+  .py-5 {
+    padding-top:1.25rem;
+    padding-bottom:1.25rem;
+    
+}
   .py-6 {
     padding-top:1.5rem;
     padding-bottom:1.5rem;
@@ -1284,6 +1328,10 @@ video {
 }
   .text-center {
     text-align:center;
+    
+}
+  .text-right {
+    text-align:right;
     
 }
   .text-2xl {
@@ -1316,6 +1364,11 @@ video {
     line-height:1.75rem;
     
 }
+  .text-xs {
+    font-size:0.75rem;
+    line-height:1rem;
+    
+}
   .font-bold {
     font-weight:700;
     
@@ -1334,6 +1387,18 @@ video {
 }
   .uppercase {
     text-transform:uppercase;
+    
+}
+  .capitalize {
+    text-transform:capitalize;
+    
+}
+  .leading-4 {
+    line-height:1rem;
+    
+}
+  .leading-6 {
+    line-height:1.5rem;
     
 }
   .leading-snug {
@@ -1405,6 +1470,11 @@ video {
     color:rgb(31 41 55 / var(--tw-text-opacity));
     
 }
+  .text-gray-900 {
+    --tw-text-opacity:1;
+    color:rgb(17 24 39 / var(--tw-text-opacity));
+    
+}
   .text-indigo-400 {
     --tw-text-opacity:1;
     color:rgb(129 140 248 / var(--tw-text-opacity));
@@ -1447,6 +1517,17 @@ video {
   .placeholder-blue-400::placeholder {
     --tw-placeholder-opacity:1;
     color:rgb(96 165 250 / var(--tw-placeholder-opacity));
+    
+}
+  .placeholder-gray-400::placeholder {
+    --tw-placeholder-opacity:1;
+    color:rgb(156 163 175 / var(--tw-placeholder-opacity));
+    
+}
+  .shadow {
+    --tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+    box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     
 }
   .shadow-lg {
@@ -1549,6 +1630,11 @@ video {
     background-color:rgb(31 41 55 / var(--tw-bg-opacity));
     
 }
+  .hover\:bg-green-600:hover {
+    --tw-bg-opacity:1;
+    background-color:rgb(22 163 74 / var(--tw-bg-opacity));
+    
+}
   .hover\:bg-green-700:hover {
     --tw-bg-opacity:1;
     background-color:rgb(21 128 61 / var(--tw-bg-opacity));
@@ -1557,6 +1643,11 @@ video {
   .hover\:bg-red-600:hover {
     --tw-bg-opacity:1;
     background-color:rgb(220 38 38 / var(--tw-bg-opacity));
+    
+}
+  .hover\:bg-red-700:hover {
+    --tw-bg-opacity:1;
+    background-color:rgb(185 28 28 / var(--tw-bg-opacity));
     
 }
   .hover\:text-blue-200:hover {
@@ -1593,6 +1684,11 @@ video {
     text-decoration-line:underline;
     
 }
+  .focus\:border-blue-500:focus {
+    --tw-border-opacity:1;
+    border-color:rgb(59 130 246 / var(--tw-border-opacity));
+    
+}
   .focus\:border-indigo-500:focus {
     --tw-border-opacity:1;
     border-color:rgb(99 102 241 / var(--tw-border-opacity));
@@ -1614,9 +1710,19 @@ video {
     --tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity));
     
 }
+  .focus\:ring-green-500:focus {
+    --tw-ring-opacity:1;
+    --tw-ring-color:rgb(34 197 94 / var(--tw-ring-opacity));
+    
+}
   .focus\:ring-indigo-500:focus {
     --tw-ring-opacity:1;
     --tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity));
+    
+}
+  .focus\:ring-red-500:focus {
+    --tw-ring-opacity:1;
+    --tw-ring-color:rgb(239 68 68 / var(--tw-ring-opacity));
     
 }
   .focus\:ring-offset-2:focus {
@@ -1625,8 +1731,65 @@ video {
 }
   @media (min-width: 640px) {
   
+    .sm\:col-span-2 {
+        grid-column:span 2 / span 2;
+    
+    }
+  
+    .sm\:mx-auto {
+        margin-left:auto;
+        margin-right:auto;
+    
+    }
+  
+    .sm\:mt-0 {
+        margin-top:0px;
+    
+    }
+  
+    .sm\:grid {
+        display:grid;
+    
+    }
+  
+    .sm\:w-full {
+        width:100%;
+    
+    }
+  
+    .sm\:max-w-md {
+        max-width:28rem;
+    
+    }
+  
+    .sm\:max-w-xs {
+        max-width:20rem;
+    
+    }
+  
     .sm\:grid-cols-2 {
         grid-template-columns:repeat(2, minmax(0, 1fr));
+    
+    }
+  
+    .sm\:grid-cols-3 {
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+    
+    }
+  
+    .sm\:gap-4 {
+        gap:1rem;
+    
+    }
+  
+    .sm\:rounded-lg {
+        border-radius:0.5rem;
+    
+    }
+  
+    .sm\:px-10 {
+        padding-left:2.5rem;
+        padding-right:2.5rem;
     
     }
   
