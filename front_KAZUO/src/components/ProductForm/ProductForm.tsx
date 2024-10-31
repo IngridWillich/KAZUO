@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
@@ -12,22 +12,42 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<IProduct>({
-    
     name: "",
     quantity: 0,
-    price: 0,
+    unids: "",
+    maxCapacity: 0,
+    inPrice: 0,
+    bange: "",
+    outPrice: 0,
     minStock: 0,
-    storeId: storeId,
     userId: "",
+    storeId: "",
   });
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+ 
+  const [exchangeRates, setExchangeRates] = useState<{ [key: string]: number }>({});
+
+  
 
   const [errors, setErrors] = useState<IProductsErrors>({});
 
-  // Verificar si todos los campos están completos
   const areFieldsFilled = () => {
     return (
-      formData.name && formData.quantity && formData.price && formData.minStock
+      formData.name &&
+      formData.quantity &&
+      formData.inPrice &&
+      formData.minStock &&
+      formData.outPrice &&
+      formData.unids &&
+      formData.maxCapacity &&
+      formData.bange
     );
+  };
+
+  const convertPrice = (price: number, fromCurrency: string, toCurrency: string) => {
+    if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency]) return price;
+    const priceInUSD = price / exchangeRates[fromCurrency];
+    return priceInUSD * exchangeRates[toCurrency];
   };
 
   const validateField = (name: string, value: string) => {
@@ -41,31 +61,68 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const downloadTemplate = () => {
+    const fileId = '1e1xuwETRuSMJK1-p6hJa8fWTb8Xj3y6j';
+    const exportUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=xlsx`;
+    
+    fetch(exportUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "plantilla.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      })
+      .catch(error => {
+        console.error('Error al descargar la plantilla:', error);
+        alert('Error al descargar la plantilla. Por favor, intente nuevamente.');
+      });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if(file){
+    if (file) {
       const reader = new FileReader();
-      reader.onload = (event) =>{
+      reader.onload = (event) => {
         const data = new Uint8Array(event.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, {type: "array"});
+        const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
 
-        const productsData: IProduct[] = XLSX.utils.sheet_to_json(worksheet);
-        console.log(storeId);
-        console.log(localStorage.getItem("userData"));
-const userId = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!).id : "";
-const productsToSend = productsData.map(product => ({
-  ...product,
-  storeId: storeId,
-  userId: userId
-}));
+        const range = XLSX.utils.decode_range("B4:I1000");
+        const productsData: IProduct[] = [];
+        for (let R = range.s.r + 1; R <= range.e.r; ++R) {
+          const row = {
+            name: worksheet[XLSX.utils.encode_cell({ r: R, c: 1 })]?.v,
+            quantity: worksheet[XLSX.utils.encode_cell({ r: R, c: 2 })]?.v,
+            unids: worksheet[XLSX.utils.encode_cell({ r: R, c: 3 })]?.v,
+            maxCapacity: worksheet[XLSX.utils.encode_cell({ r: R, c: 4 })]?.v,
+            inPrice: worksheet[XLSX.utils.encode_cell({ r: R, c: 5 })]?.v,
+            bange: worksheet[XLSX.utils.encode_cell({ r: R, c: 6 })]?.v,
+            outPrice: worksheet[XLSX.utils.encode_cell({ r: R, c: 7 })]?.v,
+            minStock: worksheet[XLSX.utils.encode_cell({ r: R, c: 8 })]?.v,
+          };
+          if (row.name) productsData.push(row as IProduct);
+        }
+        const userId = localStorage.getItem("userData")
+          ? JSON.parse(localStorage.getItem("userData")!).id
+          : "";
+        const productsToSend = productsData.map((product) => ({
+          ...product,
+          storeId: storeId,
+          userId: userId,
+        }));
 
-handleBulkUpload(productsToSend);
+        handleBulkUpload(productsToSend);
       };
       reader.readAsArrayBuffer(file);
     }
   };
+
   const handleBulkUpload = async (products: IProduct[]) => {
     try {
       const response = await fetch(`${kazuo_back}/product/bulk`, {
@@ -75,7 +132,6 @@ handleBulkUpload(productsToSend);
         },
         body: JSON.stringify(products),
       });
-  
       if (response.ok) {
         Swal.fire({
           title: "Productos Añadidos con éxito",
@@ -97,26 +153,50 @@ handleBulkUpload(productsToSend);
       });
     }
   };
+
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        setExchangeRates(data.rates);
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    fetchExchangeRates();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if(name === 'bange'){
+      setSelectedCurrency(value);
+      const newPrice = convertPrice(formData.outPrice, formData.bange, value);
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: value,
+        outPrice: newPrice
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
     validateField(name, value);
   };
-  
+
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     validateField(name, value);
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
-  
+
     if (Object.keys(validationErrors).length === 0) {
       let userId = "";
       const userData = localStorage.getItem("userData");
@@ -128,7 +208,9 @@ handleBulkUpload(productsToSend);
       const dataToSend = {
         ...formData,
         quantity: Number(formData.quantity),
-        price: Number(formData.price),
+        inPrice: Number(formData.inPrice),
+        maxCapacity: Number(formData.maxCapacity),
+        outPrice: Number(formData.outPrice),
         minStock: Number(formData.minStock),
         userId: userId,
         storeId: storeId,
@@ -166,19 +248,15 @@ handleBulkUpload(productsToSend);
       }
     }
   };
-  
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold text-center text-blue-700">
-          Registrar
-        </h2>
+        <h2 className="text-2xl font-bold text-center text-blue-700">Registrar</h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Nombre del Producto:
             </label>
             <input
@@ -194,12 +272,9 @@ handleBulkUpload(productsToSend);
             />
             {errors.name && <p className="text-red-600">{errors.name}</p>}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="quantity"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
               Cantidad:
             </label>
             <input
@@ -214,42 +289,95 @@ handleBulkUpload(productsToSend);
               min="0"
               required
             />
-            {errors.quantity && (
-              <p className="text-red-600">{errors.quantity}</p>
-            )}
+            {errors.quantity && <p className="text-red-600">{errors.quantity}</p>}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="price"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Precio:
+            <label htmlFor="unids" className="block text-sm font-medium text-gray-700">
+              Unidad de medida:
             </label>
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-              $
-            </span>
             <input
-              type="number"
-              name="price"
-              id="price"
-              value={formData.price}
+              type="text"
+              name="unids"
+              id="unids"
+              value={formData.unids}
               onChange={handleChange}
               onBlur={handleBlur}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Ingrese el precio"
-              min="0"
+              placeholder="Ingresa el valor como lo cuentas"
               required
             />
-            <span className="ml-2 text-gray-500">USD</span>
+          </div>
+  
+          <div className="space-y-2">
+            <label htmlFor="maxCapacity" className="block text-sm font-medium text-gray-700">
+              Capacidad máxima:
+            </label>
+            <input
+              type="number"
+              name="maxCapacity"
+              id="maxCapacity"
+              value={formData.maxCapacity}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingresa la capacidad máxima de almacenamiento"
+              required
+            />
+          </div>
+  
+          <div className="space-y-2">
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+              Precio de Venta:
+            </label>
+            <div className="flex items-center">
+            <input
+  type="number"
+  name="inPrice" 
+  id="inPrice"
+  value={formData.inPrice}
+  onChange={handleChange}
+  onBlur={handleBlur}
+  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+  placeholder="Ingrese el precio de compra..."
+  required
+/>
+              
+              <select
+                value={selectedCurrency}
+                onChange={handleChange}
+                className="ml-2 px-2 py-1 border rounded-md"
+              >
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+              </select>
+            </div>
+            <p className="text-gray-500 mt-1">
+              {/* Precio en {currency}: {convertedPrice.toFixed(2)} {currency} */}
+            </p>
             {errors.price && <p className="text-red-600">{errors.price}</p>}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="minStock"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="outPrice" className="block text-sm font-medium text-gray-700">
+              Valor de venta ({formData.bange}):
+            </label>
+            <input
+              type="number"
+              name="outPrice"
+              id="outPrice"
+              value={Number(formData.outPrice).toFixed(2)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingresa el valor de venta"
+              required
+            />
+          </div>
+  
+          <div className="space-y-2">
+            <label htmlFor="minStock" className="block text-sm font-medium text-gray-700">
               Cantidad Mínima:
             </label>
             <input
@@ -264,11 +392,9 @@ handleBulkUpload(productsToSend);
               min="0"
               required
             />
-            {errors.minStock && (
-              <p className="text-red-600">{errors.minStock}</p>
-            )}
+            {errors.minStock && <p className="text-red-600">{errors.minStock}</p>}
           </div>
-
+  
           <button
             type="submit"
             disabled={!areFieldsFilled()}
@@ -280,12 +406,21 @@ handleBulkUpload(productsToSend);
           >
             Registrar Producto
           </button>
-          <p>O</p>
-          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange}/>
+          
+          <p className="text-center">O</p>
+          
+          <button
+            onClick={downloadTemplate}
+            className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+          >
+            Descargar Plantilla
+          </button>
+          
+          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="mt-4" />
         </form>
       </div>
     </div>
   );
-};
+}  
 
 export default ProductForm;

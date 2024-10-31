@@ -147,14 +147,14 @@ export function validateProductForm(values: IProduct): IProductsErrors {
   }
 
   // Validación del precio
-  if (!values.price) {
-      errors.price = "El precio es obligatorio";
-  } else if (isNaN(Number(values.price))) {
-      errors.price = "El precio debe ser un número válido";
-  } else if (Number(values.price) <= 0) {
-      errors.price = "El precio debe ser mayor que cero";
+  // if (!values.price) {
+  //     errors.price = "El precio es obligatorio";
+  // } else if (isNaN(Number(values.price))) {
+  //     errors.price = "El precio debe ser un número válido";
+  // } else if (Number(values.price) <= 0) {
+  //     errors.price = "El precio debe ser mayor que cero";
 
-  }
+  // }
 
   // // Validación del ID de la tienda
   // if (!values.storeId) {

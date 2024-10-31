@@ -1,7 +1,7 @@
 export interface ILoginProps {
   email: string;
   password: string;
-  name?: string
+  name?: string;
   userId?: string;
   token?: string;
 }
@@ -49,17 +49,21 @@ export interface IProduct {
   id?: string;
   name: string;
   quantity: number;
-  price: number;
+  unids: string;
+  maxCapacity: number;
+  inPrice: number;
+  bange: string;
+  outPrice: number;
   minStock: number;
   storeId: string;
-  userId: string
+  userId: string;
 }
 
 export interface IProductsErrors {
   [key: string]: string | undefined;
   name?: string;
   quantity?: string;
-  price?: string;
+  // price?: string;
   minStock?: string;
   storeId?: string;
 }
@@ -83,7 +87,7 @@ export interface ICategory {
   name: string;
 }
 
-export interface IEditStoreProps{
+export interface IEditStoreProps {
   storeId: string;
 }
 

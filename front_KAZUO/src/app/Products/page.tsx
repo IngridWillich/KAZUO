@@ -2,11 +2,11 @@ import Products from '@/components/Products/Products'
 import ProtectedRoutes from '@/context/ProtectedRoutes'
 import React from 'react'
 
-const page = () => {
+const page = ({ params }: { params: { storeId: string } }) => {
   return (
     <div>
     <ProtectedRoutes>
-      <Products/>
+      <Products storeId= {params.storeId}/>
       </ProtectedRoutes>
     </div>
   )
