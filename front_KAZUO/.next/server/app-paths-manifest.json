@@ -1,7 +1,0 @@
-{
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
-  "/Planes/page": "app/Planes/page.js",
-  "/Login/page": "app/Login/page.js",
-  "/Register/page": "app/Register/page.js"
-}
