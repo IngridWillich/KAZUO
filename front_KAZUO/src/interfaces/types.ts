@@ -94,3 +94,7 @@ export interface IEditStoreProps {
 export interface InventarioProps {
   userId: string;
 }
+
+export interface IEditProductProps {
+  productId: string;
+}

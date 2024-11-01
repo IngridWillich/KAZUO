@@ -1,16 +1,12 @@
 import EditStoreForm from '@/components/EditStoreForm/EditStoreForm'
 import React from 'react'
 
-const page = () => {
+const page = ({ params }: { params: { storeId: string } }) => {
   return (
     <div>
-      <EditStoreForm/>
+      <EditStoreForm storeId={params.storeId}/>
     </div>
   )
 }
 
-<<<<<<< HEAD
 export default page
-=======
-export default page
->>>>>>> 6c55dbb037ded11f19953abc1e896a182a9487db

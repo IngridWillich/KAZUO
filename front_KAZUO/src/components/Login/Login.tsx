@@ -279,7 +279,7 @@ const Login: React.FC = () => {
               Contraseña:
             </label>
             <input
-              type="text"
+              type="password"
               name="password"
               id="password"
               value={dataUser.password}

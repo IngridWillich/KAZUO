@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
+import { useAppContext } from "@/context/AppContext";
 
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
+  const {userData} = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
@@ -23,8 +25,10 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     userId: "",
     storeId: "",
   });
-  const [selectedCurrency, setSelectedCurrency] = useState("USD")
-  const [exchangeRates, setExchangeRates] = useState<{[key: string]: number }>({}); 
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [exchangeRates, setExchangeRates] = useState<{ [key: string]: number }>(
+    {}
+  );
 
   const [errors, setErrors] = useState<IProductsErrors>({});
 
@@ -42,8 +46,13 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     );
   };
 
-  const convertPrice = (price: number, fromCurrency: string, toCurrency: string) => {
-    if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency]) return price;
+  const convertPrice = (
+    price: number,
+    fromCurrency: string,
+    toCurrency: string
+  ) => {
+    if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency])
+      return price;
     const priceInUSD = price / exchangeRates[fromCurrency];
     return priceInUSD * exchangeRates[toCurrency];
   };
@@ -60,14 +69,14 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   };
 
   const downloadTemplate = () => {
-    const fileId = '1e1xuwETRuSMJK1-p6hJa8fWTb8Xj3y6j';
+    const fileId = "1e1xuwETRuSMJK1-p6hJa8fWTb8Xj3y6j";
     const exportUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=xlsx`;
-    
+
     fetch(exportUrl)
-      .then(response => response.blob())
-      .then(blob => {
+      .then((response) => response.blob())
+      .then((blob) => {
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = "plantilla.xlsx";
         document.body.appendChild(a);
@@ -75,9 +84,11 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       })
-      .catch(error => {
-        console.error('Error al descargar la plantilla:', error);
-        alert('Error al descargar la plantilla. Por favor, intente nuevamente.');
+      .catch((error) => {
+        console.error("Error al descargar la plantilla:", error);
+        alert(
+          "Error al descargar la plantilla. Por favor, intente nuevamente."
+        );
       });
   };
 
@@ -155,33 +166,43 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   useEffect(() => {
     const fetchExchangeRates = async () => {
       try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const response = await fetch(
+          "https://api.exchangerate-api.com/v4/latest/USD"
+        );
         const data = await response.json();
         setExchangeRates(data.rates);
       } catch (error) {
-        console.error('Error fetching exchange rates:', error);
+        console.error("Error fetching exchange rates:", error);
       }
     };
-  
+
     fetchExchangeRates();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-if(name === 'bange'){
-  setSelectedCurrency(value)
-const newPrice = convertPrice(formData.outPrice,formData.bange, value );
-setFormData(prevState => ({
-  ...prevState,
-  [name]: value,
-  outPrice: newPrice
-}))
-} else {
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
+    if (name === "bange") {
+      setSelectedCurrency(value);
+      const newPrice = convertPrice(formData.outPrice, formData.bange, value);
+      const newInPrice = convertPrice(
+        formData.inPrice,
+        formData.bange,
+        value
+      );
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+        outPrice: newPrice,
+        inPrice: newInPrice,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
     validateField(name, value);
   };
 
@@ -194,8 +215,8 @@ setFormData(prevState => ({
     e.preventDefault();
     const validationErrors = validateProductForm(formData);
     setErrors(validationErrors);
-    console.log(formData)
-    console.log(validationErrors)
+    console.log(formData);
+    console.log(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
       let userId = "";
@@ -246,11 +267,49 @@ setFormData(prevState => ({
         });
       }
     }
-  };  
+  };
+
+  const handleGenerateReport = async () => {
+    
+
+    try {
+      const response = await fetch(`${kazuo_back}/product/report/${storeId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${userData?.id}`,
+          "Content-Type": "application/json",
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error("Error al generar el informe");
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'informe_bodega.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error:", error);
+      // Mostrar un mensaje de error al usuario
+    }
+  };
+
+const handleBack = () => {
+  window.history.back();
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
+      <a href="#" onClick={handleBack}>
+              Volver
+            </a>
         <h2 className="text-2xl font-bold text-center text-blue-700">
           Registrar
         </h2>
@@ -344,48 +403,48 @@ setFormData(prevState => ({
 
           <div className="space-y-2">
             <label
-              htmlFor="inPrice"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Precio de compra:
-            </label>
-            <input
-              type="number"
-              name="inPrice"
-              id="inPrice"
-              value={formData.inPrice}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Ingresa el valor por el que lo compraste"
-              required
-            />
-            {/*ESPACIO PARA LA VALIDACION*/}
-          </div>
-
-          <div className="space-y-2">
-            <label
               htmlFor="bange"
               className="block text-sm font-medium text-gray-700"
             >
               Moneda de uso:
             </label>
             <select
-    name="bange"
-    id="bange"
-    value={formData.bange}
-    onChange={handleChange}
-    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-    required
-  >
-    <option value="">Seleccione una moneda</option>
-    <option value="USD">USD</option>
-    <option value="MXN">MXN</option>
-    <option value="BOB">BOB</option>
-    <option value="ARS">ARS</option>
-    <option value="COP">COP</option>
-    <option value="EUR">EUR</option>
-  </select>
+              name="bange"
+              id="bange"
+              value={formData.bange}
+              onChange={handleChange}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              required
+            >
+              <option value="">Seleccione una moneda</option>
+              <option value="USD">USD</option>
+              <option value="MXN">MXN</option>
+              <option value="BOB">BOB</option>
+              <option value="ARS">ARS</option>
+              <option value="COP">COP</option>
+              <option value="EUR">EUR</option>
+            </select>
+            {/*ESPACIO PARA LA VALIDACION*/}
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="inPrice"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Precio de compra: ({formData.bange})
+            </label>
+            <input
+              type="number"
+              name="inPrice"
+              id="inPrice"
+              value= {Number(formData.inPrice).toFixed(2)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Ingresa el valor por el que lo compraste"
+              required
+            />
             {/*ESPACIO PARA LA VALIDACION*/}
           </div>
 

@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
+import { socket } from "@/services/socket";
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -28,14 +29,16 @@ const Inventario: React.FC = () => {
         setProfileImage(reader.result as string); // Mostrar la imagen como vista previa
       };
       reader.readAsDataURL(file);
-  
+
       // Subida al servidor
       const formData = new FormData();
       formData.append("image", file); // Cambia 'file' por 'image' para que coincida con el backend
-  
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      
-      fetch(`${kazuo_back}/files/uploadProfileImage`, { // Endpoint del backend
+
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+      fetch(`${kazuo_back}/files/uploadProfileImage`, {
+        // Endpoint del backend
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, // Agrega el token en el header
@@ -49,7 +52,11 @@ const Inventario: React.FC = () => {
           } else {
             const errorData = await response.json();
             console.error("Error al subir la imagen:", errorData);
-            Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
+            Swal.fire(
+              "Error",
+              `Error al subir la imagen: ${errorData.message}`,
+              "error"
+            );
           }
         })
         .catch((error) => {
@@ -58,8 +65,7 @@ const Inventario: React.FC = () => {
         });
     }
   };
-  
-  
+
   const handlePencilClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -98,7 +104,7 @@ const Inventario: React.FC = () => {
         } else {
           Swal.fire(
             "Error",
-            ("No puedes eliminar esta bodega, por que tiene productos. Vacia la bodega"),
+            "No puedes eliminar esta bodega, por que tiene productos. Vacia la bodega",
             "error"
           );
         }
@@ -116,32 +122,61 @@ const Inventario: React.FC = () => {
     return category ? category.name : "Categoría no encontrada";
   };
 
+  // FUNCION POR PETICION0ES CRUD
   useEffect(() => {
-    const fetchStores = async () => {
-      if (userData) {
-        const userId = userData.id;
+  const fetchStores = async () => {
+    if (userData) {
+      const userId = userData.id;
 
-        try {
-          const response = await fetch(`${kazuo_back}/store/user/${userId}`);
-          const dataStore = await response.json();
-          setStore(dataStore);
-          console.log(dataStore);
-        } catch (error) {
-          console.error("No se pudo cargar las bodegas ", error);
-        }
+      try {
+        const response = await fetch(`${kazuo_back}/store/user/${userId}`);
+        const dataStore = await response.json();
+        setStore(dataStore);
+        console.log(dataStore);
+      } catch (error) {
+        console.error("No se pudo cargar las bodegas ", error);
+        setStore([]);
       }
-    };
+    }
+  };
 
-    fetchStores();
-  }, [userData]);
+  fetchStores();
 
-  const filteredStores = store.filter(
-    (bodega) =>
-      bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      getCategoryName(bodega.categoryId)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-  );
+  }, []);
+  //---------------------------------------------------------//
+
+  //FUNCION POR WEB SOCKETS
+  // useEffect(() => {
+  //   socket.emit("getStores");
+
+  //   socket.on("storesUpdate", (updatedStores: IStore[]) => {
+  //     console.log('Recibida actualización de tiendas:', updatedStores);
+  //     setStore(updatedStores);
+  //     console.log('Actualizando de:', store, 'a:', updatedStores);
+  //   }); //Actualizar las Stores en tiempo real.
+
+  //   return () => {
+  //     socket.off("storesUpdate");
+  //   };
+  // }, []);
+
+  // const handleAddStore = (newStore: IStore) => {
+  //   socket.emit("addStore", newStore);
+  // };
+
+  // const handleDeleteStoreBySocket = (storeId: string) => {
+  //   socket.emit("deleteStore", storeId);
+  // };
+
+  const filteredStores = Array.isArray(store)
+    ? store.filter(
+        (bodega) =>
+          bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          getCategoryName(bodega.categoryId)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      )
+    : [];
   useEffect(() => {
     const handlefetchCategories = async () => {
       try {
@@ -272,14 +307,12 @@ const Inventario: React.FC = () => {
                 className="grid grid-cols-5 grid-rows-5 gap-1 bg-white shadow-lg rounded-lg p-6 w-content"
               >
                 <div className="col-span-4 row-span-3">
-                <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
-
+                  <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
                 </div>
                 <div className="col-span-4 row-span-2 col-start-1 row-start-4">
-                <p className="text-gray-500 mb-4">
-                  Categoría: {getCategoryName(bodega.categoryId)}
-                </p>
-
+                  <p className="text-gray-500 mb-4">
+                    Categoría: {getCategoryName(bodega.categoryId)}
+                  </p>
                 </div>
                 <div className="col-start-5 row-start-1">
                   <Menu as="div" className="relative ">
@@ -361,30 +394,83 @@ const Inventario: React.FC = () => {
       ) : filteredStores.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
           {filteredStores.map((bodega) => (
-            <div key={bodega.id} className="bg-white shadow-lg rounded-lg p-6">
-              <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
-              <p className="text-gray-500 mb-4">
-                Categoría: {getCategoryName(bodega.categoryId)}
-              </p>
-              <div className="flex justify-between">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-                  onClick={(e) => handleNavigateToEditStore(e, bodega.id)}
-                >
-                  Modificar
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                  onClick={(e) => handleDeleteStore(e, bodega.id)}
-                >
-                  Eliminar
-                </button>
-                <button
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-                  onClick={(e) => handleNavigateToStorePage(e, bodega.id)}
-                >
-                  Entrar
-                </button>
+            <div
+              key={bodega.id}
+              className="grid grid-cols-5 grid-rows-5 gap-1 bg-white shadow-lg rounded-lg p-6 w-content"
+            >
+              <div className="col-span-4 row-span-3">
+                <h3 className="text-lg font-semibold mb-2">{bodega.name}</h3>
+              </div>
+              <div className="col-span-4 row-span-2 col-start-1 row-start-4">
+                <p className="text-gray-500 mb-4">
+                  Categoría: {getCategoryName(bodega.categoryId)}
+                </p>
+              </div>
+              <div className="col-start-5 row-start-1">
+                <Menu as="div" className="relative ">
+                  <Menu.Button className="flex items-center text-gray-400 hover:text-gray-600">
+                    <BiDotsHorizontal className="h-5 w-5" aria-hidden="true" />
+                  </Menu.Button>
+                  <Transition
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="px-1 py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`${
+                                active
+                                  ? "bg-blue-500 text-white"
+                                  : "text-gray-900"
+                              } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                              onClick={(e) =>
+                                handleNavigateToEditStore(e, bodega.id)
+                              }
+                            >
+                              Modificar
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`${
+                                active
+                                  ? "bg-red-500 text-white"
+                                  : "text-gray-900"
+                              } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                              onClick={(e) => handleDeleteStore(e, bodega.id)}
+                            >
+                              Eliminar
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`${
+                                active
+                                  ? "bg-green-500 text-white"
+                                  : "text-gray-900"
+                              } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                              onClick={(e) =>
+                                handleNavigateToStorePage(e, bodega.id)
+                              }
+                            >
+                              Entrar
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
           ))}
