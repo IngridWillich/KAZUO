@@ -15,8 +15,8 @@ const ProductForm : React.FC= () => {
     quantity: 0,
     price: 0,
     minStock: 0,
-    // storeId: "",
-    UserId: "",
+    storeId: "",
+    userId: "",
   });
 
   const [errors, setErrors] = useState<IProductsErrors>({});
@@ -80,7 +80,7 @@ const ProductForm : React.FC= () => {
       };
 
         try {
-        const response = await fetch(${kazuo_back}/product, {
+        const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

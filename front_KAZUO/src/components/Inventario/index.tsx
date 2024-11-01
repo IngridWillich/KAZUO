@@ -9,57 +9,92 @@ import Link from "next/link";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Inventario: React.FC = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [store, setStore] = useState<IStore[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { userData } = useAppContext();
+  const { userData, setUserData } = useAppContext();
+  const [profileImage, setProfileImage] = useState(userData?.igmUrl);
 
 
   const {user, isAuthenticated}=useAuth0()
   const router = useRouter();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
-
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Vista previa en el frontend
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImage(reader.result as string); // Mostrar la imagen como vista previa
-      };
-      reader.readAsDataURL(file);
-  
-      // Subida al servidor
-      const formData = new FormData();
-      formData.append("image", file); // Cambia 'file' por 'image' para que coincida con el backend
-  
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      
-      fetch(`${kazuo_back}/files/uploadProfileImage`, { // Endpoint del backend
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`, // Agrega el token en el header
-        },
-        body: formData,
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            const data = await response.json();
-            setProfileImage(data.imageUrl); // Actualiza la imagen de perfil con la URL del servidor
-          } else {
-            const errorData = await response.json();
-            console.error("Error al subir la imagen:", errorData);
-            Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
-          }
-        })
-        .catch((error) => {
-          console.error("Error al subir la imagen:", error);
-          Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
-        });
+  const fetchUserImage = async (userId: string) => {
+    try {
+      const response = await fetch(`${kazuo_back}/users/${userId}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener la imagen del usuario');
+      }
+      const userData = await response.json();
+      return userData.igmUrl; // Suponiendo que la URL de la imagen está en la propiedad imgUrl
+    } catch (error) {
+      console.error('Error fetching user image:', error);
+      return null;
     }
   };
+  useEffect(() => {
+    // Cargar imagen desde userData o localStorage
+    const storedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
+    if (userData?.igmUrl || storedUserData?.igmUrl) {
+      setProfileImage(userData?.igmUrl || storedUserData.igmUrl);
+    }
+  }, [userData]);
+  
+  
+
+ 
+ const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  const userId = localStorage.getItem("userData") 
+    ? JSON.parse(localStorage.getItem("userData")!).id 
+    : null;
+
+  if (file && userId) {
+    // Convertir a URL para vista previa
+    const reader = new FileReader();
+    reader.onload = () => setProfileImage(reader.result as string);
+    reader.readAsDataURL(file);
+
+    // Crear FormData para la subida
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("id", userId.toString());
+
+    try {
+      const response = await fetch(`${kazuo_back}/files/uploadProfileImage`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${userData?.token}` },
+        body: formData,
+      });
+
+      if (response.ok) {
+        try {
+          const data = await response.json();
+      
+          // Actualiza la URL de la imagen en el estado local para renderizar la vista previa de inmediato
+          setProfileImage(data.imageUrl);
+
+          // Actualiza userData en el contexto y en el localStorage
+          if (userData && setUserData) {
+            const updatedUserData = { ...userData, igmUrl: data.imageUrl };
+            setUserData(updatedUserData); // Actualiza userData en el contexto
+            localStorage.setItem("userData", JSON.stringify(updatedUserData)); // Guarda la actualización en localStorage
+          }
+        } catch (error) {
+          console.error("Error al actualizar userData o profileImage:", error);
+          Swal.fire("Error", "Ocurrió un error al procesar la respuesta del servidor.", "error");
+        }
+      } else {
+        const errorData = await response.json();
+        Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
+      }
+      
+    } catch (error) {
+      Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
+    }
+  }
+};
+
   
   
   const handlePencilClick = () => {

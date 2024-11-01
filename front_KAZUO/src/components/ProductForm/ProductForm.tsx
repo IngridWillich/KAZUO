@@ -134,7 +134,7 @@ handleBulkUpload(productsToSend);
       };
 
       try {
-        const response = await fetch(`${kazuo_back}/products`, {
+        const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
