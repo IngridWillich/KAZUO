@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
+import Loader from "../Loader/Loader"
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -17,6 +18,7 @@ const Inventario: React.FC = () => {
   const { userData } = useAppContext();
   const { user, isAuthenticated } = useAuth0();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +84,7 @@ const Inventario: React.FC = () => {
     });
 
     if (confirmed.isConfirmed) {
+      setLoading(true); // Inicia el loader
       try {
         const response = await fetch(`${kazuo_back}/store/${storeId}`, {
           method: "DELETE",
@@ -104,6 +107,8 @@ const Inventario: React.FC = () => {
         }
       } catch (error) {
         Swal.fire("Error", "Ocurrió un error al eliminar la bodega.");
+      } finally {
+        setLoading(false); // Detiene el loader
       }
     }
   };
@@ -120,6 +125,7 @@ const Inventario: React.FC = () => {
     const fetchStores = async () => {
       if (userData) {
         const userId = userData.id;
+        setLoading(true); // Inicia la carga
 
         try {
           const response = await fetch(`${kazuo_back}/store/user/${userId}`);
@@ -128,6 +134,8 @@ const Inventario: React.FC = () => {
           console.log(dataStore);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
+        }finally{
+          setLoading(false);
         }
       }
     };
@@ -144,12 +152,14 @@ const Inventario: React.FC = () => {
   );
   useEffect(() => {
     const handlefetchCategories = async () => {
+      setLoading(true);
       try {
         const response = await fetch(`${kazuo_back}/category`);
         const dataCategory = await response.json();
         localStorage.setItem("Categorias", JSON.stringify(dataCategory));
       } catch (error) {
-        console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     handlefetchCategories();
@@ -186,6 +196,7 @@ const Inventario: React.FC = () => {
   };
 
   return (
+    
     <div className="min-h-screen bg-gray-50 p-8">
       {/* Información de Usuario */}
       <div className="bg-white shadow-md rounded-md p-4 mb-8">
@@ -237,6 +248,7 @@ const Inventario: React.FC = () => {
       </div>
 
       {/* Encabezado de Inventario */}
+      
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">
           Gestión de Inventario
@@ -263,7 +275,9 @@ const Inventario: React.FC = () => {
       </div>
 
       {/* Show message or stores */}
-      {searchQuery === "" ? (
+      {loading ? (
+  <Loader message= "Cargando bodegas..." />
+) : searchQuery === "" ? (
         store && store.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 mt-8">
             {store.map((bodega) => (

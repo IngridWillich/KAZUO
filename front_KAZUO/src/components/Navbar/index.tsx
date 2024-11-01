@@ -9,6 +9,7 @@ import path from "path";
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAppContext();
+  const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
   const handleLogout = async () => {

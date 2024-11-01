@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
+import Loader from "../Loader/Loader";
 
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState<IProduct>({
     name: "",
@@ -217,6 +219,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       };
   
       try {
+        setLoading(true);
         const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
@@ -241,15 +244,15 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "No se pudo crear el producto. Por favor, inténtalo de nuevo.",
+          text: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
           icon: "error",
           confirmButtonText: "Aceptar",
         });
-      }
-    }
+      } finally {
+      setLoading(false); // Desactiva el loade
   };
-
-
+}
+}
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
@@ -396,16 +399,17 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
           </div>
   
           <button
-            type="submit"
-            disabled={!areFieldsFilled()}
-            className={`w-full py-2 px-4 text-white rounded-md ${
-              areFieldsFilled()
-                ? "bg-blue-500 hover:bg-blue-900"
-                : "bg-gray-300 cursor-not-allowed"
-            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-          >
-            Registrar Producto
-          </button>
+  type="submit"
+  disabled={!areFieldsFilled()}
+  className={`flex items-center justify-center w-full py-2 px-4 text-white rounded-md ${
+    areFieldsFilled()
+      ? "bg-blue-500 hover:bg-blue-900"
+      : "bg-gray-300 cursor-not-allowed"
+  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+>
+  {loading ? <Loader /> : "Registrar Producto"}
+</button>
+
           
           <p className="text-center">O</p>
           

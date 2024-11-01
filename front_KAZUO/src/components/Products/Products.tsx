@@ -1,21 +1,28 @@
 "use client";
+
 import { IEditStoreProps, IProduct } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loader from "../Loader/Loader";
 
 const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
+  const { userData } = useAppContext();
+  
+  // State variables
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { userData } = useAppContext();
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+
+  // Fetch products when component mounts or user data/storeId changes
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -26,24 +33,31 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
             "Content-Type": "application/json",
           },
         });
+        
+        // Check if the response is okay
         if (!response.ok) {
           throw new Error("Error al obtener los productos");
         }
+
         const data = await response.json();
         const sortedProducts = data.sort((a: IProduct, b: IProduct) =>
           a.name.localeCompare(b.name)
         );
-        setProducts(data);
+        setProducts(sortedProducts);
+        setIsLoading(false); // Stop loading once products are fetched
       } catch (error) {
         console.error("Error:", error);
         setProducts([]);
+        setIsLoading(false); // Stop loading even if there's an error
       }
     };
+
     if (userData?.token) {
       fetchProducts();
     }
   }, [userData, storeId]);
 
+  // Filter low stock products
   useEffect(() => {
     const filterLowStockProducts = () => {
       const lowStock = products.filter(
@@ -54,16 +68,19 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
     filterLowStockProducts();
   }, [products]);
 
+  // Handle creating a new product
   const handleCreateNewProduct = () => {
     router.push(`/AddNewProduct/${storeId}`);
   };
 
+  // Handle file input click
   const handlePencilClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
+  // Filter products based on the search query
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -74,9 +91,9 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   return (
     <div className="w-full min-h-screen flex flex-col justify-center">
       <main className="w-full flex-grow container mx-auto px-4 py-8">
-        <div className=" rounded-md p-8 md:w-2/3 mx-auto">
+        <div className="rounded-md p-8 md:w-2/3 mx-auto">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Aqui va el nombre de la bodega</h2>
+            <h2 className="text-xl font-semibold">Aquí va el nombre de la bodega</h2>
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
               onClick={() => {}}
@@ -100,7 +117,11 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
             />
           </div>
           
-          
+          {isLoading ? ( // Verificando si está cargando
+             <div className="flex justify-center items-center h-32"> 
+              <Loader  />
+            </div>
+          ) : (
             <div className="w-full mt-4">
               <div className="w-full bg-gray-100 rounded-md p-4">
                 <table className="w-full">
@@ -150,6 +171,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
                 </table>
               </div>
             </div>
+          )}
         </div>
       </main>
     </div>
@@ -157,3 +179,4 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
 };
 
 export default Products;
+

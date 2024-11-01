@@ -5,6 +5,8 @@ import { validateRegisterForm } from "@/helpers/validate";
 import Swal from "sweetalert2";
 // import { register } from "@/helpers/auth.helper";
 import { useRouter } from "next/navigation";
+import Loader from "../Loader/Loader";
+
 
 const Register = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL
@@ -18,6 +20,7 @@ const Register = () => {
   };
 
   const [dataUser, setDataUser] = useState<IRegisterProps>(initialState);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<TRegisterError>(initialState);
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({
     email: false,
@@ -62,6 +65,7 @@ const Register = () => {
     console.log(dataUser);
 
     if (Object.keys(validationErrors).length === 0) {
+      setLoading(true); 
       try {
         const response = await fetch(`${kazuo_back}/auth/signup`, {
           method: "POST",
@@ -98,9 +102,11 @@ const Register = () => {
           confirmButtonText: "Aceptar",
         });
       }
-
+      finally {
+      
+        setLoading(false); 
     }
-
+}
     
   };
 
@@ -216,16 +222,14 @@ const Register = () => {
             )}
           </div>
           <button
-            type="submit"
-            disabled={!isFormValid}
-            className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm ${
-              isFormValid
-                ? "bg-gray-900 hover:bg-gray-800"
-                : "bg-gray-400 cursor-not-allowed"
-            }`}
-          >
-            Registrarse
-          </button>
+  type="submit"
+  disabled={!isFormValid}
+  className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
+    isFormValid ? "bg-gray-900 hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
+  }`}
+>
+  {loading ? <Loader /> : "Registrarse"}
+</button>
         </form>
       </div>
     </div>
