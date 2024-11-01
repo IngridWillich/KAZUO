@@ -22,6 +22,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { Link } from "lucide-react";
 import Loader from "../Loader/Loader";
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import Swal from "sweetalert2";
 
 
 const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
@@ -140,6 +141,50 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   //   socket.emit('deleteProduct', productId);
   // };
 
+const handleGenerateReport = async () => {
+  try {
+    const response = await fetch(`${kazuo_back}/informes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        storeId: storeId,
+        products: products,
+        tipo: "inventario",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al generar el informe");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'informe_inventario.pdf';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    Swal.fire({
+      title: "Informe generado",
+      text: "El informe se ha generado y descargado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    Swal.fire({
+      title: "Error",
+      text: "No se pudo generar el informe. Por favor, inténtalo de nuevo.",
+      icon: "error",
+      confirmButtonText: "Aceptar",
+    });
+  }
+}
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-gray-100">
       <main className="w-full flex-grow container mx-auto px-4 py-8">
@@ -151,7 +196,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
-                onClick={() => {}}
+                onClick={handleGenerateReport}
               >
                 Generar Informe
               </button>
