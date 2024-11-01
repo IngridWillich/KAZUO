@@ -10,3 +10,6 @@ const page = ({ params }: { params: { storeId: string } }) => {
 }
 
 export default page
+
+
+

@@ -7,11 +7,13 @@ import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
 import { useAppContext } from "@/context/AppContext";
+import Loader from "../Loader/Loader";
 
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const {userData} = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState<IProduct>({
     name: "",
@@ -32,7 +34,6 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
 
   const [errors, setErrors] = useState<IProductsErrors>({});
 
-  // Verificar si todos los campos están completos
   const areFieldsFilled = () => {
     return (
       formData.name &&
@@ -143,7 +144,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       });
       if (response.ok) {
         Swal.fire({
-          title: "Productos Añadidos con exito",
+          title: "Productos Añadidos con éxito",
           text: "Los productos han sido almacenados",
           icon: "success",
           confirmButtonText: "Aceptar",
@@ -225,6 +226,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         const parsedUserData = JSON.parse(userData);
         userId = parsedUserData.id;
       }
+  
       const dataToSend = {
         ...formData,
         quantity: Number(formData.quantity),
@@ -235,8 +237,9 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         userId: userId,
         storeId: storeId,
       };
-
+  
       try {
+        setLoading(true);
         const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
@@ -244,7 +247,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
           },
           body: JSON.stringify(dataToSend),
         });
-
+  
         if (response.ok) {
           Swal.fire({
             title: "¡Producto creado!",
@@ -261,10 +264,12 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "No se pudo crear el producto. Por favor, inténtalo de nuevo.",
+          text: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -303,6 +308,7 @@ const handleBack = () => {
   window.history.back();
 };
 
+      
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       
@@ -315,10 +321,7 @@ const handleBack = () => {
         </h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Nombre del Producto:
             </label>
             <input
@@ -334,12 +337,9 @@ const handleBack = () => {
             />
             {errors.name && <p className="text-red-600">{errors.name}</p>}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="quantity"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
               Cantidad:
             </label>
             <input
@@ -354,20 +354,15 @@ const handleBack = () => {
               min="0"
               required
             />
-            {errors.quantity && (
-              <p className="text-red-600">{errors.quantity}</p>
-            )}
+            {errors.quantity && <p className="text-red-600">{errors.quantity}</p>}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="unids"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="unids" className="block text-sm font-medium text-gray-700">
               Unidad de medida:
             </label>
             <input
-              type="string"
+              type="text"
               name="unids"
               id="unids"
               value={formData.unids}
@@ -377,15 +372,11 @@ const handleBack = () => {
               placeholder="Ingresa el valor como lo cuentas"
               required
             />
-            {/*ESPACIO PARA LA VALIDACION*/}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="maxCapacity"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Capacidad maxima:
+            <label htmlFor="maxCapacity" className="block text-sm font-medium text-gray-700">
+              Capacidad máxima:
             </label>
             <input
               type="number"
@@ -395,12 +386,11 @@ const handleBack = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Ingresa la capacidad maxima de almacenamiento"
+              placeholder="Ingresa la capacidad máxima de almacenamiento"
               required
             />
-            {/*ESPACIO PARA LA VALIDACION*/}
           </div>
-
+  
           <div className="space-y-2">
             <label
               htmlFor="bange"
@@ -466,14 +456,10 @@ const handleBack = () => {
               placeholder="Ingresa el valor de venta"
               required
             />
-            {/*ESPACIO PARA LA VALIDACION*/}
           </div>
-
+  
           <div className="space-y-2">
-            <label
-              htmlFor="minStock"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="minStock" className="block text-sm font-medium text-gray-700">
               Cantidad Mínima:
             </label>
             <input
@@ -488,34 +474,36 @@ const handleBack = () => {
               min="0"
               required
             />
-            {errors.minStock && (
-              <p className="text-red-600">{errors.minStock}</p>
-            )}
+            {errors.minStock && <p className="text-red-600">{errors.minStock}</p>}
           </div>
-
+  
           <button
-            type="submit"
-            disabled={!areFieldsFilled()}
-            className={`w-full py-2 px-4 text-white rounded-md ${
-              areFieldsFilled()
-                ? "bg-blue-500 hover:bg-blue-900"
-                : "bg-gray-300 cursor-not-allowed"
-            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-          >
-            Registrar Producto
-          </button>
-          <p>O</p>
+  type="submit"
+  disabled={!areFieldsFilled()}
+  className={`flex items-center justify-center w-full py-2 px-4 text-white rounded-md ${
+    areFieldsFilled()
+      ? "bg-blue-500 hover:bg-blue-900"
+      : "bg-gray-300 cursor-not-allowed"
+  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+>
+  {loading ? <Loader /> : "Registrar Producto"}
+</button>
+
+          
+          <p className="text-center">O</p>
+          
           <button
             onClick={downloadTemplate}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded w-full"
           >
             Descargar Plantilla
           </button>
-          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+          
+          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="mt-4" />
         </form>
       </div>
     </div>
   );
-};
+}  
 
 export default ProductForm;

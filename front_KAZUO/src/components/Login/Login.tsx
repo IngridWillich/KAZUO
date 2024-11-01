@@ -9,6 +9,9 @@ import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
+import Loader from "../Loader/Loader";
+
+
 
 const Login: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -21,6 +24,7 @@ const Login: React.FC = () => {
   };
 
   const [dataUser, setDataUser] = useState<ILoginProps>(initialState);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ILoginError>(initialState);
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({
     email: false,
@@ -76,6 +80,7 @@ const Login: React.FC = () => {
             confirmButtonText: "Aceptar",
           });
         }
+        setLoading(false);
       } else {
         console.log("Usuario no autenticado");
       }
@@ -147,6 +152,7 @@ const Login: React.FC = () => {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
+      setLoading(true); // Activa el loader
       try {
         const key = await generateKey();
         const encryptedPassword = await encryptPassword(dataUser.password, key);
@@ -188,6 +194,8 @@ const Login: React.FC = () => {
           confirmButtonText: "Aceptar",
         });
       } finally {
+      
+        setLoading(false); // Desactiva el loader
         console.log("Datos del formulario:", dataUser);
       }
     }
@@ -292,16 +300,14 @@ const Login: React.FC = () => {
             )}
           </div>
           <button
-            type="submit"
-            disabled={isButtonDisabled}
-            className={`w-full py-2 px-4 text-white ${
-              isButtonDisabled
-                ? "bg-gray-400 cursor-not-allowed"
-                : " bg-gray-900 hover:bg-gray-800"
-            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md`}
-          >
-            Iniciar Sesión
-          </button>
+  type="submit"
+  disabled={!isFormValid}
+  className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
+    isFormValid ? "bg-gray-900 hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
+  }`}
+>
+  {loading ? <Loader /> : "Iniciar sesion"}
+</button>
         </form>
         <p className="text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}

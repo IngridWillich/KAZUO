@@ -4,9 +4,11 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { ICategory, IEditStoreProps } from "@/interfaces/types";
+import Loader from "../Loader/Loader";
 
-const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
+const EditStoreForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState<ICategory[]>([]);
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -20,6 +22,7 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
 
     const fetchStoreData = async () => {
       try {
+      
         const response = await fetch(`${kazuo_back}/store/${storeId}`);
         if (response.ok) {
           const storeData = await response.json();
@@ -27,14 +30,12 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
           setSelectedCategory(storeData.categoryName);
         }
       } catch (error) {
-        console.error('Error al obtener datos de la tienda:', error);
+        console.error("Error al obtener datos de la tienda:", error);
       }
     };
 
-   fetchStoreData();
+    fetchStoreData();
   }, [storeId]);
-
-
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -47,16 +48,17 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
     const userId = userData.id;
 
     const dataStore = {
       name,
       categoryName: selectedCategory,
-      userId
+      userId,
     };
-    console.log(dataStore);
+ 
     try {
+      setLoading(true);
       const response = await fetch(`${kazuo_back}/store/${storeId}`, {
         method: "PUT",
         headers: {
@@ -83,8 +85,11 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
         icon: "error",
         confirmButtonText: "Aceptar",
       });
+    } finally {
+      setLoading(false);
     }
   };
+  const isButtonDisabled = !name || !selectedCategory;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -126,20 +131,22 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value="">Selecciona una categoría</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.name}>
-              {category.name}
-            </option>
-          ))}
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
+          <button 
+  type="submit"
+  disabled={isButtonDisabled}
+  className={`flex items-center justify-center w-full py-2 px-4 text-white ${isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md`}
+>
+  {loading ? <Loader /> : "Actualizar bodega"}
+</button>
 
-          <button
-            type="submit"
-            className="w-full py-2 px-4 text-white bg-blue-500 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md"
-          >
-            Actualizar Bodega
-          </button>
+
         </form>
       </div>
     </div>
@@ -147,3 +154,4 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({storeId}) => {
 };
 
 export default EditStoreForm;
+

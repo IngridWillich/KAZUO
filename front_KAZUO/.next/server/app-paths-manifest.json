@@ -1,7 +1,15 @@
 {
+<<<<<<< HEAD
   "/GestionInventario/page": "app/GestionInventario/page.js",
   "/Register/page": "app/Register/page.js",
   "/storeform/page": "app/storeform/page.js",
   "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
   "/Products/[storeId]/page": "app/Products/[storeId]/page.js"
+=======
+  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
+  "/storeform/[storeId]/page": "app/storeform/[storeId]/page.js",
+  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/storeform/page": "app/storeform/page.js"
+>>>>>>> bce64140a7a3f2de071bd7f5575fd1b59e3bf626
 }
