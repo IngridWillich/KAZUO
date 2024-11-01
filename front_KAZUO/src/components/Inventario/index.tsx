@@ -243,17 +243,6 @@ const Inventario: React.FC = () => {
         <p>
           <strong>Plan:</strong> Kazuo Pro
         </p>
-        <button
-          className="mt-4 bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
-          onClick={() => router.push("/register-company")}
-        >
-          Convertirse en administrador
-        </button>
-  
-          
-
-
-
       </div>
 
       {/* Encabezado de Inventario */}
