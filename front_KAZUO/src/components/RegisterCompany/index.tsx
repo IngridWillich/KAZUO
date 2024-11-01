@@ -29,6 +29,7 @@ const CompanyRegistrationForm: React.FC = () => {
     contactPhone: false,
     email: false,
     industry: false,
+    
   });
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -41,17 +42,28 @@ const CompanyRegistrationForm: React.FC = () => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
     setErrors(validateForm({ ...formData, [name]: value }));
     setTouched((prevTouched) => ({ ...prevTouched, [name]: true }));
+
+
+    const validationErrors = validateForm({ ...formData, [name]: value });
+    setErrors(validationErrors);
   };
 
   const validateForm = (data = formData) => {
     const newErrors: { [key: string]: string } = {};
     if (!data.CompanyName.trim()) newErrors.CompanyName = 'El nombre de la empresa es requerido';
-    if (!data.country.trim()) newErrors.country = 'La localidad es requerida';
+    if (!data.country.trim()) newErrors.country = 'El país es requerido';
     if (!data.address.trim()) newErrors.address = 'La dirección es requerida';
     if (!data.contactPhone.trim()) newErrors.contactPhone = 'El teléfono de contacto es requerido';
-    if (!/^\d{11}$/.test(data.contactPhone)) newErrors.contactPhone = 'El teléfono debe tener 10 dígitos';
-    if (!data.email.trim()) newErrors.email = 'El correo electrónico es requerido';
+    if (!/^\d{11}$/.test(data.contactPhone)) newErrors.contactPhone = 'El teléfono debe tener 11 dígitos';
+
+   if(!data.email.trim()) {
+    newErrors.email = 'El correo electrónico es requerido';
+   }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    newErrors.email = 'El correo electrónico no es válido';
+}
+
     if (!/\S+@\S+\.\S+/.test(data.email)) newErrors.email = 'El correo electrónico no es válido';
+    if (!data.industry.trim()) newErrors.industry = 'La industria es requerida';
     return newErrors;
   };
 
@@ -59,13 +71,18 @@ const CompanyRegistrationForm: React.FC = () => {
     const hasNoErrors = Object.keys(errors).length === 0;
     const isEveryFieldTouched = Object.values(touched).every((t) => t);
     setIsFormValid(isEveryFieldTouched && hasNoErrors);
+
+    console.log("Errors:", errors);
+    console.log("Touched:", touched);
+    console.log("Is Form Valid:", isFormValid);
+
   }, [errors, touched]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm() && user && isAuthenticated) {
+    if (isFormValid && user && isAuthenticated) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/companies`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_UR}/companies`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -80,7 +97,9 @@ const CompanyRegistrationForm: React.FC = () => {
         if (response.ok) {
           router.push('/Company');
         } else {
-          throw new Error('Failed to register company');
+          const errorData = await response.json(); // Extraer el cuerpo de error
+  console.error('Error de respuesta:', errorData);
+  throw new Error(`Failed to register company: ${errorData.message}`);
         }
       } catch (error) {
         console.error('Error registering company:', error);
@@ -199,6 +218,7 @@ const CompanyRegistrationForm: React.FC = () => {
                   className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   value={formData.industry}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                 >
                   <option value="">Selecciona una industria</option>
                   <option value="tecnologia">Tecnología</option>
@@ -229,3 +249,4 @@ const CompanyRegistrationForm: React.FC = () => {
 };
 
 export default CompanyRegistrationForm;
+

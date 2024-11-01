@@ -8,6 +8,9 @@ import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
 import { useAppContext } from "@/context/AppContext";
 import Loader from "../Loader/Loader";
+import { ArrowLeft } from "lucide-react";
+import { FaDownload } from 'react-icons/fa';
+
 
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const {userData} = useAppContext();
@@ -310,12 +313,13 @@ const handleBack = () => {
 
       
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 mt-5">
       
-      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
-      <a href="#" onClick={handleBack}>
-              Volver
-            </a>
+      <div className="w-full max-w-md mt-5 mb-5 p-8 space-y-6 bg-white shadow-lg rounded-lg">
+      <button onClick={handleBack} className="mb-4">
+    <ArrowLeft className="mr-2 h-4 w-4" />
+</button>
+
         <h2 className="text-2xl font-bold text-center text-blue-700">
           Registrar
         </h2>
@@ -491,13 +495,21 @@ const handleBack = () => {
 
           
           <p className="text-center">O</p>
-          
+{/*           
           <button
             onClick={downloadTemplate}
             className="bg-blue-500 text-white px-4 py-2 rounded w-full"
           >
             Descargar Plantilla
-          </button>
+          </button> */}
+   
+   <button
+  onClick={downloadTemplate}
+  className="bg-blue-500 text-white px-4 py-2 rounded w-full flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors duration-200"
+>
+  <FaDownload className="h-5 w-5" /> {/* Usa FaDownload aquí */}
+  Descargar Plantilla
+</button>
           
           <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="mt-4" />
         </form>
