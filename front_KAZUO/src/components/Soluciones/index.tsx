@@ -1,7 +1,8 @@
 import Link from "next/link";
 
+
 export default function Soluciones() {
-  const features = [
+const features = [
     {
       title: "Control de Inventario",
       description: "Gestiona tu stock en tiempo real, con actualizaciones automáticas y alertas de nivel bajo.",

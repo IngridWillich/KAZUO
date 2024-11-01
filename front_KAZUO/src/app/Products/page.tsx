@@ -1,12 +1,17 @@
 import Products from '@/components/Products/Products'
+import ProtectedRoutesProducts from '@/context/ProtectedRoutesProducts'
+
+import ProtectedRoutes from '@/context/ProtectedRoutes'
 import React from 'react'
 
-const StorePage = ({ params }: { params: { storeId: string } }) => {
+const page = ({ params }: { params: { storeId: string } }) => {
   return (
     <div>
-    <Products storeId={params.storeId}/>
+      <ProtectedRoutesProducts>
+        <Products storeId={params.storeId}/>
+      </ProtectedRoutesProducts>
     </div>
   )
 }
 
-export default StorePage
+export default page
