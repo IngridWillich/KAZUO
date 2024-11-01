@@ -1,6 +1,7 @@
 "use client";
 
 import { IEditStoreProps, IProduct } from "@/interfaces/types";
+import { useAuth0 } from "@auth0/auth0-react";
 import { socket } from "@/services/socket";
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
@@ -8,26 +9,21 @@ import { useRouter } from "next/navigation";
 import {
   faCircleInfo,
   faEdit,
-  faInfo,
   faMinus,
   faPlus,
-  faPlusCircle,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartLine } from "@fortawesome/free-solid-svg-icons/faChartLine";
-import { FaPlusSquare } from "react-icons/fa";
-import { FaCircleInfo, FaInfo, FaPlus } from "react-icons/fa6";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
-import { Link } from "lucide-react";
 import Loader from "../Loader/Loader";
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
 
 
 const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
   const { userData } = useAppContext();
+  const { user, isAuthenticated } = useAuth0();
+
 
   // State variables
   const [activeTab, setActiveTab] = useState("stock");
@@ -185,6 +181,14 @@ const handleGenerateReport = async () => {
   }
 }
 
+const handleNavigateToProductPage = (productId: string) => {
+  if (userData || isAuthenticated) {
+    router.push(`/Products/${storeId}/${productId}`);
+  } else {
+    router.push("/login");
+  }
+};
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-gray-100">
       <main className="w-full flex-grow container mx-auto px-4 py-8">
@@ -265,22 +269,17 @@ const handleGenerateReport = async () => {
                           <td className="py-2 text-center text-red-600 font-bold">
                             {product.minStock}
                           </td>
-                          <td className="py-2 text-center">
+                          <td className="grid grid-cols-2 grid-rows-2 gap-6 py-2 text-center">
                           <FontAwesomeIcon
                             icon={faEdit}
                             className="text-blue-500 hover:text-blue-600 cursor-pointer mx-1"
-                            onClick={() => {}}
+                            onClick={() => handleNavigateToProductPage(product.id!)}
                           />
                           <FontAwesomeIcon
                             icon={faTrash}
                             className="text-red-500 hover:text-red-600 cursor-pointer mx-1"
-                          />
-                          <FontAwesomeIcon
-                            icon={faChartLine}
-                            className="mx-1"
-                          />
+                          />                          
                           <FontAwesomeIcon icon={faPlus} className="mx-1" />
-                          <FontAwesomeIcon icon={faCircleInfo} />
                           <FontAwesomeIcon icon={faMinus} className="mx-1" />
                         </td>
                         </tr>

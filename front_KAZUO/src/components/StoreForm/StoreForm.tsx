@@ -14,9 +14,10 @@ export const StoreForm = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
-  const categoriesFromStorage: ICategory[] = JSON.parse(
-    localStorage.getItem("Categorias") || "[]"
-  );
+  
+  const categoriesFromStorage: ICategory[] = typeof window !== 'undefined' 
+  ? JSON.parse(localStorage.getItem("Categorias") || "[]")
+  : [];
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);

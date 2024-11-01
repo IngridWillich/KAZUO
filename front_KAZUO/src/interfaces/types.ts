@@ -57,6 +57,9 @@ export interface IProduct {
   minStock: number;
   storeId: string;
   userId: string;
+  store?:{
+    name:string
+  }
 }
 
 export interface IProductsErrors {

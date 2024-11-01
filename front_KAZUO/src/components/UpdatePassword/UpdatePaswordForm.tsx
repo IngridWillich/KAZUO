@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { TRegisterError, IRegisterProps, IUpdatePassProps, TUpdatePassError } from "@/interfaces/types";
-import { validateRegisterForm, validateUpdatePass } from "@/helpers/validate";
+import { IUpdatePassProps, TUpdatePassError } from "@/interfaces/types";
+import { validateUpdatePass } from "@/helpers/validate";
 import Swal from "sweetalert2";
 // import { register } from "@/helpers/auth.helper";
 import { useRouter, useSearchParams } from "next/navigation";
