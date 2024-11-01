@@ -8,8 +8,12 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
+<<<<<<< HEAD
 import { socket } from "@/services/socket";
 import Loader from "../Loader/Loader";
+=======
+import { Link } from "lucide-react";
+>>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -130,9 +134,14 @@ const Inventario: React.FC = () => {
   // FUNCION POR PETICION0ES CRUD
   useEffect(() => {
     const fetchStores = async () => {
+<<<<<<< HEAD
       if (userData) {
         const userId = userData.id;
         setLoading(true); // Inicia la carga
+=======
+      if (userData || isAuthenticated) {
+        const userId = userData ? userData.id : user?.sub;
+>>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
 
         try {
           const response = await fetch(`${kazuo_back}/store/user/${userId}`);
@@ -141,8 +150,12 @@ const Inventario: React.FC = () => {
           console.log(dataStore);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
+<<<<<<< HEAD
         } finally {
           setLoading(false);
+=======
+          setStore([]);
+>>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
         }
       }
     };
@@ -151,6 +164,7 @@ const Inventario: React.FC = () => {
   }, []);
   //---------------------------------------------------------//
 
+<<<<<<< HEAD
   //FUNCION POR WEB SOCKETS
   // useEffect(() => {
   //   socket.emit("getStores");
@@ -183,6 +197,17 @@ const Inventario: React.FC = () => {
             .includes(searchQuery.toLowerCase())
       )
     : [];
+=======
+  
+  const filteredStores = Array.isArray(store) ? store.filter(
+    (bodega) =>
+      bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      getCategoryName(bodega.categoryId)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+  ) : [];
+
+>>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
   useEffect(() => {
     const handlefetchCategories = async () => {
       setLoading(true);
@@ -199,7 +224,7 @@ const Inventario: React.FC = () => {
   }, []);
 
   const handleNavigateToCreateStore = () => {
-    if (userData) {
+    if (userData || isAuthenticated) {
       router.push("/storeform");
     } else {
       router.push("/login");
@@ -210,7 +235,7 @@ const Inventario: React.FC = () => {
     event: React.MouseEvent<HTMLButtonElement>,
     storeId: string
   ) => {
-    if (userData) {
+    if (userData || isAuthenticated) {
       router.push(`/storeform/${storeId}`);
     } else {
       router.push("/login");
@@ -221,7 +246,7 @@ const Inventario: React.FC = () => {
     event: React.MouseEvent<HTMLButtonElement>,
     storeId: string
   ) => {
-    if (userData) {
+    if (userData || isAuthenticated) {
       router.push(`/Products/${storeId}`);
     } else {
       router.push("/login");
@@ -249,8 +274,13 @@ const Inventario: React.FC = () => {
               />
             ) : (
               <span className="text-gray-500">No image</span>
-            )}
+            )
+            }
+            
+            
           </div>
+
+          
           <div
             className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600"
             onClick={handlePencilClick}

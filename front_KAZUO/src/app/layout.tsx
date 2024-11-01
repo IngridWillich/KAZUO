@@ -24,7 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <AuthProvider> */}
+     
         <ClientLayout>
           <AppProvider>
             <ShowComponents>
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <Footer />
           </AppProvider>
         </ClientLayout>
-        {/* </AuthProvider> */}
+        
       </body>
     </html>
   );
