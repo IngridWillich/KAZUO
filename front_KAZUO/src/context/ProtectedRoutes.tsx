@@ -9,6 +9,7 @@ const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   const {isAuthenticated} = useAuth0();
   const router = useRouter();
 
+
   const userData = localStorage.getItem("userData");
 
   useEffect(() => {
@@ -21,3 +22,4 @@ const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default ProtectedRoutes;
+

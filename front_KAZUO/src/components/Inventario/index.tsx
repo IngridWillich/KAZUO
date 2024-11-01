@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
+import { Link } from "lucide-react";
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -118,8 +119,8 @@ const Inventario: React.FC = () => {
 
   useEffect(() => {
     const fetchStores = async () => {
-      if (userData) {
-        const userId = userData.id;
+      if (userData || isAuthenticated) {
+        const userId = userData ? userData.id : user?.sub;
 
         try {
           const response = await fetch(`${kazuo_back}/store/user/${userId}`);
@@ -128,6 +129,7 @@ const Inventario: React.FC = () => {
           console.log(dataStore);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
+          setStore([]);
         }
       }
     };
@@ -135,13 +137,15 @@ const Inventario: React.FC = () => {
     fetchStores();
   }, [userData]);
 
-  const filteredStores = store.filter(
+  
+  const filteredStores = Array.isArray(store) ? store.filter(
     (bodega) =>
       bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       getCategoryName(bodega.categoryId)
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
-  );
+  ) : [];
+
   useEffect(() => {
     const handlefetchCategories = async () => {
       try {
@@ -156,7 +160,7 @@ const Inventario: React.FC = () => {
   }, []);
 
   const handleNavigateToCreateStore = () => {
-    if (userData) {
+    if (userData || isAuthenticated) {
       router.push("/storeform");
     } else {
       router.push("/login");
@@ -167,7 +171,7 @@ const Inventario: React.FC = () => {
     event: React.MouseEvent<HTMLButtonElement>,
     storeId: string
   ) => {
-    if (userData) {
+    if (userData || isAuthenticated) {
       router.push(`/storeform/${storeId}`);
     } else {
       router.push("/login");
@@ -178,7 +182,7 @@ const Inventario: React.FC = () => {
     event: React.MouseEvent<HTMLButtonElement>,
     storeId: string
   ) => {
-    if (userData) {
+    if (userData || isAuthenticated) {
       router.push(`/Products/${storeId}`);
     } else {
       router.push("/login");
@@ -206,8 +210,13 @@ const Inventario: React.FC = () => {
               />
             ) : (
               <span className="text-gray-500">No image</span>
-            )}
+            )
+            }
+            
+            
           </div>
+
+          
           <div
             className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600"
             onClick={handlePencilClick}
