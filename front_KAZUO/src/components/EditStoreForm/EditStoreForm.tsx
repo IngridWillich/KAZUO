@@ -153,9 +153,5 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   );
 };
 
-<<<<<<< HEAD
-export default EditStoreForm;
-=======
 export default EditStoreForm;
 
->>>>>>> 926eb0787f40c3fd20c7469b1bbd2aec25e7ea65

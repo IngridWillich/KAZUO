@@ -1,12 +1,29 @@
+import Stripe from "stripe";
 import ButtonCheckout from "../ButtonCheckout";
 
 async function loadPrices() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prices`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch prices");
-  }
-  const prices = await res.json();
-  return prices;
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prices`);
+  // if (!res.ok) {
+  //   throw new Error("Failed to fetch prices");
+  // }
+  // const prices = await res.json();
+  // return prices;
+     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  
+    // Listar todos los precios
+    const prices = await stripe.prices.list({
+      expand: ['data.product'], // Expandimos los productos para acceder a sus propiedades
+    });
+  
+    // Filtrar los precios que están activos y cuyos productos también estén activos
+    const activePrices = prices.data.filter(
+      (price) => price.active && price.product && (price.product as Stripe.Product).active
+    );
+  
+    // Ordenar por unit_amount
+    const sortedPrices = activePrices.sort((a, b) => a.unit_amount! - b.unit_amount!);
+    
+    return sortedPrices;
 }
 
 export default async function Planes() {
