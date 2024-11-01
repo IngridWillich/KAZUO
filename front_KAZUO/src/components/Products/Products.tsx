@@ -191,7 +191,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
                       <th className="pb-2 text-center">Moneda de uso</th>
                       <th className="pb-2 text-center">Precio de venta</th>
                       <th className="pb-2 text-center">Cantidad mínima</th>
-                      <th className="pb-2 text-center">Acción</th>
+                      <th className="pb-2 text-center">Control de Inventario</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -217,11 +217,23 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
                             {product.minStock}
                           </td>
                           <td className="py-2 text-center">
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              className="text-red-500 hover:text-red-600 cursor-pointer"
-                            />
-                          </td>
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            className="text-blue-500 hover:text-blue-600 cursor-pointer mx-1"
+                            onClick={() => {}}
+                          />
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="text-red-500 hover:text-red-600 cursor-pointer mx-1"
+                          />
+                          <FontAwesomeIcon
+                            icon={faChartLine}
+                            className="mx-1"
+                          />
+                          <FontAwesomeIcon icon={faPlus} className="mx-1" />
+                          <FontAwesomeIcon icon={faCircleInfo} />
+                          <FontAwesomeIcon icon={faMinus} className="mx-1" />
+                        </td>
                         </tr>
                       ))
                     ) : (
