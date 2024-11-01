@@ -1,7 +1,0 @@
-{
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Planes/page": "app/Planes/page.js",
-  "/storeform/page": "app/storeform/page.js",
-  "/page": "app/page.js",
-  "/Soluciones/page": "app/Soluciones/page.js"
-}

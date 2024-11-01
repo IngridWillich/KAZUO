@@ -41,6 +41,9 @@ const Inventario: React.FC = () => {
       setProfileImage(userData?.igmUrl || storedUserData.igmUrl);
     }
   }, [userData]);
+  
+  
+
  
  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];
@@ -178,7 +181,6 @@ const Inventario: React.FC = () => {
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
   ) : [];
-
   useEffect(() => {
     const handlefetchCategories = async () => {
       try {
@@ -273,6 +275,13 @@ const Inventario: React.FC = () => {
         </p>
       </div>
 
+      <button
+          className="mt-4 bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
+          onClick={() => router.push("/register-company")}
+        >
+          Convertirse en administrador
+        </button>
+
       {/* Encabezado de Inventario */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">
@@ -336,36 +345,6 @@ const Inventario: React.FC = () => {
                     >
                       <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="px-1 py-1">
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={`${
-                                  active
-                                    ? "bg-blue-500 text-white"
-                                    : "text-gray-900"
-                                } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                                onClick={(e) =>
-                                  handleNavigateToEditStore(e, bodega.id)
-                                }
-                              >
-                                Modificar
-                              </button>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={`${
-                                  active
-                                    ? "bg-red-500 text-white"
-                                    : "text-gray-900"
-                                } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                                onClick={(e) => handleDeleteStore(e, bodega.id)}
-                              >
-                                Eliminar
-                              </button>
-                            )}
-                          </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
                               <button

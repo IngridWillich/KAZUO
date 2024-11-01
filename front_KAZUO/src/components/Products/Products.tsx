@@ -158,8 +158,4 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   );
 };
 
-<<<<<<< HEAD
-export default Products
-=======
 export default Products;
->>>>>>> 4b3bbaf0c7b3949e3be8fc2c0a4c288e9cea9ed7
