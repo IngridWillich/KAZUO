@@ -10,7 +10,8 @@ const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   const {isAuthenticated} = useAuth0();
   const router = useRouter();
 
-  const userData = useLocalStorage<string | null>("userData", null);
+
+  const userData = localStorage.getItem("userData");
 
   useEffect(() => {
     if ( !isLoggedIn && !isAuthenticated && !userData) {

@@ -11,8 +11,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 import Loader from "../Loader/Loader";
 
-
-
 const Login: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
@@ -301,13 +299,14 @@ const Login: React.FC = () => {
           </div>
           <button
   type="submit"
-  disabled={!isFormValid}
+  disabled={isButtonDisabled}
   className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
-    isFormValid ? "bg-gray-900 hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
+    isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"
   }`}
 >
-  {loading ? <Loader /> : "Iniciar sesion"}
+  {loading ? <Loader /> : "Iniciar sesión"}
 </button>
+
         </form>
         <p className="text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}

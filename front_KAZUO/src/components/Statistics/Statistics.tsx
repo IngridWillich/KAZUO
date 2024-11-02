@@ -1,4 +1,4 @@
-// //ECHAR CALENDARIO
+//ECHAR CALENDARIO
 // function getVirtualData(year) {
 //     const date = +echarts.time.parse(year + '-01-01');
 //     const end = +echarts.time.parse(+year + 1 + '-01-01');

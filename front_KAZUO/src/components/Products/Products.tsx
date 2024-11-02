@@ -75,17 +75,6 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
     }
   }, [userData]);
 
-  // useEffect(()=>{
-  //   socket.emit("getProducts", storeId);
-
-  //   socket.on('productsUpdate', (updatedProducts: IProduct[])=>{
-  //     setProducts(updatedProducts);
-  //   });
-
-  //   return () => {
-  //     socket.off("productsUpdate");
-  //   };
-  // },[storeId])
 
   useEffect(() => {
     const fetchStoreData = async () => {
@@ -133,13 +122,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
     window.history.back();
   };
 
-  // const handleAddProduct = (newProduct: IProduct) => {
-  //   socket.emit('addProduct', { ...newProduct, storeId });
-  // };
-
-  // const handleDeleteProduct = (productId: string) => {
-  //   socket.emit('deleteProduct', productId);
-  // };
+ 
 
 const handleGenerateReport = async () => {
   try {

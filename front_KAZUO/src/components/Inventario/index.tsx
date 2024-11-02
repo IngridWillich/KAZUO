@@ -149,6 +149,7 @@ const Inventario: React.FC = () => {
     const category = categoriesFromStorage.find((cat) => cat.id === categoryId);
     return category ? category.name : "Categoría no encontrada";
   };
+<<<<<<< HEAD
 
   // FUNCION POR PETICION0ES CRUD
   useEffect(() => {
@@ -207,29 +208,43 @@ const Inventario: React.FC = () => {
     : [];
     
 //---------------------------------------------------------//
+=======
+>>>>>>> b09853f06c38a216642fd478933ee92fbea9592d
 
-//FUNCION POR WEB SOCKETS
-// useEffect(() => {
-//   socket.emit("getStores");
+  // FUNCION POR PETICION0ES CRUD
+  useEffect(() => {
+    const fetchStores = async () => {
+      if (userData || isAuthenticated) {
+        const userId = userData ? userData.id : user?.sub;
 
-//   socket.on("storesUpdate", (updatedStores: IStore[]) => {
-//     console.log('Recibida actualización de tiendas:', updatedStores);
-//     setStore(updatedStores);
-//     console.log('Actualizando de:', store, 'a:', updatedStores);
-//   }); //Actualizar las Stores en tiempo real.
+        try {
+          const response = await fetch(`${kazuo_back}/store/user/${userId}`);
+          const dataStore = await response.json();
+          setStore(dataStore);
+          console.log(dataStore);
+        } catch (error) {
+          console.error("No se pudo cargar las bodegas ", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-//   return () => {
-//     socket.off("storesUpdate");
-//   };
-// }, []);
+    fetchStores();
+  }, []);
+ 
 
-// const handleAddStore = (newStore: IStore) => {
-//   socket.emit("addStore", newStore);
-// };
+  const filteredStores = Array.isArray(store)
+    ? store.filter(
+        (bodega) =>
+          bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          getCategoryName(bodega.categoryId)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      )
+    : [];
+    
 
-// const handleDeleteStoreBySocket = (storeId: string) => {
-//   socket.emit("deleteStore", storeId);
-// };
 
 useEffect(() => {
   const handlefetchCategories = async () => {
