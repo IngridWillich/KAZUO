@@ -16,7 +16,7 @@ const Inventario: React.FC = () => {
   const [store, setStore] = useState<IStore[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { userData, setUserData } = useAppContext();
+  const { userData } = useAppContext();
   const { user, isAuthenticated } = useAuth0();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
