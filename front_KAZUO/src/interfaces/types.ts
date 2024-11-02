@@ -62,6 +62,21 @@ export interface IProduct {
   }
 }
 
+export interface IUpdateProduct {
+  id?: string;
+  name?: string;
+  unids?: string;
+  maxCapacity?: number;
+  inPrice?: number;
+  bange?: string;
+  outPrice?: number;
+  storeId?: string;
+  userId?: string;
+  store?:{
+    name:string
+  }
+}
+
 export interface IProductsErrors {
   [key: string]: string | undefined;
   name?: string;

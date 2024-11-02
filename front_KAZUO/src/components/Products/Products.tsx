@@ -12,9 +12,9 @@ import {
   faMinus,
   faPlus,
   faTrash,
+  faChartLine
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartLine } from "@fortawesome/free-solid-svg-icons/faChartLine";
 import Loader from "../Loader/Loader";
 import Swal from "sweetalert2";
 
@@ -189,6 +189,83 @@ const handleNavigateToProductPage = (productId: string) => {
   }
 };
 
+const handleAddProduct = (productId: string) => {
+  Swal.fire({
+    title: '¿Cuántos Productos se añadirán?',
+    input: 'number',
+    inputLabel: 'Añadir productos',
+    inputPlaceholder: 'Ingrese la cantidad',
+    showCancelButton: true,
+    inputValidator: (value) => {
+      const numValue = Number(value);
+      if (isNaN(numValue) || numValue <= 0) {
+        return 'Por favor, ingrese una cantidad válida';
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const quantityChange = Number(result.value);
+      updateProductQuantity(productId, quantityChange);
+      console.log(quantityChange);
+    }
+  });
+};
+
+
+const handleNewOrderProduct = (productId: string) => {
+  Swal.fire({
+    title: '¿Cuántos productos se despacharán?',
+    input: 'number',
+    inputLabel: 'Generar despacho',
+    inputPlaceholder: 'Ingrese la cantidad',
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value || Number(value) <= 0) {
+        return 'Por favor, ingrese una cantidad válida';
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const quantityChange = Number(result.value);      
+        updateProductQuantity(productId, -quantityChange); 
+       
+    }
+  });
+};
+const updateProductQuantity = async (productId: string, quantityChange: number) => {
+  console.log(quantityChange)
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+
+  const newQuantity = Number(product.quantity) + (Number(quantityChange));
+  console.log(product.quantity)
+
+
+  try {
+    const response = await fetch(`${kazuo_back}/product/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userData?.token}`,
+      },
+      body: JSON.stringify({ quantity: Number(newQuantity) }),
+    });
+
+    if (response.ok) {
+      setProducts(products.map(p => 
+        p.id === productId ? { ...p, quantity: newQuantity } : p
+      ));
+      Swal.fire('Éxito', 'Cantidad actualizada correctamente', 'success');
+    } else {
+      throw new Error('Error al actualizar la cantidad');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    Swal.fire('Error', 'No se pudo actualizar la cantidad', 'error');
+  }
+};
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-gray-100">
       <main className="w-full flex-grow container mx-auto px-4 py-8">
@@ -276,11 +353,11 @@ const handleNavigateToProductPage = (productId: string) => {
                             onClick={() => handleNavigateToProductPage(product.id!)}
                           />
                           <FontAwesomeIcon
-                            icon={faTrash}
-                            className="text-red-500 hover:text-red-600 cursor-pointer mx-1"
+                            icon={faChartLine}
+                            className="cursor-pointer mx-1"
                           />                          
-                          <FontAwesomeIcon icon={faPlus} className="mx-1" />
-                          <FontAwesomeIcon icon={faMinus} className="mx-1" />
+                          <FontAwesomeIcon icon={faPlus} className="cursor-pointer mx-1" onClick={()=>handleAddProduct(product.id!)} />
+                          <FontAwesomeIcon icon={faMinus} className="cursor-pointer mx-1"  onClick={() => handleNewOrderProduct(product.id!)}  />
                         </td>
                         </tr>
                       ))
