@@ -5,7 +5,7 @@ import Planes from "@/components/Planes";
 function planes() {
     
     return (
-        <div>
+        <div className="">
           <Planes />
         </div>
     );

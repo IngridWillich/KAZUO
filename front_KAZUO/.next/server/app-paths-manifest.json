@@ -1,0 +1,6 @@
+{
+  "/page": "app/page.js",
+  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
+  "/GestionInventario/page": "app/GestionInventario/page.js",
+  "/Login/page": "app/Login/page.js"
+}

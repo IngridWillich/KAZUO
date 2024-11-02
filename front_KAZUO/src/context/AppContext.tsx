@@ -37,7 +37,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         token: "", // Establecer el token si lo tienes
         email: user.email || "", // Asegúrate de incluir el email
         name: user.name || "",
-        userId: ""
+        userId: "",
+        igmUrl: "",
       };
 
       setIsLoggedIn(true);
@@ -45,6 +46,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(newUserData));
       localStorage.setItem("token", userData?.token!);
+      localStorage.setItem("igmUrl", userData?.igmUrl!);
     }
   }, [isAuthenticated, user]); // Incluido isAuthenticated y user
 
@@ -54,6 +56,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserData(loginData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(loginData));
+      if (userData?.token) {
+        localStorage.setItem("token", userData.token);
+     }
+     if (userData?.igmUrl) {
+        localStorage.setItem("igmUrl", userData.igmUrl);
+     }
   } catch (error) {
       console.error("Error de login", error);
       throw error;
@@ -66,6 +74,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("isLoggedIn", "false");
     localStorage.removeItem("userData");
     localStorage.removeItem("token");
+    localStorage.removeItem("igmUrl");
+
     // Cerrar sesión con Auth0
     logoutAuth0();
     window.location.href = window.location.origin;
@@ -76,6 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     userData,
     login,
     logout,
+    setUserData,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

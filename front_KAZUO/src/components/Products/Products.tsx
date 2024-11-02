@@ -15,7 +15,12 @@ import {
   faChartLine
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaPlusSquare } from "react-icons/fa";
+import { FaCircleInfo, FaInfo, FaPlus } from "react-icons/fa6";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
+import { Link } from "lucide-react";
 import Loader from "../Loader/Loader";
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
 
 
@@ -25,7 +30,6 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const { user, isAuthenticated } = useAuth0();
 
 
-  // State variables
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
