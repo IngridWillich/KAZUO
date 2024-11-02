@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Loader2 } from "lucide-react"; // Asegúrate de importar Loader2 de la librería que estés usando
+import { Loader2 } from "lucide-react"; 
 
 const Loader = ({ message = "Cargando...", size = "8", color = "text-blue-500" }) => {
  

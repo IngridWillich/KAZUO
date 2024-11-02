@@ -1,5 +1,4 @@
 "use client";
-
 import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
@@ -8,12 +7,17 @@ import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
 import { useAppContext } from "@/context/AppContext";
 import Loader from "../Loader/Loader";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { FaDownload } from 'react-icons/fa';
+import Loader1 from "../Loader/Loader1";
+
 
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   const {userData} = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [loadingTemplate, setLoadingTemplate] = useState(false);
 
   const [formData, setFormData] = useState<IProduct>({
     name: "",
@@ -57,7 +61,10 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     const priceInUSD = price / exchangeRates[fromCurrency];
     return priceInUSD * exchangeRates[toCurrency];
   };
-
+  // Verificar si el formulario es válido
+  const isFormValid = () => {
+    return areFieldsFilled() && Object.keys(errors).length === 0;
+  };
   const validateField = (name: string, value: string) => {
     const validationErrors = validateProductForm({
       ...formData,
@@ -129,11 +136,14 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
 
         handleBulkUpload(productsToSend);
       };
+      
       reader.readAsArrayBuffer(file);
+   
     }
   };
 
   const handleBulkUpload = async (products: IProduct[]) => {
+    setLoadingTemplate(true);
     try {
       const response = await fetch(`${kazuo_back}/product/bulk`, {
         method: "POST",
@@ -161,6 +171,8 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         icon: "error",
         confirmButtonText: "Aceptar",
       });
+    } finally {
+      setLoadingTemplate(false);
     }
   };
 
@@ -310,12 +322,12 @@ const handleBack = () => {
 
       
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 mt-5">
       
-      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
-      <a href="#" onClick={handleBack}>
-              Volver
-            </a>
+      <div className="w-full max-w-md mt-5 mb-5 p-8 space-y-6 bg-white shadow-lg rounded-lg">
+      <button onClick={handleBack} className="mb-4">
+    <ArrowLeft className="mr-2 h-4 w-4" />
+</button>
         <h2 className="text-2xl font-bold text-center text-blue-700">
           Registrar
         </h2>
@@ -390,7 +402,7 @@ const handleBack = () => {
               required
             />
           </div>
-  
+          {errors.maxCapacity && <p className="text-red-600">{errors.maxCapacity}</p>}
           <div className="space-y-2">
             <label
               htmlFor="bange"
@@ -414,7 +426,7 @@ const handleBack = () => {
               <option value="COP">COP</option>
               <option value="EUR">EUR</option>
             </select>
-            {/*ESPACIO PARA LA VALIDACION*/}
+            {errors.bange && <p className="text-red-600">{errors.bange}</p>}
           </div>
 
           <div className="space-y-2">
@@ -435,7 +447,8 @@ const handleBack = () => {
               placeholder="Ingresa el valor por el que lo compraste"
               required
             />
-            {/*ESPACIO PARA LA VALIDACION*/}
+          {errors.inPrice && <p className="text-red-600">{errors.inPrice}</p>}
+      
           </div>
 
           <div className="space-y-2">
@@ -457,7 +470,7 @@ const handleBack = () => {
               required
             />
           </div>
-  
+          {errors.inPrice && <p className="text-red-600">{errors.inPrice}</p>}
           <div className="space-y-2">
             <label htmlFor="minStock" className="block text-sm font-medium text-gray-700">
               Cantidad Mínima:
@@ -481,29 +494,35 @@ const handleBack = () => {
   type="submit"
   disabled={!areFieldsFilled()}
   className={`flex items-center justify-center w-full py-2 px-4 text-white rounded-md ${
-    areFieldsFilled()
-      ? "bg-blue-500 hover:bg-blue-900"
-      : "bg-gray-300 cursor-not-allowed"
+    areFieldsFilled() ? "bg-blue-500 hover:bg-blue-900" : "bg-gray-300 cursor-not-allowed"
   } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
 >
+  
   {loading ? <Loader /> : "Registrar Producto"}
 </button>
 
-          
-          <p className="text-center">O</p>
-          
-          <button
-            onClick={downloadTemplate}
-            className="bg-blue-500 text-white px-4 py-2 rounded w-full"
-          >
-            Descargar Plantilla
-          </button>
-          
-          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="mt-4" />
+<p className="text-center"></p>
+
+<button
+  onClick={downloadTemplate}
+  className="bg-blue-500 text-white rounded w-full flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors duration-200"
+  style={{ height: '40px' }} 
+>
+  <FaDownload className="h-5 w-5" />
+  {loadingTemplate ? (
+    <div className="flex items-center justify-center">
+      <Loader1 />
+    </div>
+  ) : (
+    "Descargar Plantilla"
+  )}
+</button>
+
+<input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="mt-4" />
         </form>
       </div>
     </div>
   );
-}  
+};
 
-export default ProductForm;
+export default ProductForm

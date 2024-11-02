@@ -66,151 +66,125 @@ const Inventario: React.FC = () => {
         method: "POST",
         headers: { Authorization: `Bearer ${userData?.token}` },
         body: formData,
-      });
-
-      if (response.ok) {
-        try {
-          const data = await response.json();
-      
-          // Actualiza la URL de la imagen en el estado local para renderizar la vista previa de inmediato
-          setProfileImage(data.imageUrl);
-
-          // Actualiza userData en el contexto y en el localStorage
-          if (userData && setUserData) {
-            const updatedUserData = { ...userData, igmUrl: data.imageUrl };
-            setUserData(updatedUserData); // Actualiza userData en el contexto
-            localStorage.setItem("userData", JSON.stringify(updatedUserData)); // Guarda la actualización en localStorage
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            setProfileImage(data.imageUrl); // Actualiza la imagen de perfil con la URL del servidor
+          } else {
+            const errorData = await response.json();
+            console.error("Error al subir la imagen:", errorData);
+            Swal.fire(
+              "Error",
+              `Error al subir la imagen: ${errorData.message}`,
+              "error"
+            );
           }
-        } catch (error) {
-          console.error("Error al actualizar userData o profileImage:", error);
-          Swal.fire("Error", "Ocurrió un error al procesar la respuesta del servidor.", "error");
-        }
-      } else {
-        const errorData = await response.json();
-        Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
-      }
-      
-    } catch (error) {
-      Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
+        })
+        .catch((error) => {
+          console.error("Error al subir la imagen:", error);
+          Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
+        });
+      }  catch {
+        console.log(Error)
+      }  
+  };
+}
+
+  const handlePencilClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
-  }
-};
+  };
 
-  
-const handlePencilClick = () => {
-  if (fileInputRef.current) {
-    fileInputRef.current.click();
-  }
-};
+  const handleDeleteStore = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    storeId: string
+  ) => {
+    const confirmed = await Swal.fire({
+      title: "¿Estás seguro que desea eliminar la bodega?",
+      text: "No podrás deshacer esta acción.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
 
-const handleDeleteStore = async (
-  event: React.MouseEvent<HTMLButtonElement>,
-  storeId: string
-) => {
-  const confirmed = await Swal.fire({
-    title: "¿Estás seguro que desea eliminar la bodega?",
-    text: "No podrás deshacer esta acción.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar",
-  });
-
-  if (confirmed.isConfirmed) {
-    setLoading(true); // Inicia el loader
-    try {
-      const response = await fetch(`${kazuo_back}/store/${storeId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        setStore((prevStore) =>
-          prevStore.filter((bodega) => bodega.id !== storeId)
-        );
-        Swal.fire("Eliminado", "La bodega ha sido eliminada.", "success");
-      } else {
-        Swal.fire(
-          "Error",
-          "No puedes eliminar esta bodega, por que tiene productos. Vacia la bodega",
-          "error"
-        );
-      }
-    } catch (error) {
-      Swal.fire("Error", "Ocurrió un error al eliminar la bodega.");
-    } finally {
-      setLoading(false); // Detiene el loader
-    }
-  }
-};
-
-const getCategoryName = (categoryId: string) => {
-  const categoriesFromStorage: ICategory[] = JSON.parse(
-    localStorage.getItem("Categorias") || "[]"
-  );
-  const category = categoriesFromStorage.find((cat) => cat.id === categoryId);
-  return category ? category.name : "Categoría no encontrada";
-};
-
-// FUNCION POR PETICION0ES CRUD
-useEffect(() => {
-  const fetchStores = async () => {
-    if (userData || isAuthenticated) {
-      const userId = userData ? userData.id : user?.sub;
-
+    if (confirmed.isConfirmed) {
+      setLoading(true); // Inicia el loader
       try {
-        const response = await fetch(`${kazuo_back}/store/user/${userId}`);
-        const dataStore = await response.json();
-        setStore(dataStore);
-        console.log(dataStore);
+        const response = await fetch(`${kazuo_back}/store/${storeId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          setStore((prevStore) =>
+            prevStore.filter((bodega) => bodega.id !== storeId)
+          );
+          Swal.fire("Eliminado", "La bodega ha sido eliminada.", "success");
+        } else {
+          Swal.fire(
+            "Error",
+            "No puedes eliminar esta bodega, por que tiene productos. Vacia la bodega",
+            "error"
+          );
+        }
       } catch (error) {
-        console.error("No se pudo cargar las bodegas ", error);
+        Swal.fire("Error", "Ocurrió un error al eliminar la bodega.");
       } finally {
-        setLoading(false);
+        setLoading(false); // Detiene el loader
       }
     }
   };
 
-  fetchStores();
-}, []);
-//---------------------------------------------------------//
+  const getCategoryName = (categoryId: string) => {
+    const categoriesFromStorage: ICategory[] = JSON.parse(
+      localStorage.getItem("Categorias") || "[]"
+    );
+    const category = categoriesFromStorage.find((cat) => cat.id === categoryId);
+    return category ? category.name : "Categoría no encontrada";
+  };
 
-//FUNCION POR WEB SOCKETS
-// useEffect(() => {
-//   socket.emit("getStores");
+  // FUNCION POR PETICION0ES CRUD
+  useEffect(() => {
+    const fetchStores = async () => {
+      if (userData || isAuthenticated) {
+        const userId = userData ? userData.id : user?.sub;
 
-//   socket.on("storesUpdate", (updatedStores: IStore[]) => {
-//     console.log('Recibida actualización de tiendas:', updatedStores);
-//     setStore(updatedStores);
-//     console.log('Actualizando de:', store, 'a:', updatedStores);
-//   }); //Actualizar las Stores en tiempo real.
+        try {
+          const response = await fetch(`${kazuo_back}/store/user/${userId}`);
+          const dataStore = await response.json();
+          setStore(dataStore);
+          console.log(dataStore);
+        } catch (error) {
+          console.error("No se pudo cargar las bodegas ", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-//   return () => {
-//     socket.off("storesUpdate");
-//   };
-// }, []);
+    fetchStores();
+  }, []);
+ 
 
-// const handleAddStore = (newStore: IStore) => {
-//   socket.emit("addStore", newStore);
-// };
+  const filteredStores = Array.isArray(store)
+    ? store.filter(
+        (bodega) =>
+          bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          getCategoryName(bodega.categoryId)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      )
+    : [];
+    
 
-// const handleDeleteStoreBySocket = (storeId: string) => {
-//   socket.emit("deleteStore", storeId);
-// };
 
-const filteredStores = Array.isArray(store)
-  ? store.filter(
-      (bodega) =>
-        bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        getCategoryName(bodega.categoryId)
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())
-    )
-  : [];
 useEffect(() => {
   const handlefetchCategories = async () => {
     setLoading(true);
