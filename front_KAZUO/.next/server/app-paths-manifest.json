@@ -1,6 +1,0 @@
-{
-  "/Products/[storeId]/[productId]/page": "app/Products/[storeId]/[productId]/page.js",
-  "/Products/[storeId]/page": "app/Products/[storeId]/page.js",
-  "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/page": "app/page.js"
-}
