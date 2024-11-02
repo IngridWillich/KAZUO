@@ -8,12 +8,8 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
-<<<<<<< HEAD
-import { socket } from "@/services/socket";
-import Loader from "../Loader/Loader";
-=======
 import { Link } from "lucide-react";
->>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
+import Loader from "../Loader/Loader";
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -134,14 +130,8 @@ const Inventario: React.FC = () => {
   // FUNCION POR PETICION0ES CRUD
   useEffect(() => {
     const fetchStores = async () => {
-<<<<<<< HEAD
-      if (userData) {
-        const userId = userData.id;
-        setLoading(true); // Inicia la carga
-=======
       if (userData || isAuthenticated) {
         const userId = userData ? userData.id : user?.sub;
->>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
 
         try {
           const response = await fetch(`${kazuo_back}/store/user/${userId}`);
@@ -150,12 +140,7 @@ const Inventario: React.FC = () => {
           console.log(dataStore);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
-<<<<<<< HEAD
-        } finally {
-          setLoading(false);
-=======
           setStore([]);
->>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
         }
       }
     };
@@ -164,40 +149,6 @@ const Inventario: React.FC = () => {
   }, []);
   //---------------------------------------------------------//
 
-<<<<<<< HEAD
-  //FUNCION POR WEB SOCKETS
-  // useEffect(() => {
-  //   socket.emit("getStores");
-
-  //   socket.on("storesUpdate", (updatedStores: IStore[]) => {
-  //     console.log('Recibida actualización de tiendas:', updatedStores);
-  //     setStore(updatedStores);
-  //     console.log('Actualizando de:', store, 'a:', updatedStores);
-  //   }); //Actualizar las Stores en tiempo real.
-
-  //   return () => {
-  //     socket.off("storesUpdate");
-  //   };
-  // }, []);
-
-  // const handleAddStore = (newStore: IStore) => {
-  //   socket.emit("addStore", newStore);
-  // };
-
-  // const handleDeleteStoreBySocket = (storeId: string) => {
-  //   socket.emit("deleteStore", storeId);
-  // };
-
-  const filteredStores = Array.isArray(store)
-    ? store.filter(
-        (bodega) =>
-          bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          getCategoryName(bodega.categoryId)
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-      )
-    : [];
-=======
   
   const filteredStores = Array.isArray(store) ? store.filter(
     (bodega) =>
@@ -207,7 +158,6 @@ const Inventario: React.FC = () => {
         .includes(searchQuery.toLowerCase())
   ) : [];
 
->>>>>>> 3fa6469b2ab52ed8678b5bfe1a4ae2c188786089
   useEffect(() => {
     const handlefetchCategories = async () => {
       setLoading(true);

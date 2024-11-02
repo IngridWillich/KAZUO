@@ -9,8 +9,8 @@ import Loader from "../Loader/Loader";
 
 
 const Register = () => {
-  const kazuo_back = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter();
+  const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const initialState: IRegisterProps = {
     email: "",
     password: "",
@@ -67,7 +67,7 @@ const Register = () => {
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true); 
       try {
-        const response = await fetch(`${kazuo_back}/auth/signup`, {
+     const response = await fetch(`${kazuo_back}/auth/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
