@@ -13,8 +13,8 @@ export async function POST(request: Request) {
                 quantity: 1
             }
         ],
-        success_url: 'https://sdq9hdq4-3001.brs.devtunnels.ms/GestionInventario',
-        cancel_url: 'https://sdq9hdq4-3001.brs.devtunnels.ms/Planes',
+        success_url: process.env.SUCCESS_URL,
+        cancel_url: process.env.CANCEL_URL,
     })
     console.log(session);
     return NextResponse.json({ url: session.url });
