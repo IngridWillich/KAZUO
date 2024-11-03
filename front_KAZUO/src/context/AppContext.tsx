@@ -14,7 +14,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { logout: logoutAuth0, user, isAuthenticated } = useAuth0();
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>("isLoggedIn", false);
-  const [userData, setUserData] = useLocalStorage<userData | null>("userData",null);
+  const [userData, setUserData] = useState<userData | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -81,7 +81,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     window.location.href = window.location.origin;
   };
 
-  const value = {
+  const value: AppContextType = {
     isLoggedIn,
     userData,
     login,

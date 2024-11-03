@@ -61,6 +61,7 @@ export interface IProduct {
   store?:{
     name:string
   }
+  [key: string]: any;
 }
 
 export interface IUpdateProduct {
@@ -76,6 +77,7 @@ export interface IUpdateProduct {
   store?:{
     name:string
   }
+  [key: string]: any;
 }
 
 export interface IProductsErrors {
