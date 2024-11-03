@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build && next export",
+    "build": "next build",
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "cap:sync": "next build && next export && npx cap sync",
+    "cap:sync": "npx cap sync",
     "cap:run:android": "npx cap run android",
+    "cap:open": "npx cap open android",
     "prepare-mobile": "node scripts/prepare-mobile.js",
-  "build-mobile": "npm run build && npm run prepare-mobile"
+    "build-mobile": "npm run build && npm run prepare-mobile",
+    "cap:build": "npm run build-mobile && npm run cap:sync && npm run cap:open"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
