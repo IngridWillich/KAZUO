@@ -1,4 +1,4 @@
-
+"use client"
 import ProductForm from '@/components/ProductForm/ProductForm'
 import React from 'react'
 
