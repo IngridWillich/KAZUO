@@ -57,7 +57,7 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
 
       // Solo actualizar si el valor ha cambiado
       if (newValue === product?.[name as keyof IProduct]) {
-        const { [name]: _, ...rest } = prev;
+        const { [name as keyof IUpdateProduct]: _, ...rest } = prev;
         return rest;
       }
 
@@ -72,14 +72,14 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
     e.preventDefault();
     if (!product) return;
 
-    const changedValues: IUpdateProduct = {
+    const changedValues: Partial<IUpdateProduct> = {
       id: productId
     };
 
    
     (Object.keys(formValues) as Array<keyof IUpdateProduct>).forEach ((key) => {
-      if (formValues[key] !== product[key]) {
-        changedValues[key] = formValues[key];
+      if (formValues[key] !== product[key as keyof IProduct]) {
+        (changedValues as any)[key] = formValues[key];
       }
     });
 

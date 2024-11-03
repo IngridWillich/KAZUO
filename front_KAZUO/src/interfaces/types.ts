@@ -67,9 +67,9 @@ export interface IUpdateProduct {
   id?: string;
   name?: string;
   unids?: string;
-  maxCapacity?: number;
-  inPrice?: number;
-  bange?: string;
+  maxCapacity?: number | undefined;
+  inPrice?: number | undefined;
+  bange?: string | undefined;
   outPrice?: number;
   storeId?: string;
   userId?: string;

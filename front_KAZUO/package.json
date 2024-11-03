@@ -3,13 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "next build && next export",
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cap:sync": "next build && next export && npx cap sync",
+    "cap:run:android": "npx cap run android",
+    "prepare-mobile": "node scripts/prepare-mobile.js",
+  "build-mobile": "npm run build && npm run prepare-mobile"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -17,7 +23,6 @@
     "@heroicons/react": "^2.1.5",
     "@react-oauth/google": "^0.12.1",
     "autoprefixer": "^10.4.19",
-    "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "file-saver": "^2.0.5",
     "i18next": "^23.16.4",
@@ -37,6 +42,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@capacitor/cli": "^6.1.2",
     "@types/crypto-js": "^4.2.2",
     "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20",

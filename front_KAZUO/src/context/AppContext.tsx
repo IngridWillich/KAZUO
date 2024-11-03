@@ -86,8 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     userData,
     login,
     logout,
-    setUserData,
-  };
+    setUserData: setUserData as React.Dispatch<React.SetStateAction<userData | null>>,  };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
