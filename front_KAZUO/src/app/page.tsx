@@ -18,7 +18,8 @@ export default function LandingPage() {
             Empresarial que automatiza tu facturación, inventario, reportes y
             mucho más.
           </p>
-          <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition duration-300">
+          <button className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-transform duration-300 ease-in-out text-white py-2 rounded-xl text-center font-semibold shadow-md hover:scale-105"
+          >
             Empieza tus 15 días gratis
           </button>
           <div className="flex items-center justify-center md:justify-start mt-6">

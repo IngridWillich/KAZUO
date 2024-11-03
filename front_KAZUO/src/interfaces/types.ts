@@ -43,6 +43,7 @@ export interface userData {
   company: string;
   token: string;
   userId: string;
+  igmUrl?: string
 }
 
 export interface IProduct {
@@ -71,6 +72,7 @@ export interface IProductsErrors {
 export interface AppContextType {
   isLoggedIn: boolean;
   userData: userData | null;
+  setUserData: React.Dispatch<React.SetStateAction<userData | null>>;
   login: (loginData: any) => Promise<void>;
   logout: () => void;
 }

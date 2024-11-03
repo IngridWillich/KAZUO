@@ -13,10 +13,10 @@ export async function POST(request: Request) {
                 quantity: 1
             }
         ],
-        success_url: 'http://localhost:3000/GestionInventario',
-        cancel_url: 'http://localhost:3000/Planes',
+        success_url: process.env.SUCCESS_URL,
+        cancel_url: process.env.CANCEL_URL,
     })
-    // console.log(session);
+    console.log(session);
     return NextResponse.json({ url: session.url });
 
 }

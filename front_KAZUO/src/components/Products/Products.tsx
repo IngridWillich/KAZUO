@@ -1,6 +1,7 @@
 "use client";
 
 import { IEditStoreProps, IProduct } from "@/interfaces/types";
+import { useAuth0 } from "@auth0/auth0-react";
 import { socket } from "@/services/socket";
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
@@ -8,28 +9,28 @@ import { useRouter } from "next/navigation";
 import {
   faCircleInfo,
   faEdit,
-  faInfo,
   faMinus,
   faPlus,
-  faPlusCircle,
   faTrash,
+  faChartLine
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartLine } from "@fortawesome/free-solid-svg-icons/faChartLine";
-import { FaPlusSquare } from "react-icons/fa";
+ import { FaPlusSquare } from "react-icons/fa";
 import { FaCircleInfo, FaInfo, FaPlus } from "react-icons/fa6";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { Link } from "lucide-react";
 import Loader from "../Loader/Loader";
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft } from 'lucide-react';
+import Swal from "sweetalert2";
 
 
 const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
   const { userData } = useAppContext();
+  const { user, isAuthenticated } = useAuth0();
 
-  // State variables
+
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<IProduct[]>([]);
@@ -75,17 +76,6 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
     }
   }, [userData]);
 
-  // useEffect(()=>{
-  //   socket.emit("getProducts", storeId);
-
-  //   socket.on('productsUpdate', (updatedProducts: IProduct[])=>{
-  //     setProducts(updatedProducts);
-  //   });
-
-  //   return () => {
-  //     socket.off("productsUpdate");
-  //   };
-  // },[storeId])
 
   useEffect(() => {
     const fetchStoreData = async () => {
@@ -129,21 +119,153 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
       product.bange.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-const handleBack = () => {
-  router.back();
+  const handleBack = () => {
+    window.history.back();
+  };
+
+ 
+
+const handleGenerateReport = async () => {
+  try {
+    const response = await fetch(`${kazuo_back}/informes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        storeId: storeId,
+        products: products,
+        tipo: "inventario",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al generar el informe");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'informe_inventario.pdf';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    Swal.fire({
+      title: "Informe generado",
+      text: "El informe se ha generado y descargado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    Swal.fire({
+      title: "Error",
+      text: "No se pudo generar el informe. Por favor, inténtalo de nuevo.",
+      icon: "error",
+      confirmButtonText: "Aceptar",
+    });
+  }
 }
+
+const handleNavigateToProductPage = (productId: string) => {
+  if (userData || isAuthenticated) {
+    router.push(`/Products/${storeId}/${productId}`);
+  } else {
+    router.push("/login");
+  }
+};
+
+const handleAddProduct = (productId: string) => {
+  Swal.fire({
+    title: '¿Cuántos Productos se añadirán?',
+    input: 'number',
+    inputLabel: 'Añadir productos',
+    inputPlaceholder: 'Ingrese la cantidad',
+    showCancelButton: true,
+    inputValidator: (value) => {
+      const numValue = Number(value);
+      if (isNaN(numValue) || numValue <= 0) {
+        return 'Por favor, ingrese una cantidad válida';
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const quantityChange = Number(result.value);
+      updateProductQuantity(productId, quantityChange);
+      console.log(quantityChange);
+    }
+  });
+};
+
+
+const handleNewOrderProduct = (productId: string) => {
+  Swal.fire({
+    title: '¿Cuántos productos se despacharán?',
+    input: 'number',
+    inputLabel: 'Generar despacho',
+    inputPlaceholder: 'Ingrese la cantidad',
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value || Number(value) <= 0) {
+        return 'Por favor, ingrese una cantidad válida';
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const quantityChange = Number(result.value);      
+        updateProductQuantity(productId, -quantityChange); 
+       
+    }
+  });
+};
+const updateProductQuantity = async (productId: string, quantityChange: number) => {
+  console.log(quantityChange)
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+
+  const newQuantity = Number(product.quantity) + (Number(quantityChange));
+  console.log(product.quantity)
+
+
+  try {
+    const response = await fetch(`${kazuo_back}/product/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userData?.token}`,
+      },
+      body: JSON.stringify({ quantity: Number(newQuantity) }),
+    });
+
+    if (response.ok) {
+      setProducts(products.map(p => 
+        p.id === productId ? { ...p, quantity: newQuantity } : p
+      ));
+      Swal.fire('Éxito', 'Cantidad actualizada correctamente', 'success');
+    } else {
+      throw new Error('Error al actualizar la cantidad');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    Swal.fire('Error', 'No se pudo actualizar la cantidad', 'error');
+  }
+};
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-gray-100">
       <main className="w-full flex-grow container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 md:p-8 lg:w-5/6 mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold mb-4 sm:mb-0">
-              {storeName}
+        <div className="rounded-md p-8 md:w-2/3 mx-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">
+              {storeName || "Cargando el nombre de la bodega"}
             </h2>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
-                onClick={() => {}}
+                onClick={handleGenerateReport}
               >
                 Generar Informe
               </button>
@@ -167,105 +289,83 @@ const handleBack = () => {
     <ArrowLeft className="mr-2 h-4 w-4 mt-3" />
 </button>
           </div>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="p-3 text-left">Nombre</th>
-                  <th className="p-3 text-left">Cantidad</th>
-                  <th className="p-3 text-left">Unidad</th>
-                  <th className="p-3 text-left">Capacidad</th>
-                  <th className="p-3 text-left">Precio compra</th>
-                  <th className="p-3 text-left">Moneda</th>
-                  <th className="p-3 text-left">Precio venta</th>
-                  <th className="p-3 text-left">Mínimo</th>
-                  <th className="p-3 text-left">Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
-                    <tr key={product.id} className="border-b hover:bg-gray-50">
-                      <td className="p-3">{product.name}</td>
-                      <td className="p-3">{product.quantity}</td>
-                      <td className="p-3">{product.unids}</td>
-                      <td className="p-3">{product.maxCapacity}</td>
-                      <td className="p-3">{product.inPrice}</td>
-                      <td className="p-3">{product.bange}</td>
-                      <td className="p-3">{product.outPrice}</td>
-                      <td className="p-3 text-red-600 font-bold">
-                        {product.minStock}
-                      </td>
-                      <td className="p-3">
-                        <button
-                          onClick={() => {/* Handle edit */}}
-                          className="text-blue-600 hover:text-blue-800 mr-2"
-                          aria-label={`Editar ${product.name}`}
-                        >
-                          <FontAwesomeIcon icon={faPencilAlt} />
-                        </button>
-                        <button
-                          onClick={() => {/* Handle delete */}}
-                          className="text-red-600 hover:text-red-800"
-                          aria-label={`Eliminar ${product.name}`}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                      </td>
+          {isLoading ? (
+            <div className="flex justify-center items-center h-32">
+              <Loader />
+            </div>
+          ) : (
+            <div className="w-full mt-4">
+              <div className="w-full bg-gray-100 rounded-md p-4">
+                <table className="w-full">
+                  <thead>
+                    <tr className="font-medium border-b">
+                      <th className="pb-2 text-center">Nombre</th>
+                      <th className="pb-2 text-center">Cantidad</th>
+                      <th className="pb-2 text-center">Unidad de medida</th>
+                      <th className="pb-2 text-center">
+                        Capacidad de almacenamiento
+                      </th>
+                      <th className="pb-2 text-center">Precio de compra</th>
+                      <th className="pb-2 text-center">Moneda de uso</th>
+                      <th className="pb-2 text-center">Precio de venta</th>
+                      <th className="pb-2 text-center">Cantidad mínima</th>
+                      <th className="pb-2 text-center">Control de Inventario</th>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={9} className="text-center py-4">
-                      No se encontraron productos que coincidan con su búsqueda.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Responsive card view for small screens */}
-          <div className="md:hidden mt-6">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
-                  <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-                  <p><span className="font-medium">Cantidad:</span> {product.quantity}</p>
-                  <p><span className="font-medium">Unidad:</span> {product.unids}</p>
-                  <p><span className="font-medium">Capacidad:</span> {product.maxCapacity}</p>
-                  <p><span className="font-medium">Precio compra:</span> {product.inPrice}</p>
-                  <p><span className="font-medium">Moneda:</span> {product.bange}</p>
-                  <p><span className="font-medium">Precio venta:</span> {product.outPrice}</p>
-                  <p><span className="font-medium">Mínimo:</span> <span className="text-red-600 font-bold">{product.minStock}</span></p>
-                  <div className="mt-3 flex justify-end">
-                    <button
-                      onClick={() => {/* Handle edit */}}
-                      className="text-blue-600 hover:text-blue-800 mr-4"
-                      aria-label={`Editar ${product.name}`}
-                    >
-                      <FontAwesomeIcon icon={faPencilAlt} />
-                    </button>
-                    <button
-                      onClick={() => {/* Handle delete */}}
-                      className="text-red-600 hover:text-red-800"
-                      aria-label={`Eliminar ${product.name}`}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center py-4">
-                No se encontraron productos que coincidan con su búsqueda.
-              </p>
-            )}
-          </div>
+                  </thead>
+                  <tbody>
+                    {filteredProducts.length > 0 ? (
+                      filteredProducts.map((product) => (
+                        <tr key={product.id} className="border-t">
+                          <td className="py-2 text-center">{product.name}</td>
+                          <td className="py-2 text-center">
+                            {product.quantity}
+                          </td>
+                          <td className="py-2 text-center">{product.unids}</td>
+                          <td className="py-2 text-center">
+                            {product.maxCapacity}
+                          </td>
+                          <td className="py-2 text-center">
+                            {product.inPrice}
+                          </td>
+                          <td className="py-2 text-center">{product.bange}</td>
+                          <td className="py-2 text-center">
+                            {product.outPrice}
+                          </td>
+                          <td className="py-2 text-center text-red-600 font-bold">
+                            {product.minStock}
+                          </td>
+                          <td className="grid grid-cols-2 grid-rows-2 gap-6 py-2 text-center">
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            className="text-blue-500 hover:text-blue-600 cursor-pointer mx-1"
+                            onClick={() => handleNavigateToProductPage(product.id!)}
+                          />
+                          <FontAwesomeIcon
+                            icon={faChartLine}
+                            className="cursor-pointer mx-1"
+                          />                          
+                          <FontAwesomeIcon icon={faPlus} className="cursor-pointer mx-1" onClick={()=>handleAddProduct(product.id!)} />
+                          <FontAwesomeIcon icon={faMinus} className="cursor-pointer mx-1"  onClick={() => handleNewOrderProduct(product.id!)}  />
+                        </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={9} className="text-center py-4">
+                          No se encontraron productos que coincidan con su
+                          búsqueda.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
-  )
-}
-export default Products
+  );
+};
+
+export default Products;
