@@ -1,4 +1,4 @@
-
+"use client"
 
 
 type Platform = 'instagram' | 'linkedin' | 'github'

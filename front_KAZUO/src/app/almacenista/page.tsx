@@ -1,3 +1,4 @@
+"use client"
 import Inventario from '@/components/almacenistaInventario'
 import React from 'react'
 

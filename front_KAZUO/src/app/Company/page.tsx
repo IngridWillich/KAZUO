@@ -1,3 +1,4 @@
+"use client"
 import Company from "@/components/Company";
 import ProtectedRoutes from "@/context/ProtectedRoutes";
 

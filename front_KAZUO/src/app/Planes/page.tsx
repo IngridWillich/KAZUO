@@ -1,4 +1,4 @@
-
+"use client"
 import Planes from "@/components/Planes";
 
 

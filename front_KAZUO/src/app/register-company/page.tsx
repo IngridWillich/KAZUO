@@ -1,3 +1,4 @@
+"use client"
 import CompanyRegistrationForm from "@/components/RegisterCompany";
 import ProtectedRoutes from "@/context/ProtectedRoutes";
 

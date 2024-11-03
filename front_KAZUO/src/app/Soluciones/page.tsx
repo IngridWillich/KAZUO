@@ -1,4 +1,4 @@
-
+"use client"
 import Soluciones from "@/components/Soluciones";
 
 

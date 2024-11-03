@@ -1,3 +1,4 @@
+"use client"
 import EditStoreForm from '@/components/EditStoreForm/EditStoreForm'
 import React from 'react'
 

@@ -1,4 +1,4 @@
-
+"use client"
 import AboutUs from "@/components/SobreNosotros";
 import Ubicacion from "@/components/Ubicacion";
 

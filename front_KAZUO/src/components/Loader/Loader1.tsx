@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import { FaDownload } from 'react-icons/fa'; // Asegúrate de tener el icono importado
 

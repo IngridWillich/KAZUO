@@ -1,3 +1,4 @@
+"use client"
 import Contacto from "@/components/Contacto";
 
 

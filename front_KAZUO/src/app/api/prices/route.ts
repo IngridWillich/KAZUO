@@ -1,3 +1,4 @@
+"use client"
 import Stripe from "stripe"; 
 const { NextResponse } = require("next/server");
 

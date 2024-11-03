@@ -1,3 +1,4 @@
+"use client"
 import Stripe from "stripe";
 import ButtonCheckout from "../ButtonCheckout";
 

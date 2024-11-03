@@ -1,3 +1,4 @@
+"use client"
 import Products from '@/components/Products/Products'
 import ProtectedRoutesProducts from '@/context/ProtectedRoutesProducts'
 import ProtectedRoutes from '@/context/ProtectedRoutes'

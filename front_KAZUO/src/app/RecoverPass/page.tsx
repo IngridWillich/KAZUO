@@ -1,3 +1,4 @@
+"use client"
 import RecoverPassForm from '@/components/RecoverPass/RecoverPassForm'
 import React from 'react'
 

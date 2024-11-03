@@ -1,4 +1,4 @@
-
+"use client"
 import Inventario from "@/components/Inventario";
 import ProtectedRoutes from "@/context/ProtectedRoutes";
 
