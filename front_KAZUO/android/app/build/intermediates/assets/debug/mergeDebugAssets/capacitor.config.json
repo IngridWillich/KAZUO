@@ -1,0 +1,10 @@
+{
+	"appId": "com.kazuo.app",
+	"appName": "KazuoApp",
+	"webDir": "out",
+	"server": {
+		"androidScheme": "https",
+		"cleartext": true
+	},
+	"android": {}
+}
