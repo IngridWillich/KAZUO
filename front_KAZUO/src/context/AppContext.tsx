@@ -5,6 +5,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { userData } from "@/interfaces/types";
 import { AppContextType } from "@/interfaces/types";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -12,16 +13,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { logout: logoutAuth0, user, isAuthenticated } = useAuth0();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>("isLoggedIn", false);
   const [userData, setUserData] = useState<userData | null>(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
     const storedUserData = localStorage.getItem("userData");
     if (storedLoginStatus === "true" && storedUserData) {
       setIsLoggedIn(true);
       setUserData(JSON.parse(storedUserData));
     }
+  }
   }, []);
 
   useEffect(() => {
@@ -78,7 +81,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     window.location.href = window.location.origin;
   };
 
-  const value = {
+  const value: AppContextType = {
     isLoggedIn,
     userData,
     login,

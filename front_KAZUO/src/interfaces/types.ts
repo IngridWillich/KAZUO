@@ -58,6 +58,26 @@ export interface IProduct {
   minStock: number;
   storeId: string;
   userId: string;
+  store?:{
+    name:string
+  }
+  [key: string]: any;
+}
+
+export interface IUpdateProduct {
+  id?: string;
+  name?: string;
+  unids?: string;
+  maxCapacity?: number;
+  inPrice?: number;
+  bange?: string;
+  outPrice?: number;
+  storeId?: string;
+  userId?: string;
+  store?:{
+    name:string
+  }
+  [key: string]: any;
 }
 
 export interface IProductsErrors {

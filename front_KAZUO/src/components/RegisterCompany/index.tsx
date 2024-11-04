@@ -60,9 +60,10 @@ const CompanyRegistrationForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm() && user && isAuthenticated) {
+    console.log(validateForm)
+    // if (validateForm() && user && isAuthenticated) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/companies`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ const CompanyRegistrationForm: React.FC = () => {
         console.error('Error registering company:', error);
         setErrors({ submit: 'Hubo un error al registrar la empresa. Por favor, inténtelo de nuevo.' });
       }
-    } 
+    // } 
   };
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
