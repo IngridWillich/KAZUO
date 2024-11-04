@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 
 const CompanyRegistrationForm: React.FC = () => {
   const { user, isAuthenticated } = useAuth0();
+  const userData=useAppContext();
   
   const initialFormData = {
     CompanyName: '',
@@ -16,7 +17,7 @@ const CompanyRegistrationForm: React.FC = () => {
     contactPhone: '',
     email: '',
     industry: '',
-    userId:  user?.sub || user || null,
+    userId:  user?.sub || userData || null,
   };
 
   const [formData, setFormData] = useState(initialFormData);
