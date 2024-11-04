@@ -77,6 +77,26 @@ export interface AppContextType {
   logout: () => void;
 }
 
+export interface IFormData {
+  CompanyName: string;
+  country: string;
+  address: string;
+  contactPhone: string;
+  email: string;
+  industry: string;
+ 
+
+}
+
+export interface IFormErrors {
+  CompanyName?: string;
+  country?: string;
+  address?: string;
+  contactPhone?: string;
+  email?: string;
+  industry?: string;
+}
+
 export interface IStore {
   id: string;
   name: string;
