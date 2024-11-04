@@ -8,6 +8,7 @@ import { AppProvider } from "@/context/AppContext";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
 import ClientLayout from "./ClientLayout";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,8 +31,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <ShowComponents>
               <Navbar />
             </ShowComponents>
-            {children}
-            <Footer />
+            <Suspense fallback={<div>Loading...</div>}>
+          {children}
+        </Suspense>            <Footer />
           </AppProvider>
         </ClientLayout>
         

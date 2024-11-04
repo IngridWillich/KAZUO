@@ -7,11 +7,11 @@ const page = ({ params }: { params: { storeId: string } }) => {
   return (
     <div>
       <ProtectedRoutesProducts>
-        <Products storeId={params.storeId}/>
+        <Products storeId={params.storeId} />
       </ProtectedRoutesProducts>
 
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
