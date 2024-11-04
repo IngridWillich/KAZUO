@@ -1,4 +1,4 @@
-// File: C:\Users\Windows\OneDrive\Documentos\PROGRAMACION\CARRERA\PF\KAZUO\front_KAZUO\src\app\api\prices\route.ts
+// File: C:\Users\Usuario\Desktop\proyectos\ProyectoFinal\KAZUO\front_KAZUO\src\app\api\prices\route.ts
 import * as entry from '../../../../../src/app/api/prices/route.js'
 import type { NextRequest } from 'next/server.js'
 

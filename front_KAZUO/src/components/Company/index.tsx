@@ -8,6 +8,7 @@ import Image from 'next/image'
 interface TeamMember {
   id: string
   name: string
+  email: string
   position: string
   image: string
   description: string
@@ -38,7 +39,7 @@ export default function MiEmpresa() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
-  const [newMember, setNewMember] = useState<TeamMember>({ id: '', name: '', position: '', image: '', description: '' })
+  const [newMember, setNewMember] = useState<TeamMember>({ id: '', name: '', email: '', position: '', image: '', description: '' })
   const { user, isAuthenticated, loginWithRedirect } = useAuth0()
 
   const fetchCompanyData = useCallback(async () => {
@@ -128,7 +129,7 @@ export default function MiEmpresa() {
   const handleAddTeamMember = () => {
     if (newMember.name && newMember.position) {
       setTeamMembers([...teamMembers, { ...newMember, id: Date.now().toString() }])
-      setNewMember({ id: '', name: '', position: '', image: '', description: '' })
+      setNewMember({ id: '', name: '', email: '', position: '', image: '', description: '' })
       alert("Miembro del equipo agregado correctamente")
     }
   }
@@ -257,6 +258,13 @@ export default function MiEmpresa() {
                 onChange={(e) => setNewMember({ ...newMember, position: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
+              <input
+                type="text"
+                placeholder="Correo Electronico"
+                value={newMember.email}
+                onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
               <textarea
                 placeholder="Descripción"
                 value={newMember.description}
@@ -264,12 +272,7 @@ export default function MiEmpresa() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 rows={3}
               />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageUpload(e, 'memberImage')}
-                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
+              
               <button
                 
                 onClick={handleAddTeamMember}

@@ -1,4 +1,4 @@
-// File: C:\Users\Windows\OneDrive\Documentos\PROGRAMACION\CARRERA\PF\KAZUO\front_KAZUO\src\app\Contacto\page.tsx
+// File: C:\Users\Usuario\Desktop\proyectos\ProyectoFinal\KAZUO\front_KAZUO\src\app\Contacto\page.tsx
 import * as entry from '../../../../src/app/Contacto/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

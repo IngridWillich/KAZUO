@@ -1,4 +1,4 @@
-// File: C:\Users\Windows\OneDrive\Documentos\PROGRAMACION\CARRERA\PF\KAZUO\front_KAZUO\src\app\api\webhook\route.ts
+// File: C:\Users\Usuario\Desktop\proyectos\ProyectoFinal\KAZUO\front_KAZUO\src\app\api\webhook\route.ts
 import * as entry from '../../../../../src/app/api/webhook/route.js'
 import type { NextRequest } from 'next/server.js'
 
