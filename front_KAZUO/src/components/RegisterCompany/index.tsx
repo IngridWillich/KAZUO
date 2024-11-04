@@ -257,8 +257,8 @@ if (!isAuthenticated || !user) {
                   name="industry"
                   className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   value={formData.industry}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  // onChange={handleChange}
+                  // onBlur={handleBlur}
                 >
                   <option value="">Selecciona una industria</option>
                   <option value="tecnologia">Tecnología</option>
