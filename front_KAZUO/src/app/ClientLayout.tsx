@@ -6,25 +6,11 @@ import { AppProvider } from "@/context/AppContext";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
-import {Spanish} from "../translations/es/global";
-import {English} from "../translations/en/global";
+import i18n from "../../next-i18next.config";
 
 
 
-
-i18next.init({
-  interpolation: { escapeValue: false },
-  lng: "es",
-  resources:{
-    es:{
-      global:Spanish
-    },
-    en:{
-      global:English
-    }
-  }
-})
-
+ 
 interface ClientLayoutProps {
   children: ReactNode;
 }

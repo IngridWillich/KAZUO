@@ -22,19 +22,7 @@ export const English = {
         description: "Access your inventory from anywhere and stay updated across devices."
       }
     ],
-    testimonials: {
-      title: "What Our Clients Say",
-      reviews: [
-        {
-          name: "Ana González",
-          comment: "Kazuo has transformed the way we manage our store inventory. Highly recommended!"
-        },
-        {
-          name: "Luis Martínez",
-          comment: "Our business efficiency has improved remarkably thanks to Kazuo’s intuitive platform."
-        }
-      ]
-    },
+    
     footer: {
       contact_us: "Contact Us",
       privacy_policy: "Privacy Policy",
