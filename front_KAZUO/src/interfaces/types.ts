@@ -117,6 +117,25 @@ export interface IFormErrors {
   industry?: string;
 }
 
+export interface CompanyData {
+  nombreEmpresa: string
+  pais: string
+  direccion: string
+  telefonoContacto: string
+  correoElectronico: string
+  industria: string
+
+}
+export interface TeamMember {
+  id: string
+  name: string
+  email:string
+  position: string
+
+}
+
+
+
 export interface IStore {
   id: string;
   name: string;
