@@ -1190,6 +1190,10 @@ video {
     border-color:rgb(209 213 219 / var(--tw-border-opacity));
     
 }
+  .border-transparent {
+    border-color:transparent;
+    
+}
   .bg-\[\#d7e6bb\] {
     --tw-bg-opacity:1;
     background-color:rgb(215 230 187 / var(--tw-bg-opacity));
@@ -1603,6 +1607,10 @@ video {
 }
   .opacity-100 {
     opacity:1;
+    
+}
+  .opacity-50 {
+    opacity:0.5;
     
 }
   .shadow {

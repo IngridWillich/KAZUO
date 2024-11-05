@@ -101,10 +101,10 @@ export interface IFormData {
   CompanyName: string;
   country: string;
   address: string;
-  contactPhone: string;
+  contactPhone: number;
   email: string;
   industry: string;
- 
+  userId:string;
 
 }
 
@@ -112,7 +112,7 @@ export interface IFormErrors {
   CompanyName?: string;
   country?: string;
   address?: string;
-  contactPhone?: string;
+  contactPhone?: String;
   email?: string;
   industry?: string;
 }
