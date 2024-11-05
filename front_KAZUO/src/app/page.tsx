@@ -1,11 +1,17 @@
 import Image from 'next/image';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 export default function LandingPage() {
-  return (
+
+  // const { t, i18n } = useTranslation( "global" );
+
+    return (
     <div className="bg-white">
       <main className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 md:pr-8 mb-8 md:mb-0 text-center md:text-left">
           <p className="text-sm font-medium text-gray-500 mb-4">
+           {/* <h1>{t("landing.managementSystem")} </h1> */}
             SISTEMA DE GESTIÓN PARA PYMES
           </p>
           <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">

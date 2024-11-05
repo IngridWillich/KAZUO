@@ -15,12 +15,13 @@ import {
   faChartLine
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaPlusSquare } from "react-icons/fa";
+ import { FaPlusSquare } from "react-icons/fa";
 import { FaCircleInfo, FaInfo, FaPlus } from "react-icons/fa6";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { Link } from "lucide-react";
 import Loader from "../Loader/Loader";
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { ArrowLeft } from 'lucide-react';
 import Swal from "sweetalert2";
 
 
@@ -284,9 +285,9 @@ const updateProductQuantity = async (productId: string, quantityChange: number) 
               onChange={(e) => setSearchQuery(e.target.value)}
               className="border border-gray-300 rounded-md p-3 w-full"
             />
-            <a href="#" onClick={handleBack}>
-              Volver
-            </a>
+           <button onClick={handleBack} className="mb-4">
+    <ArrowLeft className="mr-2 h-4 w-4 mt-3" />
+</button>
           </div>
           {isLoading ? (
             <div className="flex justify-center items-center h-32">

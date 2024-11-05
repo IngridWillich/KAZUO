@@ -22,6 +22,8 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  
+  
   return (
     <html lang="en">
       <body className={inter.className}>

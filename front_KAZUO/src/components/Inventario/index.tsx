@@ -8,8 +8,9 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
-import { Link } from "lucide-react";
+import { socket } from "@/services/socket";
 import Loader from "../Loader/Loader";
+import { Link } from "lucide-react";
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -164,8 +165,7 @@ const Inventario: React.FC = () => {
           console.log(dataStore);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
-        } finally {
-          setLoading(false);
+          setStore([]);
         }
       }
     };
