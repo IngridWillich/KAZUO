@@ -2,6 +2,7 @@
 
 import { IEditStoreProps, IProduct } from "@/interfaces/types";
 import { useAuth0 } from "@auth0/auth0-react";
+
 import { useEffect, useState, useRef } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
@@ -17,10 +18,13 @@ import Loader from "../Loader/Loader";
 import Swal from "sweetalert2";
 import { ArrowLeft } from "lucide-react";
 
+
 const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const router = useRouter();
   const { userData } = useAppContext();
   const { user, isAuthenticated } = useAuth0();
+
+
 
   const [activeTab, setActiveTab] = useState("stock");
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -28,6 +32,8 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [storeName, setStoreName] = useState("");
+
+
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -52,11 +58,13 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
           a.name.localeCompare(b.name)
         );
         setProducts(sortedProducts);
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error:", error);
         setProducts([]);
         setIsLoading(false);
+
       }
     };
 
@@ -64,6 +72,8 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
       fetchProducts();
     }
   }, [userData]);
+
+
 
   useEffect(() => {
     const fetchStoreData = async () => {
@@ -110,6 +120,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
   const handleBack = () => {
     window.history.back();
   };
+
 
   const handleNavigateToStatistics = () => {
     router.push(`/Statistics/${storeId}`);
@@ -297,6 +308,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
     }
   };
 
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center bg-gray-100">
       <main className="w-full flex-grow container mx-auto px-4 py-8">
@@ -314,12 +326,14 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
               </button>
               <button
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+
                 onClick={handleNavigateToStatistics}
               >
                 Estadisticas por Bodega
               </button>
               <button
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+
                 onClick={handleCreateNewProduct}
               >
                 Agregar Producto
@@ -334,15 +348,18 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="border border-gray-300 rounded-md p-3 w-full"
             />
+
             <button onClick={handleBack} className="mb-4">
               <ArrowLeft className="mr-2 h-4 w-4 mt-3" />
             </button>
+
           </div>
           {isLoading ? (
             <div className="flex justify-center items-center h-32">
               <Loader />
             </div>
           ) : (
+
             <div className="w-full mt-4 overflow-x-auto shadow-md sm:rounded-lg">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -446,6 +463,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
                 </tbody>
               </table>
             </div>
+
           )}
         </div>
       </main>

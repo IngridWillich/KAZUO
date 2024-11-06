@@ -1,3 +1,5 @@
+
+
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -5,6 +7,7 @@ import Swal from 'sweetalert2';
 import { validateDataForm } from '@/helpers/validate';
 import { IFormData, IFormErrors } from '@/interfaces/types';
 import Loader from '../Loader/Loader';
+
 import { useAppContext } from '@/context/AppContext';
 
 const CompanyRegistrationForm: React.FC = () => {
@@ -12,6 +15,7 @@ const CompanyRegistrationForm: React.FC = () => {
   const { userData } = useAppContext();
 
 const token = userData?.token;
+
 
   const initialFormData: IFormData = {
     CompanyName: '',
@@ -77,7 +81,9 @@ const token = userData?.token;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
     
+
 
     event.preventDefault();
     const validationErrors = validateDataForm(formData);
@@ -90,6 +96,7 @@ const token = userData?.token;
         const parsedUserData = JSON.parse(userData);
         userId = parsedUserData.id;
       }
+
       
       const dataFormm = {
         ...formData,
@@ -99,17 +106,20 @@ const token = userData?.token;
 console.log(`token: ${token}`)
       try {
         console.log(`Datos de usuario ${token}`)
+
         setLoading(true);
         const response = await fetch(`${kazuo_back}/companies`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(dataFormm),
         });
         // console.log(dataFormm);
         console.log(token)
+
         if (response.ok) {
           Swal.fire({
             title: "¡Te has registrado exitosamente!",
@@ -120,8 +130,10 @@ console.log(`token: ${token}`)
           router.push("/Company");
         } else {
           throw new Error("Respuesta no exitosa del servidor");
+
    
           
+
         }
       } catch {
         Swal.fire({
@@ -132,7 +144,9 @@ console.log(`token: ${token}`)
         });
       } finally {
         setLoading(false);
+
         
+
       }
     }
   };

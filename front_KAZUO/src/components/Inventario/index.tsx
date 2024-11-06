@@ -8,8 +8,10 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
+
 import Loader from "../Loader/Loader";
 import Link from "next/link"
+
 
 
 const Inventario: React.FC = () => {
@@ -64,6 +66,7 @@ const Inventario: React.FC = () => {
       formData.append("id", userId.toString());
 
       try {
+
         const response = await fetch(
           `${kazuo_back}/files/uploadProfileImage/${userId}`,
           {
@@ -72,6 +75,7 @@ const Inventario: React.FC = () => {
             body: formData,
           }
         )
+
           .then(async (response) => {
             if (response.ok) {
               const data = await response.json();
@@ -124,10 +128,12 @@ const Inventario: React.FC = () => {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+
             Authorization: `Bearer ${userData?.token}`,
           },
         });
         console.log(userData?.token);
+
         if (response.ok) {
           setStore((prevStore) =>
             prevStore.filter((bodega) => bodega.id !== storeId)
@@ -143,7 +149,9 @@ const Inventario: React.FC = () => {
       } catch (error) {
         Swal.fire("Error", "Ocurrió un error al eliminar la bodega.");
       } finally {
+
         setLoading(false);
+
       }
     }
   };
@@ -177,6 +185,8 @@ const Inventario: React.FC = () => {
     fetchStores();
   }, []);
 
+
+
   const filteredStores = Array.isArray(store)
     ? store.filter(
         (bodega) =>
@@ -186,6 +196,8 @@ const Inventario: React.FC = () => {
             .includes(searchQuery.toLowerCase())
       )
     : [];
+
+
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -209,7 +221,9 @@ const Inventario: React.FC = () => {
   }, []);
 
   useEffect(() => {
+
     console.log(`Token: ${userData?.token}`);
+
     const handlefetchCategories = async () => {
       setLoading(true);
       try {
@@ -304,6 +318,7 @@ const Inventario: React.FC = () => {
         <p>
           <strong>Plan:</strong> Kazuo Pro
         </p>
+
         <button
           className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
           onClick={() => router.push("/register-company")}
@@ -311,6 +326,7 @@ const Inventario: React.FC = () => {
           Registrar Empresa
         </button>
        
+
       </div>
 
       {/* Encabezado de Inventario */}
