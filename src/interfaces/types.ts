@@ -36,7 +36,7 @@ export type TRegisterError = Partial<IRegisterProps>;
 export type TUpdatePassError = Partial<IUpdatePassProps>;
 
 export interface userData {
-  id: number;
+  id: number | string;
   email: string;
   password: string;
   name: string;
@@ -44,6 +44,7 @@ export interface userData {
   token: string;
   userId: string;
   igmUrl?: string
+  auth0Id?: string
 }
 
 export interface IProduct {

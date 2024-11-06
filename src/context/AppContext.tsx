@@ -12,7 +12,8 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { logout: logoutAuth0, user, isAuthenticated } = useAuth0();
+  const { logout: logoutAuth0, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>("isLoggedIn", false);
   const [userData, setUserData] = useState<userData | null>(null);
 
@@ -30,8 +31,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     console.log(`Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`);
     if (isAuthenticated && user) {
+      const auth0Id = user.sub || "";
       const newUserData: userData = {
-        id: parseInt(user.sub?.split('|')[1] || "0", 10), // Convertir el ID de string a number, manejar el caso undefined
+        id: "", 
         password: "", // Manejar según tus necesidades
         company: user.email || "", // Usar el email o algún otro campo como compañía
         token: "", // Establecer el token si lo tienes
@@ -39,6 +41,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         name: user.name || "",
         userId: "",
         igmUrl: "",
+        auth0Id: auth0Id,
       };
 
       setIsLoggedIn(true);
@@ -49,6 +52,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("igmUrl", userData?.igmUrl!);
     }
   }, [isAuthenticated, user]); // Incluido isAuthenticated y user
+
+ 
 
   const login = async (loginData: any) => {
     try {
@@ -97,5 +102,6 @@ export const useAppContext = () => {
   if (context === undefined) {
     throw new Error("Error de contexto");
   }
+ 
   return context;
 };
