@@ -31,3 +31,4 @@ const GoogleTranslateWidget: React.FC = () => {
 };
 
 export default GoogleTranslateWidget;
+

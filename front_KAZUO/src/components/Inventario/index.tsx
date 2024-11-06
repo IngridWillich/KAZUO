@@ -8,9 +8,11 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
-import { socket } from "@/services/socket";
+
 import Loader from "../Loader/Loader";
-import { Link } from "lucide-react";
+import Link from "next/link"
+
+
 
 const Inventario: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -64,11 +66,16 @@ const Inventario: React.FC = () => {
       formData.append("id", userId.toString());
 
       try {
-        const response = await fetch(`${kazuo_back}/files/uploadProfileImage`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${userData?.token}` },
-          body: formData,
-        })
+
+        const response = await fetch(
+          `${kazuo_back}/files/uploadProfileImage/${userId}`,
+          {
+            method: "POST",
+            headers: { Authorization: `Bearer ${userData?.token}` },
+            body: formData,
+          }
+        )
+
           .then(async (response) => {
             if (response.ok) {
               const data = await response.json();
@@ -121,8 +128,11 @@ const Inventario: React.FC = () => {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+
+            Authorization: `Bearer ${userData?.token}`,
           },
         });
+        console.log(userData?.token);
 
         if (response.ok) {
           setStore((prevStore) =>
@@ -139,7 +149,9 @@ const Inventario: React.FC = () => {
       } catch (error) {
         Swal.fire("Error", "Ocurrió un error al eliminar la bodega.");
       } finally {
-        setLoading(false); // Detiene el loader
+
+        setLoading(false);
+
       }
     }
   };
@@ -172,30 +184,8 @@ const Inventario: React.FC = () => {
 
     fetchStores();
   }, []);
-  //---------------------------------------------------------//
 
-  //FUNCION POR WEB SOCKETS
-  // useEffect(() => {
-  //   socket.emit("getStores");
 
-  //   socket.on("storesUpdate", (updatedStores: IStore[]) => {
-  //     console.log('Recibida actualización de tiendas:', updatedStores);
-  //     setStore(updatedStores);
-  //     console.log('Actualizando de:', store, 'a:', updatedStores);
-  //   }); //Actualizar las Stores en tiempo real.
-
-  //   return () => {
-  //     socket.off("storesUpdate");
-  //   };
-  // }, []);
-
-  // const handleAddStore = (newStore: IStore) => {
-  //   socket.emit("addStore", newStore);
-  // };
-
-  // const handleDeleteStoreBySocket = (storeId: string) => {
-  //   socket.emit("deleteStore", storeId);
-  // };
 
   const filteredStores = Array.isArray(store)
     ? store.filter(
@@ -207,9 +197,8 @@ const Inventario: React.FC = () => {
       )
     : [];
 
-  //---------------------------------------------------------//
 
-  // FUNCION POR PETICION0ES CRUD
+
   useEffect(() => {
     const fetchStores = async () => {
       if (userData || isAuthenticated) {
@@ -232,6 +221,9 @@ const Inventario: React.FC = () => {
   }, []);
 
   useEffect(() => {
+
+    console.log(`Token: ${userData?.token}`);
+
     const handlefetchCategories = async () => {
       setLoading(true);
       try {
@@ -327,7 +319,14 @@ const Inventario: React.FC = () => {
           <strong>Plan:</strong> Kazuo Pro
         </p>
 
-        
+        <button
+          className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          onClick={() => router.push("/register-company")}
+        >
+          Registrar Empresa
+        </button>
+       
+
       </div>
 
       {/* Encabezado de Inventario */}

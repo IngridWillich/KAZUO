@@ -110,19 +110,20 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><a href="/Soluciones" className="hover:underline">Sistema de gestión</a></li>    
                         <li><a href="#" className="hover:underline">Integraciones</a></li>
-            <li><a href="#" className="hover:underline">API desarrolladores</a></li>
+
+        
+
           </ul>
         </div>
         
         <div>
           <h3 className="font-bold text-lg mb-4">Recursos</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:underline">Blog</a></li>
-            <li><a href="#" className="hover:underline">Mejores prácticas</a></li>
-            <li><a href="#" className="hover:underline">Colores</a></li>
-            <li><a href="#" className="hover:underline">Rueda de colores</a></li>
+
+            
             <li><a href="#" className="hover:underline">Soporte</a></li>
-            <li><a href="#" className="hover:underline">Desarrolladores</a></li>
+            <li><a href="/Sobre Nosotros" className="hover:underline">Desarrolladores</a></li>
+
             <li><a href="#" className="hover:underline">Biblioteca de recursos</a></li>
           </ul>
         </div>
