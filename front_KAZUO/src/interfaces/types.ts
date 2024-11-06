@@ -120,3 +120,40 @@ export interface InventarioProps {
 export interface IEditProductProps {
   productId: string;
 }
+
+export interface IFormData {
+  CompanyName: string;
+  country: string;
+  address: string;
+  contactPhone: number;
+  email: string;
+  industry: string;
+  userId:string;
+
+}
+
+export interface IFormErrors {
+  CompanyName?: string;
+  country?: string;
+  address?: string;
+  contactPhone?: String;
+  email?: string;
+  industry?: string;
+}
+
+ export interface CompanyData {
+  nombreEmpresa: string
+  pais: string
+  direccion: string
+  telefonoContacto: string
+  correoElectronico: string
+  industria: string
+ }
+
+ export interface TeamMember {
+  id: string
+  name: string
+  email: string
+  position: string
+  
+}

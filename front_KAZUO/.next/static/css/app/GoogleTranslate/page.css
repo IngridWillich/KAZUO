@@ -1,0 +1,45 @@
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./src/components/GoogleTranslateWidget/styles.module.css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************/
+.styles_google-translate-widget__JLPy0 .styles_goog-te-gadget__cYDlo {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .styles_google-translate-widget__JLPy0 .styles_goog-te-combo___8pN5 {
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    width: 100%;
+    max-width: 200px;
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    outline: none;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  .styles_google-translate-widget__JLPy0 .styles_goog-te-combo___8pN5:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  }
+
+  .styles_google-translate-widget__JLPy0 .styles_goog-logo-link__pxEwb {
+    display: none;
+  }
+
+  .styles_google-translate-widget__JLPy0 .styles_goog-te-gadget__cYDlo span {
+    display: none;
+  }
+
+  .styles_google-translate-widget__JLPy0 .styles_goog-te-gadget__cYDlo {
+    margin-bottom: 0.5rem;
+  }
+
+  .styles_google-translate-widget__JLPy0 .styles_goog-te-gadget-simple__WmEhn {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }

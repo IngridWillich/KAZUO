@@ -4,26 +4,10 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash } from 'react-icons/fa'
 import Image from 'next/image'
+import { CompanyData, TeamMember } from '@/interfaces/types'
+import { useAppContext } from '@/context/AppContext'
 
-interface TeamMember {
-  id: string
-  name: string
-  email: string
-  position: string
-  image: string
-  description: string
-}
 
-interface CompanyData {
-  nombreEmpresa: string
-  pais: string
-  direccion: string
-  telefonoContacto: string
-  correoElectronico: string
-  industria: string
-  sobreNosotros: string
-  logo: string
-}
 
 export default function MiEmpresa() {
   const [companyData, setCompanyData] = useState<CompanyData>({
@@ -33,32 +17,44 @@ export default function MiEmpresa() {
     telefonoContacto: '',
     correoElectronico: '',
     industria: '',
-    sobreNosotros: '',
-    logo: '',
+   
   })
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
-  const [newMember, setNewMember] = useState<TeamMember>({ id: '', name: '', email: '', position: '', image: '', description: '' })
+  const [newMember, setNewMember] = useState<TeamMember>({ id: '', name: '', email: '', position: '' })
   const { user, isAuthenticated, loginWithRedirect } = useAuth0()
 
+ 
   const fetchCompanyData = useCallback(async () => {
-    if (!user?.sub) return
+    if (!user) return
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/${user.sub}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies/user/${user}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${user.sub}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
       if (response.ok) {
-        const data = await response.json()
-        setCompanyData(data)
-        if (data.teamMembers) setTeamMembers(data.teamMembers)
+        const data = await response.json();
+        setCompanyData(data);
+        if (data.teamMembers) setTeamMembers(data.teamMembers);
       } else {
-        alert("No se pudo cargar la información de la empresa")
+        alert("No se pudo cargar la información de la empresa");
       }
     } catch (error) {
-      console.error('Error fetching company data:', error)
-      alert("Ocurrió un error al cargar los datos")
+      console.error('Error fetching company data:', error);
+      alert("Ocurrió un error al cargar los datos");
     }
-  }, [user])
+  }, [user]);
+
+
+
+  
+
 
 
 
@@ -68,29 +64,7 @@ export default function MiEmpresa() {
     if (errors[name]) setErrors(prevErrors => ({ ...prevErrors, [name]: '' }))
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'logo' | 'memberImage') => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const formData = new FormData()
-      formData.append('image', file)
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload-image`, { method: 'POST', body: formData })
-        if (response.ok) {
-          const data = await response.json()
-          if (field === 'logo') {
-            setCompanyData(prevState => ({ ...prevState, logo: data.imageUrl }))
-          } else {
-            setNewMember(prevState => ({ ...prevState, image: data.imageUrl }))
-          }
-          alert("Imagen subida correctamente")
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error)
-        alert("No se pudo subir la imagen")
-      }
-    }
-  }
-
+  
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {}
     if (!companyData.nombreEmpresa.trim()) newErrors.nombreEmpresa = 'El nombre de la empresa es requerido'
@@ -108,7 +82,7 @@ export default function MiEmpresa() {
     e.preventDefault()
     if (validateForm() && user && isAuthenticated) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/update`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies/:${companyData}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...companyData, teamMembers, userId: user.sub }),
@@ -129,7 +103,7 @@ export default function MiEmpresa() {
   const handleAddTeamMember = () => {
     if (newMember.name && newMember.position) {
       setTeamMembers([...teamMembers, { ...newMember, id: Date.now().toString() }])
-      setNewMember({ id: '', name: '', email: '', position: '', image: '', description: '' })
+      setNewMember({ id: '', name: '', email: '', position: '' })
       alert("Miembro del equipo agregado correctamente")
     }
   }
@@ -162,42 +136,18 @@ export default function MiEmpresa() {
                    key === 'direccion' ? 'Dirección' :
                    key === 'telefonoContacto' ? 'Teléfono de Contacto' :
                    key === 'correoElectronico' ? 'Correo Electrónico' :
-                   key === 'industria' ? 'Industria' :
-                   key === 'sobreNosotros' ? 'Sobre Nosotros' :
-                   key === 'logo' ? 'Logo' : key}
+                   key === 'industria' ? 'Industria' : ''}
                 </label>
                 <div className="md:col-span-2">
                   {isEditing ? (
-                    key === 'logo' ? (
-                      <div className="flex items-center space-x-2">
-                        <input
-                          id={key}
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageUpload(e, 'logo')}
-                          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                        />
-                        {value && <Image src={value} alt="Logo" width={50} height={50} className="rounded-full" />}
-                      </div>
-                    ) : key === 'sobreNosotros' ? (
-                      <textarea
-                        id={key}
-                        name={key}
-                        value={value}
-                        onChange={handleChange}
-                        rows={4}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                      />
-                    ) : (
-                      <input
-                        id={key}
-                        type={key === 'correoElectronico' ? 'email' : 'text'}
-                        name={key}
-                        value={value}
-                        onChange={handleChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                      />
-                    )
+                    <input
+                      id={key}
+                      type={key === 'correoElectronico' ? 'email' : 'text'}
+                      name={key}
+                      value={value}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    />
                   ) : (
                     <span className="text-gray-900">{value}</span>
                   )}
@@ -218,7 +168,7 @@ export default function MiEmpresa() {
           </form>
         </div>
       </div>
-
+  
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="px-6 py-4 bg-gray-50 border-b">
           <h2 className="text-xl font-semibold text-gray-800">Nuestro Equipo</h2>
@@ -226,12 +176,9 @@ export default function MiEmpresa() {
         <div className="p-6">
           {teamMembers.map((member) => (
             <div key={member.id} className="flex items-center justify-between p-4 border-b last:border-b-0">
-              <div className="flex items-center space-x-4">
-                {member.image && <Image src={member.image} alt={member.name} width={50} height={50} className="rounded-full" />}
-                <div>
-                  <p className="font-semibold text-gray-900">{member.name}</p>
-                  <p className="text-sm text-gray-500">{member.position}</p>
-                </div>
+              <div>
+                <p className="font-semibold text-gray-900">{member.name}</p>
+                <p className="text-sm text-gray-500">{member.position}</p>
               </div>
               <button
                 onClick={() => handleRemoveTeamMember(member.id)}
@@ -251,6 +198,13 @@ export default function MiEmpresa() {
                 onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
+              <input 
+                type="email"
+                placeholder="Correo Electrónico"
+                value={newMember.email}
+                onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
               <input
                 type="text"
                 placeholder="Cargo"
@@ -258,23 +212,8 @@ export default function MiEmpresa() {
                 onChange={(e) => setNewMember({ ...newMember, position: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
-              <input
-                type="text"
-                placeholder="Correo Electronico"
-                value={newMember.email}
-                onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-              <textarea
-                placeholder="Descripción"
-                value={newMember.description}
-                onChange={(e) => setNewMember({ ...newMember, description: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                rows={3}
-              />
-              
+             
               <button
-                
                 onClick={handleAddTeamMember}
                 className="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300"
               >
@@ -285,5 +224,5 @@ export default function MiEmpresa() {
         </div>
       </div>
     </div>
-  )
+  );
 }

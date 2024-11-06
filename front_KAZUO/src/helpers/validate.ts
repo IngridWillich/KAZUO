@@ -1,7 +1,8 @@
 import { ILoginError, ILoginProps, IUpdatePassProps, TUpdatePassError } from "@/interfaces/types";
 import { IRegisterProps, TRegisterError } from "@/interfaces/types";
 import {IProduct,IProductsErrors} from "@/interfaces/types";
-
+import {IFormErrors} from "@/interfaces/types";
+import {IFormData} from "@/interfaces/types";
 export function validateLoginForm(values: ILoginProps): ILoginError {
   const errors: ILoginError = {};
 
@@ -213,3 +214,51 @@ return errors;
 
 
 
+// Validación para los datos generales
+export function validateDataForm(values: IFormData): IFormErrors {
+  const errors: IFormErrors = {};
+
+  // Validación para el campo "CompanyName"
+  if (!values.CompanyName.trim()) {
+    errors.CompanyName = "El nombre de la empresa es obligatorio";
+  } else if (values.CompanyName.length < 5) {
+  errors.CompanyName = "El nombre de la empresa debe tener al menos 5 caracteres";
+}
+
+  // Validación para el campo "country"
+  if (!values.country.trim()) {
+    errors.country = "El país es obligatorio";
+  }
+
+  // Validación para el campo "address"
+  if (!values.address.trim()) {
+    errors.address = "La dirección es obligatoria";
+} else if (values.address.length < 10) {
+  errors.address = "La dirección debe tener al menos 10 caracteres";
+}
+
+// Validación para el campo "tel de contacto"
+if (!values.contactPhone) {
+  errors.contactPhone = "El tel de contacto es obligatorio";
+} else if (Number(values.contactPhone) <= 0) {
+  errors.contactPhone = "El tel de contacto no debe ser un numero negativo";
+} else if (!/^\d{10}$/.test(String(values.contactPhone))) {
+  errors.contactPhone = "El tel de contacto debe tener 10 dígitos";
+}
+
+
+  // Validación para el campo "email"
+  if (!values.email.trim()) {
+    errors.email = "El correo electrónico es obligatorio";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    errors.email = "El correo electrónico no es válido";
+  }
+
+   // Validación para el campo "industry"
+   if (!values.industry.trim()) {
+    errors.industry = "La industria es obligatoria";
+
+  }
+  
+  return errors;
+}

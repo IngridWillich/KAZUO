@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/Nosotros/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/Nosotros/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,45 +11,31 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/Soluciones/page": [
+    "/GoogleTranslate/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Soluciones/page.js"
+      "static/css/app/GoogleTranslate/page.css",
+      "static/chunks/app/GoogleTranslate/page.js"
     ],
     "/Planes/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/Planes/page.js"
     ],
-    "/Contacto/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Contacto/page.js"
-    ],
-    "/Nosotros/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Nosotros/page.js"
+      "static/chunks/app/page.js"
     ],
     "/GestionInventario/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/GestionInventario/page.js"
     ],
-    "/Products/[storeId]/page": [
+    "/storeform/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/Products/[storeId]/page.js"
-    ],
-    "/AddNewProduct/[storeId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/AddNewProduct/[storeId]/page.js"
-    ],
-    "/Products/[storeId]/[productId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/Products/[storeId]/[productId]/page.js"
+      "static/chunks/app/storeform/page.js"
     ]
   }
 }

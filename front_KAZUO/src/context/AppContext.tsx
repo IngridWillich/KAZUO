@@ -7,14 +7,32 @@ import { AppContextType } from "@/interfaces/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
 
+const AppContext = createContext<AppContextType | undefined>(undefined);
+const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { logout: logoutAuth0, user, isAuthenticated } = useAuth0();
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>("isLoggedIn", false);
   const [userData, setUserData] = useState<userData | null>(null);
+
+
+  const sendUserDataToBackend = async (email: string, id: number) => {
+    try {
+      await fetch(`${kazuo_back}/getemail`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, id }),
+      });
+    } catch (error) {
+      console.error("Error al enviar datos al backend:", error);
+    }
+  };
+
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

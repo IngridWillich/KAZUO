@@ -1,7 +1,7 @@
 {
-  "/Nosotros/page": "app/Nosotros/page.js",
-  "/Products/[storeId]/[productId]/page": "app/Products/[storeId]/[productId]/page.js",
-  "/AddNewProduct/[storeId]/page": "app/AddNewProduct/[storeId]/page.js",
+  "/GoogleTranslate/page": "app/GoogleTranslate/page.js",
+  "/Planes/page": "app/Planes/page.js",
+  "/page": "app/page.js",
   "/GestionInventario/page": "app/GestionInventario/page.js",
-  "/Products/[storeId]/page": "app/Products/[storeId]/page.js"
+  "/storeform/page": "app/storeform/page.js"
 }

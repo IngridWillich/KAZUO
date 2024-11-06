@@ -9,6 +9,8 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
 import ClientLayout from "./ClientLayout";
 import { Suspense } from "react";
+import ChatBotButton from "@/components/chatbot/ChatButton";
+import GoogleTranslateWidget from "@/components/GoogleTranslateWidget";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,10 +34,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <AppProvider>
             <ShowComponents>
               <Navbar />
+              
             </ShowComponents>
             <Suspense fallback={<div>Loading...</div>}>
           {children}
-        </Suspense>            <Footer />
+        </Suspense>          
+          <Footer />
+          <ChatBotButton/>
           </AppProvider>
         </ClientLayout>
         

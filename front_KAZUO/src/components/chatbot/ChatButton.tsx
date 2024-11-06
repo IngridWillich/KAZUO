@@ -1,32 +1,40 @@
-"use client";
-import Image from "next/image";
-import React, { useState } from "react";
-import ChatBot from "./ChatBot";
+'use client'
 
-const ChatBotButton = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
+import Image from "next/image"
+import React, { useState } from "react"
+import { MessageCircle, X } from "lucide-react"
+import ChatBot from "./ChatBot"
+
+export default function Component() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatBotClick = () => {
-    setIsChatOpen(!isChatOpen);
-    console.log(isChatOpen);
-  };
+    setIsChatOpen(!isChatOpen)
+  }
 
   return (
-    <div>
-      <div className="fixed bottom-20 left-4 z-50 bg-[#d7e6bb] p-4 rounded-full border-4 border-tema">
-        <Image
-          src="{/*AGREGAR IMAGEN AQUI*/}"
-          alt="Asistente Virtual"
-          width={60}
-          height={60}
+    <div className="fixed bottom-4 right-4 z-50">
+      {/* Chatbot Button */}
+      {!isChatOpen && (
+        <div
           onClick={handleChatBotClick}
-        />
-      </div>
-      <div className={`chatbot-wrapper ${isChatOpen ? "open" : "closed"}`}>
-        {isChatOpen && <ChatBot />}
-      </div>
+          className="flex items-center bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+        >
+          <div className="p-3 bg-[#0084ff] rounded-full">
+            <MessageCircle className="w-6 h-6 text-white" />
+          </div>
+          <div className="px-4 py-2">
+            <p className="font-semibold text-gray-800">Asistente Virtual</p>
+            <p className="text-sm text-gray-600 truncate">¿En qué puedo ayudarte hoy?</p>
+          </div>
+        </div>
+      )}
+{isChatOpen && (
+        <div className="chat-window">
+          <ChatBot  />
+        </div>
+      )}
+     
     </div>
-  );
-};
-
-export default ChatBotButton;
+  )
+}
