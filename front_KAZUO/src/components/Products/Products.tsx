@@ -343,84 +343,108 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
               <Loader />
             </div>
           ) : (
-            <div className="w-full mt-4">
-              <div className="w-full bg-gray-100 rounded-md p-4">
-                <table className="w-full">
-                  <thead>
-                    <tr className="font-medium border-b">
-                      <th className="pb-2 text-center">Nombre</th>
-                      <th className="pb-2 text-center">Cantidad</th>
-                      <th className="pb-2 text-center">Unidad de medida</th>
-                      <th className="pb-2 text-center">
-                        Capacidad de almacenamiento
-                      </th>
-                      <th className="pb-2 text-center">Precio de compra</th>
-                      <th className="pb-2 text-center">Moneda de uso</th>
-                      <th className="pb-2 text-center">Precio de venta</th>
-                      <th className="pb-2 text-center">Cantidad mínima</th>
-                      <th className="pb-2 text-center">
-                        Control de Inventario
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredProducts.length > 0 ? (
-                      filteredProducts.map((product) => (
-                        <tr key={product.id} className="border-t">
-                          <td className="py-2 text-center">{product.name}</td>
-                          <td className="py-2 text-center">
-                            {product.quantity}
-                          </td>
-                          <td className="py-2 text-center">{product.unids}</td>
-                          <td className="py-2 text-center">
-                            {product.maxCapacity}
-                          </td>
-                          <td className="py-2 text-center">
-                            {product.inPrice}
-                          </td>
-                          <td className="py-2 text-center">{product.bange}</td>
-                          <td className="py-2 text-center">
-                            {product.outPrice}
-                          </td>
-                          <td className="py-2 text-center text-red-600 font-bold">
-                            {product.minStock}
-                          </td>
-                          <td className="grid grid-cols-2 grid-rows-2 gap-6 py-2 text-center">
-                            <FontAwesomeIcon
-                              icon={faEdit}
-                              className="text-blue-500 hover:text-blue-600 cursor-pointer mx-1"
-                              onClick={() =>
-                                handleNavigateToProductPage(product.id!)
-                              }
-                            />
-                            <FontAwesomeIcon
-                              icon={faChartLine}
-                              className="cursor-pointer mx-1"
-                            />
-                            <FontAwesomeIcon
-                              icon={faPlus}
-                              className="cursor-pointer mx-1"
-                              onClick={() => handleAddProduct(product.id!)}
-                            />
-                            <FontAwesomeIcon
-                              icon={faMinus}
-                              className="cursor-pointer mx-1"
-                              onClick={() => handleNewOrderProduct(product.id!)}
-                            />
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={9} className="text-center py-4">
-                          No se encontraron productos que coincidan con su
-                          búsqueda.
+            <div className="w-full mt-4 overflow-x-auto shadow-md sm:rounded-lg">
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Nombre
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Cantidad
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Unidad
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Cap. Max
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Precio Compra
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Moneda
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Precio Venta
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Stock Min
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                      <tr key={product.id} className="border-b">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.quantity}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.unids}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.maxCapacity}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.inPrice}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.bange}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {product.outPrice}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-red-600 font-bold">
+                          {product.minStock}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex space-x-2">
+                            <td className="grid grid-cols-2 grid-rows-2 gap-6 py-2 text-center">
+                              <FontAwesomeIcon
+                                icon={faEdit}
+                                className="text-blue-500 hover:text-blue-600 cursor-pointer mx-1"
+                                onClick={() =>
+                                  handleNavigateToProductPage(product.id!)
+                                }
+                              />
+                              <FontAwesomeIcon
+                                icon={faChartLine}
+                                className="text-green-500 hover:text-green-600"
+                              />
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                className="text-yellow-500 hover:text-yellow-600"
+                                onClick={() => handleAddProduct(product.id!)}
+                              />
+                              <FontAwesomeIcon
+                                icon={faMinus}
+                                className="text-red-500 hover:text-red-600"
+                                onClick={() =>
+                                  handleNewOrderProduct(product.id!)
+                                }
+                              />
+                            </td>
+                          </div>
                         </td>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={9} className="text-center py-4">
+                        No se encontraron productos que coincidan con su
+                        búsqueda.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           )}
         </div>

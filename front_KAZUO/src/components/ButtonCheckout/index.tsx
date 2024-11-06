@@ -1,44 +1,61 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
-import { Button } from "../ui/button"
+import React, { useState } from "react";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "@/context/AppContext";
+
 
 interface ButtonCheckoutProps {
   priceId: string;
+  userEmail: string;
 }
 
-const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({ priceId }) => {
+const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({
+  priceId,
+  userEmail,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const { userData } = useAppContext();
+  const router = useRouter();
+  
   const handleCheckout = async () => {
     setIsLoading(true);
+    if (!userData?.token) {
+      router.push("/Register");
+    }
     try {
-      console.log('Iniciando checkout con priceId:', priceId);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ priceId }),
-      });
+      console.log("Iniciando checkout con priceId:", priceId);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/stripe/create-checkout-session`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ priceId, userEmail }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        console.error('Respuesta de error del servidor:', data);
-        throw new Error(data.message || 'Error al procesar el pago');
+        console.error("Respuesta de error del servidor:", data);
+        throw new Error(data.message || "Error al procesar el pago");
       }
 
-      console.log('Respuesta del servidor:', data);
+      console.log("Respuesta del servidor:", data);
 
       if (!data.url) {
-        throw new Error('No se recibió la URL de checkout');
+        throw new Error("No se recibió la URL de checkout");
       }
 
       window.location.href = data.url;
     } catch (error) {
-      console.error('Error durante el checkout:', error);
-      alert('Hubo un problema al iniciar el proceso de checkout. Por favor, inténtalo de nuevo.');
+      console.error("Error durante el checkout:", error);
+      alert(
+        "Hubo un problema al iniciar el proceso de checkout. Por favor, inténtalo de nuevo."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +67,7 @@ const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({ priceId }) => {
       onClick={handleCheckout}
       disabled={isLoading}
     >
-      {isLoading ? 'Procesando...' : 'Adquirir Kazuo Pro'}
+      {isLoading ? "Procesando..." : "Adquirir Kazuo Pro"}
     </Button>
   );
 };
