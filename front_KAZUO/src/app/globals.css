@@ -1,0 +1,21 @@
+
+body {
+    color:rgb(0, 0, 0);
+    background-color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    margin: 1;
+    padding: 1;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    
+  }
+  
+  main {
+    margin-top: 5em;
+  }
+  
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
