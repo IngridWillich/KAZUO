@@ -18,8 +18,7 @@ const Inventario: React.FC = () => {
   const { userData, setUserData } = useAppContext();
   const [profileImage, setProfileImage] = useState(userData?.igmUrl);
 
-
-  const {user, isAuthenticated}=useAuth0()
+  const { user, isAuthenticated } = useAuth0();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -28,12 +27,12 @@ const Inventario: React.FC = () => {
     try {
       const response = await fetch(`${kazuo_back}/users/${userId}`);
       if (!response.ok) {
-        throw new Error('Error al obtener la imagen del usuario');
+        throw new Error("Error al obtener la imagen del usuario");
       }
       const userData = await response.json();
       return userData.igmUrl; // Suponiendo que la URL de la imagen está en la propiedad imgUrl
     } catch (error) {
-      console.error('Error fetching user image:', error);
+      console.error("Error fetching user image:", error);
       return null;
     }
   };
@@ -44,61 +43,71 @@ const Inventario: React.FC = () => {
       setProfileImage(userData?.igmUrl || storedUserData.igmUrl);
     }
   }, [userData]);
- 
- const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  const file = event.target.files?.[0];
-  const userId = localStorage.getItem("userData") 
-    ? JSON.parse(localStorage.getItem("userData")!).id 
-    : null;
 
-  if (file && userId) {
-    // Convertir a URL para vista previa
-    const reader = new FileReader();
-    reader.onload = () => setProfileImage(reader.result as string);
-    reader.readAsDataURL(file);
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    const userId = localStorage.getItem("userData")
+      ? JSON.parse(localStorage.getItem("userData")!).id
+      : null;
 
-    // Crear FormData para la subida
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("id", userId.toString());
+    if (file && userId) {
+      // Convertir a URL para vista previa
+      const reader = new FileReader();
+      reader.onload = () => setProfileImage(reader.result as string);
+      reader.readAsDataURL(file);
 
-    try {
-      const response = await fetch(`${kazuo_back}/files/uploadProfileImage`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${userData?.token}` },
-        body: formData,
-      });
+      // Crear FormData para la subida
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("id", userId.toString());
 
-      if (response.ok) {
-        try {
-          const data = await response.json();
-      
-          // Actualiza la URL de la imagen en el estado local para renderizar la vista previa de inmediato
-          setProfileImage(data.imageUrl);
+      try {
+        const response = await fetch(`${kazuo_back}/files/uploadProfileImage`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${userData?.token}` },
+          body: formData,
+        });
 
-          // Actualiza userData en el contexto y en el localStorage
-          if (userData && setUserData) {
-            const updatedUserData = { ...userData, igmUrl: data.imageUrl };
-            setUserData(updatedUserData); // Actualiza userData en el contexto
-            localStorage.setItem("userData", JSON.stringify(updatedUserData)); // Guarda la actualización en localStorage
+        if (response.ok) {
+          try {
+            const data = await response.json();
+
+            // Actualiza la URL de la imagen en el estado local para renderizar la vista previa de inmediato
+            setProfileImage(data.imageUrl);
+
+            // Actualiza userData en el contexto y en el localStorage
+            if (userData && setUserData) {
+              const updatedUserData = { ...userData, igmUrl: data.imageUrl };
+              setUserData(updatedUserData); // Actualiza userData en el contexto
+              localStorage.setItem("userData", JSON.stringify(updatedUserData)); // Guarda la actualización en localStorage
+            }
+          } catch (error) {
+            console.error(
+              "Error al actualizar userData o profileImage:",
+              error
+            );
+            Swal.fire(
+              "Error",
+              "Ocurrió un error al procesar la respuesta del servidor.",
+              "error"
+            );
           }
-        } catch (error) {
-          console.error("Error al actualizar userData o profileImage:", error);
-          Swal.fire("Error", "Ocurrió un error al procesar la respuesta del servidor.", "error");
+        } else {
+          const errorData = await response.json();
+          Swal.fire(
+            "Error",
+            `Error al subir la imagen: ${errorData.message}`,
+            "error"
+          );
         }
-      } else {
-        const errorData = await response.json();
-        Swal.fire("Error", `Error al subir la imagen: ${errorData.message}`, "error");
+      } catch (error) {
+        Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
       }
-      
-    } catch (error) {
-      Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
     }
-  }
-};
+  };
 
-  
-  
   const handlePencilClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -178,7 +187,7 @@ const Inventario: React.FC = () => {
 
     fetchStores();
   }, []);
- 
+
   //FUNCION POR WEB SOCKETS
   // useEffect(() => {
   //   socket.emit("getStores");
@@ -202,15 +211,15 @@ const Inventario: React.FC = () => {
   //   socket.emit("deleteStore", storeId);
   // };
 
-
-  const filteredStores = Array.isArray(store) ? store.filter(
-    (bodega) =>
-      bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      getCategoryName(bodega.categoryId)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-  ) : [];
-
+  const filteredStores = Array.isArray(store)
+    ? store.filter(
+        (bodega) =>
+          bodega.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          getCategoryName(bodega.categoryId)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   useEffect(() => {
     const handlefetchCategories = async () => {
@@ -278,13 +287,9 @@ const Inventario: React.FC = () => {
               />
             ) : (
               <span className="text-gray-500">No image</span>
-            )
-            }
-            
-            
+            )}
           </div>
 
-          
           <div
             className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer hover:bg-blue-600"
             onClick={handlePencilClick}

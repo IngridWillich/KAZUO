@@ -36,7 +36,7 @@ export type TRegisterError = Partial<IRegisterProps>;
 export type TUpdatePassError = Partial<IUpdatePassProps>;
 
 export interface userData {
-  id: number;
+  id: number | string;
   email: string;
   password: string;
   name: string;
@@ -44,6 +44,7 @@ export interface userData {
   token: string;
   userId: string;
   igmUrl?: string
+  auth0Id?: string
 }
 
 export interface IProduct {
@@ -97,30 +98,6 @@ export interface AppContextType {
   logout: () => void;
 }
 
-export interface IStore {
-  id: string;
-  name: string;
-  categoryName: string;
-  categoryId: "string";
-}
-
-export interface ICategory {
-  id: string;
-  name: string;
-}
-
-export interface IEditStoreProps {
-  storeId: string;
-}
-
-export interface InventarioProps {
-  userId: string;
-}
-
-export interface IEditProductProps {
-  productId: string;
-}
-
 export interface IFormData {
   CompanyName: string;
   country: string;
@@ -141,19 +118,59 @@ export interface IFormErrors {
   industry?: string;
 }
 
- export interface CompanyData {
-  nombreEmpresa: string
-  pais: string
-  direccion: string
-  telefonoContacto: string
-  correoElectronico: string
-  industria: string
- }
+export interface CompanyData {
+  id?: string
+  CompanyName: string
+  country: string
+  address: string
+  contactPhone: string
+  email: string
+  industry: string
 
- export interface TeamMember {
+}
+export interface TeamMember {
   id: string
   name: string
-  email: string
+  email:string
   position: string
+
+}
+
+
+
+export interface IStore {
+  id: string;
+  name: string;
+  categoryName: string;
+  categoryId: "string";
   
+}
+
+export interface ICategory {
+  id: string;
+  name: string;
+}
+
+export interface IEditStoreProps {
+  storeId: string;
+}
+
+export interface InventarioProps {
+  userId: string;
+}
+
+export interface IEditProductProps {
+  productId: string;
+}
+
+export interface IStatisticsProps {
+  storeId: string;
+}
+
+export interface IStoreInfo {
+  id: string;
+  name: string;
+  createdAt: string;
+  category: ICategory;
+  products: IProduct[];
 }

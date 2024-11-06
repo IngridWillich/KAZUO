@@ -7,6 +7,7 @@ function inventario() {
     <div>
       {/* <ProtectedRoutes> */}
         <Inventario/>
+         
       {/* </ProtectedRoutes> */}
     </div>
   );

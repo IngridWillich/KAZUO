@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IProduct, IStore, IUpdateProduct } from "@/interfaces/types";
 import { useAppContext } from "@/context/AppContext";
+import Swal from "sweetalert2";
 
 const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
   const [product, setProduct] = useState<IProduct | null>(null);
@@ -15,7 +16,14 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await fetch(`${kazuo_back}/product/${productId}`);
+      const response = await fetch(`${kazuo_back}/product/${productId}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData?.token}`,
+        },
+      });
+      console.log(userData?.token)
       const data = await response.json();
       setProduct(data);
       setFormValues({
@@ -39,20 +47,22 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
     fetchStores();
   }, [productId, kazuo_back]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    
-    if (name === 'store') {
+
+    if (name === "store") {
       setSelectedStore(value);
       return;
     }
 
     setFormValues((prev) => {
       let newValue: string | number = value;
-      
+
       // Convertir a número los campos numéricos
-      if (name === 'maxCapacity' || name === 'inPrice' || name === 'outPrice') {
-        newValue = value === '' ? 0 : parseFloat(value);
+      if (name === "maxCapacity" || name === "inPrice" || name === "outPrice") {
+        newValue = value === "" ? 0 : parseFloat(value);
       }
 
       // Solo actualizar si el valor ha cambiado
@@ -73,11 +83,10 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
     if (!product) return;
 
     const changedValues: IUpdateProduct = {
-      id: productId
+      id: productId,
     };
 
-   
-    (Object.keys(formValues) as Array<keyof IUpdateProduct>).forEach ((key) => {
+    (Object.keys(formValues) as Array<keyof IUpdateProduct>).forEach((key) => {
       if (formValues[key] !== product[key]) {
         changedValues[key] = formValues[key];
       }
@@ -88,8 +97,9 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
       changedValues.storeId = selectedStore;
     }
 
-    if (Object.keys(changedValues).length === 1) { // Solo contiene el id
-      alert('No hay cambios para guardar');
+    if (Object.keys(changedValues).length === 1) {
+      // Solo contiene el id
+      alert("No hay cambios para guardar");
       return;
     }
 
@@ -104,8 +114,18 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
       });
 
       if (response.ok) {
-        router.push(`/Products/${product.storeId}`);
+        Swal.fire({
+          title: "Producto actualizado",
+          icon: "success",
+          confirmButtonText: "Ok",
+        });
+        router.push(`/Products/${selectedStore}`);
       } else {
+        Swal.fire({
+          title: "Error al actualizar el producto",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
         alert("Error al actualizar el producto");
       }
     } catch (error) {
@@ -119,22 +139,42 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 p-4 bg-gray-100 rounded-md">
-        <h2 className="text-xl font-bold col-span-full mb-2">Información Actual del Producto</h2>
-        <p><strong>Nombre:</strong> {product.name}</p>
-        <p><strong>Cantidad:</strong> {product.quantity}</p>
-        <p><strong>Unidad de medida:</strong> {product.unids}</p>
-        <p><strong>Capacidad máxima:</strong> {product.maxCapacity}</p>
-        <p><strong>Precio de compra:</strong> {product.inPrice}</p>
-        <p><strong>Precio de venta:</strong> {product.outPrice}</p>
-        <p><strong>Ubicación:</strong> {product.store?.name || "No disponible"}</p>
+        <h2 className="text-xl font-bold col-span-full mb-2">
+          Información Actual del Producto
+        </h2>
+        <p>
+          <strong>Nombre:</strong> {product.name}
+        </p>
+        <p>
+          <strong>Cantidad:</strong> {product.quantity}
+        </p>
+        <p>
+          <strong>Unidad de medida:</strong> {product.unids}
+        </p>
+        <p>
+          <strong>Capacidad máxima:</strong> {product.maxCapacity}
+        </p>
+        <p>
+          <strong>Precio de compra:</strong> {product.inPrice}
+        </p>
+        <p>
+          <strong>Precio de venta:</strong> {product.outPrice}
+        </p>
+        <p>
+          <strong>Ubicación:</strong> {product.store?.name || "No disponible"}
+        </p>
       </div>
 
       <div className="bg-white p-4 rounded-md shadow">
-        <h2 className="text-xl font-bold mb-4">Modificar Información del Producto</h2>
+        <h2 className="text-xl font-bold mb-4">
+          Modificar Información del Producto
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="name" className="block mb-1">Nombre:</label>
+              <label htmlFor="name" className="block mb-1">
+                Nombre:
+              </label>
               <input
                 type="text"
                 id="name"
@@ -146,7 +186,9 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
             </div>
 
             <div>
-              <label htmlFor="unids" className="block mb-1">Unidad de medida:</label>
+              <label htmlFor="unids" className="block mb-1">
+                Unidad de medida:
+              </label>
               <input
                 type="text"
                 id="unids"
@@ -158,7 +200,9 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
             </div>
 
             <div>
-              <label htmlFor="maxCapacity" className="block mb-1">Capacidad máxima:</label>
+              <label htmlFor="maxCapacity" className="block mb-1">
+                Capacidad máxima:
+              </label>
               <input
                 type="number"
                 id="maxCapacity"
@@ -170,7 +214,9 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
             </div>
 
             <div>
-              <label htmlFor="inPrice" className="block mb-1">Precio de compra:</label>
+              <label htmlFor="inPrice" className="block mb-1">
+                Precio de compra:
+              </label>
               <input
                 type="number"
                 id="inPrice"
@@ -182,7 +228,9 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
             </div>
 
             <div>
-              <label htmlFor="outPrice" className="block mb-1">Precio de venta:</label>
+              <label htmlFor="outPrice" className="block mb-1">
+                Precio de venta:
+              </label>
               <input
                 type="number"
                 id="outPrice"
@@ -194,7 +242,9 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
             </div>
 
             <div>
-              <label htmlFor="store" className="block mb-1">Bodega:</label>
+              <label htmlFor="store" className="block mb-1">
+                Bodega:
+              </label>
               <select
                 id="store"
                 name="store"
@@ -206,7 +256,7 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
                   {product.store?.name || "Bodega actual"}
                 </option>
                 {stores
-                  .filter(store => store.id !== product.storeId)
+                  .filter((store) => store.id !== product.storeId)
                   .map((store) => (
                     <option key={store.id} value={store.id}>
                       {store.name}

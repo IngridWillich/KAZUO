@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import { IEditStoreProps, IProduct, IProductsErrors } from "@/interfaces/types";
+import { IEditStoreProps, IProduct, IProductsErrors, userData } from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
 import { useAppContext } from "@/context/AppContext";
@@ -144,14 +144,19 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
 
   const handleBulkUpload = async (products: IProduct[]) => {
     setLoadingTemplate(true);
+    const userData = localStorage.getItem("userData");
+    const parsedUserDataToken = JSON.parse(userData!);
+    const userToken = parsedUserDataToken.token;
     try {
       const response = await fetch(`${kazuo_back}/product/bulk`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${userToken}`
         },
         body: JSON.stringify(products),
       });
+      console.log(userToken)
       if (response.ok) {
         Swal.fire({
           title: "Productos Añadidos con éxito",
@@ -237,6 +242,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       if (userData) {
         const parsedUserData = JSON.parse(userData);
         userId = parsedUserData.id;
+        
       }
   
       const dataToSend = {
@@ -249,17 +255,22 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         userId: userId,
         storeId: storeId,
       };
-  
+      
       try {
+        if (userData) {
+          const parsedUserDataToken = JSON.parse(userData);
+        const userToken = parsedUserDataToken.token;
         setLoading(true);
         const response = await fetch(`${kazuo_back}/product`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization : `Bearer ${userToken}`
           },
           body: JSON.stringify(dataToSend),
         });
-  
+  console.log(`Datos de usuario: ${userToken}`)
+      
         if (response.ok) {
           Swal.fire({
             title: "¡Producto creado!",
@@ -272,7 +283,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
           const errorData = await response.json();
           console.error("Error en la respuesta del servidor:", errorData);
           throw new Error(errorData.message || "Error al crear el producto");
-        }
+        }}
       } catch (error) {
         Swal.fire({
           title: "Error",

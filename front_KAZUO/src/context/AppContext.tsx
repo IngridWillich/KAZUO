@@ -7,32 +7,15 @@ import { AppContextType } from "@/interfaces/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-
 const AppContext = createContext<AppContextType | undefined>(undefined);
-const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { logout: logoutAuth0, user, isAuthenticated } = useAuth0();
+  const { logout: logoutAuth0, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>("isLoggedIn", false);
   const [userData, setUserData] = useState<userData | null>(null);
-
-
-  const sendUserDataToBackend = async (email: string, id: number) => {
-    try {
-      await fetch(`${kazuo_back}/getemail`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, id }),
-      });
-    } catch (error) {
-      console.error("Error al enviar datos al backend:", error);
-    }
-  };
-
-
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -48,8 +31,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     console.log(`Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`);
     if (isAuthenticated && user) {
+      const auth0Id = user.sub || "";
       const newUserData: userData = {
-        id: parseInt(user.sub?.split('|')[1] || "0", 10), // Convertir el ID de string a number, manejar el caso undefined
+        id: "", 
         password: "", // Manejar según tus necesidades
         company: user.email || "", // Usar el email o algún otro campo como compañía
         token: "", // Establecer el token si lo tienes
@@ -57,6 +41,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         name: user.name || "",
         userId: "",
         igmUrl: "",
+        auth0Id: auth0Id,
       };
 
       setIsLoggedIn(true);
@@ -67,6 +52,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("igmUrl", userData?.igmUrl!);
     }
   }, [isAuthenticated, user]); // Incluido isAuthenticated y user
+
+ 
 
   const login = async (loginData: any) => {
     try {
@@ -115,8 +102,6 @@ export const useAppContext = () => {
   if (context === undefined) {
     throw new Error("Error de contexto");
   }
+ 
   return context;
 };
-
-
-  

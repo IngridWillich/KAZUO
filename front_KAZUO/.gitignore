@@ -27,3 +27,5 @@ front_KAZUO\.next
 
 
 # Local Netlify folder
+.next
+.next/cache/

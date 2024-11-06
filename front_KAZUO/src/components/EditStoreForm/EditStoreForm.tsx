@@ -63,10 +63,11 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${userData.token}`
         },
         body: JSON.stringify(dataStore),
       });
-
+console.log(userData.token)
       if (response.ok) {
         Swal.fire({
           title: "¡Bodega actualizada!",

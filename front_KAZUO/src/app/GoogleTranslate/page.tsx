@@ -1,15 +1,12 @@
 
-import GoogleTranslateWidget from "@/components/GoogleTranslateWidget";
+import GoogleTranslateWidget from "@/components/ButtonCheckout/GoogleTranslateWidget";
 
-
-function googletranslate() {
+function googleTranslate() {
   return (
     <div>
-      
-        <GoogleTranslateWidget/>
-      
+    <GoogleTranslateWidget />
     </div>
   );
 }
 
-export default googletranslate;
+export default googleTranslate;

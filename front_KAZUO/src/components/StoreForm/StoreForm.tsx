@@ -50,6 +50,7 @@ export const StoreForm = () => {
       categoryName: selectedCategory,
       userId,
     };
+    console.log(`Token: ${token}`)
 
     try {
       setLoading(true);
