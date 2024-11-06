@@ -1,5 +1,7 @@
 import Image from 'next/image';
+
 import Link from 'next/link';
+
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 
@@ -17,18 +19,22 @@ export default function LandingPage() {
           </p>
           <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
             Descubre la <span className="text-blue-600">Gestión Eficiente</span>{" "}
+
             con IA organiza tu inventario en solo 2 clicks.
+
           </h1>
           <p className="text-gray-600 mb-8">
             Olvídate de los procesos manuales con nuestro Sistema de Gestión
             Empresarial que automatiza tu facturación, inventario, reportes y
             mucho más.
           </p>
+
           <Link href={"/Register"}>
           <p className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-transform duration-300 ease-in-out text-white py-2 rounded-xl text-center font-semibold shadow-md hover:scale-105">
             Empieza tus 15 días gratis
           </p>
           </Link>
+
           <div className="flex items-center justify-center md:justify-start mt-6">
             <div className="flex">
               {[1, 2, 3, 4].map((star) => (

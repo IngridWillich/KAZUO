@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -20,6 +21,7 @@ export default function Navbar() {
   const router = useRouter();
 
  
+
   const handleLogout = async () => {
     const result = await Swal.fire({
       title: "¿Estás seguro que quieres cerrar sesión?",
@@ -29,6 +31,7 @@ export default function Navbar() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Sí, cerrar sesión",
       cancelButtonText: "Cancelar",
+
     });
 
     if (result.isConfirmed) {
@@ -46,9 +49,12 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+
   return (
     <header className="container mx-auto px-4 py-6">
       <div className="flex items-center justify-between">
+
+
         <button className="lg:hidden" onClick={toggleMenu}>
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -56,11 +62,13 @@ export default function Navbar() {
           <NavLinks />
         </nav>
         <div className="hidden lg:flex items-center space-x-4">
+
           <AuthButtons
             isLoggedIn={isLoggedIn}
             handleLogout={handleLogout}
             handleOnClick={handleOnClick}
           />
+
         </div>
       </div>
       {isMenuOpen && (
@@ -69,16 +77,20 @@ export default function Navbar() {
             <NavLinks />
           </nav>
           <div className="mt-4 flex flex-col space-y-4">
+
             <AuthButtons
               isLoggedIn={isLoggedIn}
               handleLogout={handleLogout}
               handleOnClick={handleOnClick}
             />
+
           </div>
         </div>
       )}
     </header>
+
   );
+
 }
 
 function NavLinks() {
@@ -100,6 +112,7 @@ function NavLinks() {
         Nosotros
       </Link>
       <Link href="/GoogleTranslate " className="text-gray-600">
+
         <i className="fa fa-globe fa-1.7x" aria-hidden="true"></i> Traducir
       </Link>
     </>
@@ -107,14 +120,17 @@ function NavLinks() {
 }
 
 function AuthButtons({ isLoggedIn, handleLogout, handleOnClick }: AuthButtonsProps) {
+
   return (
     <>
       {isLoggedIn ? (
         <>
+
           <button
             onClick={handleLogout}
             className="w-full lg:w-auto px-4 py-2 text-gray-600"
           >
+
             Cerrar sesión
           </button>
           <button
@@ -126,10 +142,12 @@ function AuthButtons({ isLoggedIn, handleLogout, handleOnClick }: AuthButtonsPro
         </>
       ) : (
         <>
+
           <Link
             href="/Login"
             className="w-full lg:w-auto px-4 py-2 text-gray-600"
           >
+
             Iniciar sesión
           </Link>
           <Link
@@ -141,5 +159,7 @@ function AuthButtons({ isLoggedIn, handleLogout, handleOnClick }: AuthButtonsPro
         </>
       )}
     </>
+
   );
 }
+

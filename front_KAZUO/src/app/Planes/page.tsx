@@ -1,3 +1,4 @@
+
 import Planes from "@/components/Planes";
 import ProtectedRoutes from "@/context/ProtectedRoutes";
 import Link from "next/link";
@@ -41,8 +42,11 @@ function planes() {
           </div>
         </section>
         <div></div>
+
     </div>
   );
 }
 
+
 export default planes;
+

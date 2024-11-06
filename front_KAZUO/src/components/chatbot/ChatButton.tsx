@@ -5,7 +5,9 @@ import React, { useState } from "react"
 import { MessageCircle, X } from "lucide-react"
 import ChatBot from "./ChatBot"
 
+
 export default function ChatButton() {
+
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatBotClick = () => {

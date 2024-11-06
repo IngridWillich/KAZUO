@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaPlus } from "react-icons/fa";
@@ -204,4 +205,5 @@ export default function MiEmpresa() {
       </div>
     );
   }
+
 }
