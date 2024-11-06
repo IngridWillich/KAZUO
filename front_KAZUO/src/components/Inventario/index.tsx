@@ -326,6 +326,8 @@ const Inventario: React.FC = () => {
         <p>
           <strong>Plan:</strong> Kazuo Pro
         </p>
+
+        
       </div>
 
       {/* Encabezado de Inventario */}

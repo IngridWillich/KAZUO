@@ -20,7 +20,7 @@ export default function Component() {
           onClick={handleChatBotClick}
           className="flex items-center bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200"
         >
-          <div className="p-3 bg-[#0084ff] rounded-full">
+          <div className="lex items-center justify-center p-3 bg-[#0084ff] rounded-full">
             <MessageCircle className="w-6 h-6 text-white" />
           </div>
           <div className="px-4 py-2">
