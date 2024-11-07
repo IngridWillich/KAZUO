@@ -120,7 +120,7 @@ export default function Footer() {
             
             <li><a href="#" className="hover:underline">Soporte</a></li>
             <li><a href="/Sobre Nosotros" className="hover:underline">Desarrolladores</a></li>
-            <li><a href="#" className="hover:underline">Biblioteca de recursos</a></li>
+            
           </ul>
         </div>
       </div>

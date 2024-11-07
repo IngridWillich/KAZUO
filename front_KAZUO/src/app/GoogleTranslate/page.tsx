@@ -1,5 +1,6 @@
 
-import GoogleTranslateWidget from "../../components/GoogleTranslateWidget"
+import GoogleTranslateWidget from "@/components/GoogleTranslateWidget";
+
 
 function googleTranslate() {
   return (

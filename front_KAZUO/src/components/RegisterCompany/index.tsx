@@ -8,8 +8,14 @@ import { validateDataForm } from '@/helpers/validate';
 import { IFormData, IFormErrors } from '@/interfaces/types';
 import Loader from '../Loader/Loader';
 
+import { useAppContext } from '@/context/AppContext';
+
 const CompanyRegistrationForm: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+  const { userData } = useAppContext();
+
+const token = userData?.token;
+
 
   const initialFormData: IFormData = {
     CompanyName: '',
@@ -75,6 +81,10 @@ const CompanyRegistrationForm: React.FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
+    
+
+
     event.preventDefault();
     const validationErrors = validateDataForm(formData);
     setErrors(validationErrors);
@@ -87,22 +97,29 @@ const CompanyRegistrationForm: React.FC = () => {
         userId = parsedUserData.id;
       }
 
+      
       const dataFormm = {
         ...formData,
         userId: userId,
-        contactPhone: Number(formData.contactPhone)
+        contactPhone: Number(formData.contactPhone),
       };
-
+console.log(`token: ${token}`)
       try {
+        console.log(`Datos de usuario ${token}`)
+
         setLoading(true);
         const response = await fetch(`${kazuo_back}/companies`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(dataFormm),
         });
-        console.log(dataFormm);
+        // console.log(dataFormm);
+        console.log(token)
+
         if (response.ok) {
           Swal.fire({
             title: "¡Te has registrado exitosamente!",
@@ -113,6 +130,10 @@ const CompanyRegistrationForm: React.FC = () => {
           router.push("/Company");
         } else {
           throw new Error("Respuesta no exitosa del servidor");
+
+   
+          
+
         }
       } catch {
         Swal.fire({
@@ -123,6 +144,9 @@ const CompanyRegistrationForm: React.FC = () => {
         });
       } finally {
         setLoading(false);
+
+        
+
       }
     }
   };
