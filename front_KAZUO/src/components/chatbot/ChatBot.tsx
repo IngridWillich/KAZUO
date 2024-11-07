@@ -1,110 +1,139 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react'
-import { Send, GripHorizontal, X } from 'lucide-react'
+import React, { useState, useEffect, useRef } from "react";
+import { Send, GripHorizontal, X } from "lucide-react";
+import { useAppContext } from "@/context/AppContext";
 
-export default function ChatBot() {
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [position, setPosition] = useState({ x: 20, y: 20 })
-  const [isVisible, setIsVisible] = useState(true)
-  const chatRef = useRef<HTMLDivElement>(null)
-  const isDragging = useRef(false)
-  const dragOffset = useRef({ x: 0, y: 0 })
+interface ChatBotProps {
+  onClose: () => void;
+}
+
+interface Message {
+  role: string;
+  content: string;
+}
+export default function ChatBot({ onClose }: ChatBotProps) {
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
+    []
+  );
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [position, setPosition] = useState({ x: 20, y: 20 });
+  const [isVisible, setIsVisible] = useState(true);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const dragOffset = useRef({ x: 0, y: 0 });
+  const { userData } = useAppContext();
 
   useEffect(() => {
-    const savedConversation = sessionStorage.getItem('chatConversation')
+    const savedConversation = sessionStorage.getItem("chatConversation");
     if (savedConversation) {
-      setMessages(JSON.parse(savedConversation))
+      setMessages(JSON.parse(savedConversation));
     }
-  }, [])
+  }, []);
 
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (chatRef.current) {
-      const rect = chatRef.current.getBoundingClientRect()
+      const rect = chatRef.current.getBoundingClientRect();
       dragOffset.current = {
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top
-      }
-      isDragging.current = true
+        y: event.clientY - rect.top,
+      };
+      isDragging.current = true;
     }
-  }
+  };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging.current) {
-      const newX = event.clientX - dragOffset.current.x
-      const newY = event.clientY - dragOffset.current.y
-      setPosition({ x: newX, y: newY })
+      const newX = event.clientX - dragOffset.current.x;
+      const newY = event.clientY - dragOffset.current.y;
+      setPosition({ x: newX, y: newY });
     }
-  }
+  };
 
   const handleMouseUp = () => {
-    isDragging.current = false
-  }
+    isDragging.current = false;
+  };
 
   useEffect(() => {
-    document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('mousemove', handleMouseMove as any)
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mousemove", handleMouseMove as any);
     return () => {
-      document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('mousemove', handleMouseMove as any)
-    }
-  }, [])
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mousemove", handleMouseMove as any);
+    };
+  }, []);
 
   const handleSendMessage = async () => {
     if (input.trim()) {
-      setIsLoading(true)
-      const userMessage = { role: 'user', content: input }
-      const updatedMessages = [...messages, userMessage]
-      setMessages(updatedMessages)
-      setInput('')
+      setIsLoading(true);
+      const userMessage = { role: "user", content: input };
+      const updatedMessages = [...messages, userMessage];
+      setMessages(updatedMessages);
+      setInput("");
 
       try {
         const backendResponse = await fetch(`${kazuo_back}/chatbot`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token') || '',
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token") || "",
           },
-          body: JSON.stringify({ message: input, userId: localStorage.getItem('userId') }),
-        })
+          body: JSON.stringify({ message: input, userId: userData?.id }),
+        });
 
         if (!backendResponse.ok) {
-          throw new Error('Error en la consulta al backend')
+          throw new Error("Error en la consulta al backend");
         }
 
-        const backendData = await backendResponse.json()
-        const botMessage = { 
-          role: 'assistant', 
-          content: backendData.content || 'Lo siento, no pude procesar tu solicitud.' 
-        }
-        const newMessages = [...updatedMessages, botMessage]
-        setMessages(newMessages)
+        const backendData = await backendResponse.json();
+        const botMessage: Message = {
+          role: "assistant",
+          content: backendData.prompt,
+        };
 
-        sessionStorage.setItem('chatConversation', JSON.stringify(newMessages))
+        if (backendData.data) {
+          const dataMessage: Message = {
+            role: "assistant",
+            content:
+              typeof backendData.data === "string"
+                ? backendData.data
+                : JSON.stringify(backendData.data),
+          };
+          const newMessages: Message[] = [
+            ...updatedMessages,
+            botMessage,
+            dataMessage,
+          ];
+          setMessages(newMessages);
+        } else {
+          const newMessages: Message[] = [...updatedMessages, botMessage];
+          setMessages(newMessages);
+        }
+
+        sessionStorage.setItem("chatConversation", JSON.stringify(messages));
       } catch (error) {
-        console.error('Error al procesar la solicitud:', error)
-        const errorMessage = { 
-          role: 'assistant', 
-          content: 'Lo siento, ha ocurrido un error al procesar tu solicitud.' 
-        }
-        setMessages([...updatedMessages, errorMessage])
+        console.error("Error al procesar la solicitud:", error);
+        const errorMessage = {
+          role: "assistant",
+          content: "Lo siento, ha ocurrido un error al procesar tu solicitud.",
+        };
+        setMessages([...updatedMessages, errorMessage]);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
-  }
+  };
 
   if (!isVisible) {
-    return null
+    return null;
   }
 
   return (
     <div
       ref={chatRef}
-      className="fixed w-80 bg-white shadow-lg rounded-lg overflow-hidden"
+      className="fixed w-80 bg-white shadow-lg rounded-lg overflow-hidden hidden sm:block"
       style={{
         top: `${position.y}px`,
         left: `${position.x}px`,
@@ -115,7 +144,10 @@ export default function ChatBot() {
         onMouseDown={handleMouseDown}
       >
         <button
-          onClick={() => setIsVisible(false)}
+          onClick={() => {
+            onClose();
+            setIsVisible(false);
+          }}
           className="absolute left-2 top-2 text-white hover:text-gray-200 focus:outline-none"
           aria-label="Cerrar chat"
         >
@@ -129,9 +161,9 @@ export default function ChatBot() {
           <div
             key={index}
             className={`max-w-[80%] mb-2 p-2 rounded-lg ${
-              message.role === 'user'
-                ? 'ml-auto bg-[#0084ff] text-white'
-                : 'mr-auto bg-gray-200 text-gray-800'
+              message.role === "user"
+                ? "ml-auto bg-[#0084ff] text-white"
+                : "mr-auto bg-gray-200 text-gray-800"
             }`}
           >
             {message.content}
@@ -141,8 +173,8 @@ export default function ChatBot() {
       <div className="border-t p-2">
         <form
           onSubmit={(e) => {
-            e.preventDefault()
-            handleSendMessage()
+            e.preventDefault();
+            handleSendMessage();
           }}
           className="flex items-center"
         >
@@ -168,5 +200,5 @@ export default function ChatBot() {
         </form>
       </div>
     </div>
-  )
+  );
 }

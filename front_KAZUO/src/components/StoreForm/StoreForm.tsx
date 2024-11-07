@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { ICategory } from "@/interfaces/types";
 import Loader from "../Loader/Loader";
+import { useAppContext } from "@/context/AppContext";
 
 export const StoreForm = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -13,11 +14,12 @@ export const StoreForm = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true); // Estado para habilitar/deshabilitar el botón
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const { userData} = useAppContext();
 
-  
-  const categoriesFromStorage: ICategory[] = typeof window !== 'undefined' 
-  ? JSON.parse(localStorage.getItem("Categorias") || "[]")
-  : [];
+  const categoriesFromStorage: ICategory[] =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("Categorias") || "[]")
+      : [];
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -35,22 +37,19 @@ export const StoreForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const userData = localStorage.getItem("userData");
-    let userId = "";
-    let token = "";
-
-    if (userData) {
-      const parsedUserData = JSON.parse(userData);
-      userId = parsedUserData.id;
-      token = parsedUserData.token; // Asegúrate de que este token sea válido
-    }
+    // 
+    
+    const userId = userData?.id || "";
+    const companyIds = userData?.company ? [userData.company] : [];
+    
 
     const dataStore = {
       name,
       categoryName: selectedCategory,
       userId,
+      companyIds,
     };
-    console.log(`Token: ${token}`)
+    console.log(dataStore);
 
     try {
       setLoading(true);
@@ -58,7 +57,6 @@ export const StoreForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(dataStore),
       });
@@ -97,7 +95,10 @@ export const StoreForm = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Campo para el nombre de la bodega */}
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Nombre de la Bodega:
             </label>
             <input
@@ -113,7 +114,10 @@ export const StoreForm = () => {
 
           {/* Desplegable para seleccionar categoría */}
           <div className="space-y-2">
-            <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="categoryName"
+              className="block text-sm font-medium text-gray-700"
+            >
               Seleccione su categoría:
             </label>
             <select
@@ -137,7 +141,9 @@ export const StoreForm = () => {
           <button
             type="submit"
             disabled={isButtonDisabled} // Deshabilita el botón si isButtonDisabled es true
-            className={`w-full py-2 px-4 text-white ${isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md flex items-center justify-center`}
+            className={`w-full py-2 px-4 text-white ${
+              isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"
+            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md flex items-center justify-center`}
           >
             {loading ? <Loader /> : "Crear Bodega"}
           </button>

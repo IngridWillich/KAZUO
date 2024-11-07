@@ -1,20 +1,22 @@
 import Link from "next/link";
 
-
 export default function Soluciones() {
-const features = [
+  const features = [
     {
       title: "Control de Inventario",
-      description: "Gestiona tu stock en tiempo real, con actualizaciones automáticas y alertas de nivel bajo.",
+      description:
+        "Gestiona tu stock en tiempo real, con actualizaciones automáticas y alertas de nivel bajo.",
       link: "/GestionInventario",
     },
     {
       title: "Análisis y Reportes",
-      description: "Obtén datos valiosos con informes detallados sobre rotación de inventario y tendencias de ventas.",
+      description:
+        "Obtén datos valiosos con informes detallados sobre rotación de inventario y tendencias de ventas.",
     },
     {
       title: "Gestión de Múltiples Ubicaciones",
-      description: "Controla el inventario en diferentes almacenes o tiendas desde una sola plataforma.",
+      description:
+        "Controla el inventario en diferentes almacenes o tiendas desde una sola plataforma.",
     },
   ];
 
@@ -27,8 +29,10 @@ const features = [
 
         <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-xl text-gray-700">
-            Kazuo ofrece una solución integral de control de inventario diseñada específicamente para pequeñas y medianas empresas.
-            Optimiza tu gestión de stock, reduce pérdidas y mejora la eficiencia de tu negocio con nuestras herramientas intuitivas y potentes.
+            Kazuo ofrece una solución integral de control de inventario diseñada
+            específicamente para pequeñas y medianas empresas. Optimiza tu
+            gestión de stock, reduce pérdidas y mejora la eficiencia de tu
+            negocio con nuestras herramientas intuitivas y potentes.
           </p>
         </div>
 
@@ -50,12 +54,11 @@ const features = [
             ¿Listo para optimizar tu inventario?
           </h2>
           <p className="text-xl mb-6">
-            Descubre cómo Kazuo puede transformar la gestión de tu inventario y mejorar la eficiencia de tu negocio.
+            Descubre cómo Kazuo puede transformar la gestión de tu inventario y
+            mejorar la eficiencia de tu negocio.
           </p>
           <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-blue-100 transition duration-300">
-            <Link href="/Planes">
-            Comienza tu prueba gratuita
-            </Link>
+            <Link href="/Planes">Comienza tu prueba gratuita</Link>
           </button>
         </div>
 
@@ -69,7 +72,8 @@ const features = [
                 Fácil de usar
               </h3>
               <p className="text-gray-700">
-                Interfaz intuitiva diseñada para que puedas empezar a usarla sin complicaciones.
+                Interfaz intuitiva diseñada para que puedas empezar a usarla sin
+                complicaciones.
               </p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -77,7 +81,8 @@ const features = [
                 Escalable
               </h3>
               <p className="text-gray-700">
-                Crece con tu negocio, desde pequeñas tiendas hasta empresas con múltiples ubicaciones.
+                Crece con tu negocio, desde pequeñas tiendas hasta empresas con
+                múltiples ubicaciones.
               </p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -85,7 +90,8 @@ const features = [
                 Soporte local
               </h3>
               <p className="text-gray-700">
-                Equipo de soporte dedicado para ayudarte en cada paso del camino.
+                Equipo de soporte dedicado para ayudarte en cada paso del
+                camino.
               </p>
             </div>
           </div>

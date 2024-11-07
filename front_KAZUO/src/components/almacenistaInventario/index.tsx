@@ -1,14 +1,13 @@
 "use client";
 import { ICategory, IStore } from "@/interfaces/types";
 import { useEffect, useState, useRef } from "react";
-import { FaPencilAlt, FaTimes } from "react-icons/fa";
+import { FaPencilAlt } from "react-icons/fa";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
-import { Link } from "lucide-react";
 import Loader from "../Loader/Loader";
 
 const Inventario: React.FC = () => {

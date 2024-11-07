@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Loader from "../Loader/Loader";
 
-
 const Register = () => {
   const router = useRouter();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
@@ -65,16 +64,16 @@ const Register = () => {
     console.log(dataUser);
 
     if (Object.keys(validationErrors).length === 0) {
-      setLoading(true); 
+      setLoading(true);
       try {
-     const response = await fetch(`${kazuo_back}/auth/signup`, {
+        const response = await fetch(`${kazuo_back}/auth/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataUser),
         });
-      
+
         if (response.ok) {
           Swal.fire({
             title: "¡Te has registrado exitosamente!",
@@ -101,13 +100,10 @@ const Register = () => {
           icon: "error",
           confirmButtonText: "Aceptar",
         });
+      } finally {
+        setLoading(false);
       }
-      finally {
-      
-        setLoading(false); 
     }
-}
-    
   };
 
   const isFormValid =
@@ -222,14 +218,16 @@ const Register = () => {
             )}
           </div>
           <button
-  type="submit"
-  disabled={!isFormValid}
-  className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
-    isFormValid ? "bg-gray-900 hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
-  }`}
->
-  {loading ? <Loader /> : "Registrarse"}
-</button>
+            type="submit"
+            disabled={!isFormValid}
+            className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
+              isFormValid
+                ? "bg-gray-900 hover:bg-gray-800"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+          >
+            {loading ? <Loader /> : "Registrarse"}
+          </button>
         </form>
       </div>
     </div>

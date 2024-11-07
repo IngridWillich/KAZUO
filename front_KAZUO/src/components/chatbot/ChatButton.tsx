@@ -1,21 +1,18 @@
-'use client'
+"use client";
 
-import Image from "next/image"
-import React, { useState } from "react"
-import { MessageCircle, X } from "lucide-react"
-import ChatBot from "./ChatBot"
-
+import React, { useState } from "react";
+import { MessageCircle, X } from "lucide-react";
+import ChatBot from "./ChatBot";
 
 export default function ChatButton() {
-
-  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleChatBotClick = () => {
-    setIsChatOpen(!isChatOpen)
-  }
+    setIsChatOpen(!isChatOpen);
+  };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 hidden sm:block">
       {/* Chatbot Button */}
       {!isChatOpen && (
         <div
@@ -27,16 +24,17 @@ export default function ChatButton() {
           </div>
           <div className="px-4 py-2">
             <p className="font-semibold text-gray-800">Asistente Virtual</p>
-            <p className="text-sm text-gray-600 truncate">¿En qué puedo ayudarte hoy?</p>
+            <p className="text-sm text-gray-600 truncate">
+              ¿En qué puedo ayudarte hoy?
+            </p>
           </div>
         </div>
       )}
-{isChatOpen && (
+      {isChatOpen && (
         <div className="chat-window">
-          <ChatBot  />
+          <ChatBot onClose={() => setIsChatOpen(false)} />
         </div>
       )}
-     
     </div>
-  )
+  );
 }

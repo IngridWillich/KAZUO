@@ -22,7 +22,6 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({ storeId }) => {
 
     const fetchStoreData = async () => {
       try {
-      
         const response = await fetch(`${kazuo_back}/store/${storeId}`);
         if (response.ok) {
           const storeData = await response.json();
@@ -56,18 +55,18 @@ const EditStoreForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       categoryName: selectedCategory,
       userId,
     };
- 
+
     try {
       setLoading(true);
       const response = await fetch(`${kazuo_back}/store/${storeId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${userData.token}`
+          Authorization: `Bearer ${userData.token}`,
         },
         body: JSON.stringify(dataStore),
       });
-console.log(userData.token)
+      console.log(userData.token);
       if (response.ok) {
         Swal.fire({
           title: "¡Bodega actualizada!",
@@ -139,15 +138,15 @@ console.log(userData.token)
               ))}
             </select>
           </div>
-          <button 
-  type="submit"
-  disabled={isButtonDisabled}
-  className={`flex items-center justify-center w-full py-2 px-4 text-white ${isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md`}
->
-  {loading ? <Loader /> : "Actualizar bodega"}
-</button>
-
-
+          <button
+            type="submit"
+            disabled={isButtonDisabled}
+            className={`flex items-center justify-center w-full py-2 px-4 text-white ${
+              isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"
+            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md`}
+          >
+            {loading ? <Loader /> : "Actualizar bodega"}
+          </button>
         </form>
       </div>
     </div>
@@ -155,4 +154,3 @@ console.log(userData.token)
 };
 
 export default EditStoreForm;
-

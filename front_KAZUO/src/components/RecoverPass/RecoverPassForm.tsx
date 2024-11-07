@@ -11,18 +11,6 @@ const RecoverPassForm = () => {
 
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
 
-  //   const [touched, setTouched] = useState<{ [key: string]: boolean }>({
-  //     email: false,
-  //   });
-
-  //   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-  //     const { name } = event.target;
-  //     setTouched({
-  //       ...touched,
-  //       [name]: true,
-  //     });
-  //   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -63,7 +51,7 @@ const RecoverPassForm = () => {
         confirmButtonText: "Aceptar",
       });
     } finally {
-      console.log({email});
+      console.log({ email });
     }
   };
 

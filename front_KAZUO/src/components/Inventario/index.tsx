@@ -10,93 +10,74 @@ import { Menu, Transition } from "@headlessui/react";
 import { BiDotsHorizontal } from "react-icons/bi";
 
 import Loader from "../Loader/Loader";
-import Link from "next/link"
-
-
+import Link from "next/link";
+import { Underline } from "lucide-react";
 
 const Inventario: React.FC = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [store, setStore] = useState<IStore[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { userData } = useAppContext();
+  const { userData, setUserData } = useAppContext();
   const { user, isAuthenticated } = useAuth0();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
+  const [previewImage, setPreviewImage] = useState(userData?.igmUrl);
+  const cloud_name = process.env.CLOUDINARY_CLOUD_NAME;
 
-  const fetchUserImage = async (userId: string) => {
-    try {
-      const response = await fetch(`${kazuo_back}/users/${userId}`);
-      if (!response.ok) {
-        throw new Error("Error al obtener la imagen del usuario");
-      }
-      const userData = await response.json();
-      return userData.igmUrl; // Suponiendo que la URL de la imagen está en la propiedad imgUrl
-    } catch (error) {
-      console.error("Error fetching user image:", error);
-      return null;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files ? e.target.files[0] : null;
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
-  useEffect(() => {
-    // Cargar imagen desde userData o localStorage
-    const storedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
-    if (userData?.igmUrl || storedUserData?.igmUrl) {
-      setProfileImage(userData?.igmUrl || storedUserData.igmUrl);
-    }
-  }, [userData]);
 
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    const userId = localStorage.getItem("userData")
-      ? JSON.parse(localStorage.getItem("userData")!).id
-      : null;
+  const handleUpload = async () => {
+    if (!file) return;
 
-    if (file && userId) {
-      // Convertir a URL para vista previa
-      const reader = new FileReader();
-      reader.onload = () => setProfileImage(reader.result as string);
-      reader.readAsDataURL(file);
+    setIsLoading(true);
+    setError(null);
 
-      // Crear FormData para la subida
+    try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("id", userId.toString());
 
-      try {
+      const response = await fetch(
+        `${kazuo_back}/files/uploadProfileImage/${userData?.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${userData?.token}`, // Si es necesario, incluye el token de autorización
+          },
+          body: formData,
+        }
+      );
 
-        const response = await fetch(
-          `${kazuo_back}/files/uploadProfileImage/${userId}`,
-          {
-            method: "POST",
-            headers: { Authorization: `Bearer ${userData?.token}` },
-            body: formData,
-          }
-        )
-
-          .then(async (response) => {
-            if (response.ok) {
-              const data = await response.json();
-              setProfileImage(data.imageUrl); // Actualiza la imagen de perfil con la URL del servidor
-            } else {
-              const errorData = await response.json();
-              console.error("Error al subir la imagen:", errorData);
-              Swal.fire(
-                "Error",
-                `Error al subir la imagen: ${errorData.message}`,
-                "error"
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Error al subir la imagen:", error);
-            Swal.fire("Error", "Ocurrió un error al subir la imagen.", "error");
-          });
-      } catch {
-        console.log(Error);
+      if (!response.ok) {
+        throw new Error("Error al subir la imagen");
       }
+
+      const data = await response.json();
+      // Actualizar la URL de la imagen en el contexto
+      setUserData((prevUserData) => ({
+        ...prevUserData!,
+        imgUrl: data.imgUrl, // Aquí recibes la nueva URL de la imagen del backend
+      }));
+      if (userData?.igmUrl) {
+        delete userData.igmUrl;
+      }
+      if (userData) {
+        userData.igmUrl = data.imgUrl;
+        localStorage.setItem("userData", JSON.stringify(userData));
+      }
+      window.location.reload();
+    } catch (error: any) {
+      setError(error.message || "Hubo un error al cargar la imagen");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -149,9 +130,7 @@ const Inventario: React.FC = () => {
       } catch (error) {
         Swal.fire("Error", "Ocurrió un error al eliminar la bodega.");
       } finally {
-
         setLoading(false);
-
       }
     }
   };
@@ -171,10 +150,20 @@ const Inventario: React.FC = () => {
         const userId = userData ? userData.id : user?.sub;
 
         try {
-          const response = await fetch(`${kazuo_back}/store/user/${userId}`);
+          const response = await fetch(
+            `${kazuo_back}/companies/AllStoresCompany/${userData?.company}`
+          );
           const dataStore = await response.json();
-          setStore(dataStore);
-          console.log(dataStore);
+
+          const storeInfo =
+            dataStore[0]?.stores.map((store: any) => ({
+              id: store?.id || "",
+              name: store?.name || "",
+              categoryName: store?.category?.name || "",
+              categoryId: store?.category?.id || "",
+            })) || [];
+
+          setStore(storeInfo);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
           setStore([]);
@@ -184,8 +173,6 @@ const Inventario: React.FC = () => {
 
     fetchStores();
   }, []);
-
-
 
   const filteredStores = Array.isArray(store)
     ? store.filter(
@@ -197,31 +184,7 @@ const Inventario: React.FC = () => {
       )
     : [];
 
-
-
   useEffect(() => {
-    const fetchStores = async () => {
-      if (userData || isAuthenticated) {
-        const userId = userData ? userData.id : user?.sub;
-
-        try {
-          const response = await fetch(`${kazuo_back}/store/user/${userId}`);
-          const dataStore = await response.json();
-          setStore(dataStore);
-          console.log(dataStore);
-        } catch (error) {
-          console.error("No se pudo cargar las bodegas ", error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchStores();
-  }, []);
-
-  useEffect(() => {
-
     console.log(`Token: ${userData?.token}`);
 
     const handlefetchCategories = async () => {
@@ -274,22 +237,18 @@ const Inventario: React.FC = () => {
       <div className="bg-white shadow-md rounded-md p-4 mb-8">
         <h2 className="text-xl font-semibold mb-4">Información de Usuario</h2>
         <div className="relative flex items-center justify-center mb-4">
-          <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
-            {profileImage ? (
-              <img
-                src={profileImage}
-                alt="Profile"
-                className="object-cover w-full h-full"
-              />
-            ) : user?.picture ? (
-              <img
-                src={user.picture}
-                alt="Profile"
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <span className="text-gray-500">No image</span>
+          <div>
+            <h2>Subir Imagen de Perfil</h2>
+            {userData?.igmUrl && (
+              <img src={userData.igmUrl} alt="Imagen de perfil" width={100} />
             )}
+            <div>
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <button onClick={handleUpload} disabled={isLoading}>
+                {isLoading ? "Subiendo..." : "Subir Imagen"}
+              </button>
+            </div>
+            {error && <p style={{ color: "red" }}>{error}</p>}
           </div>
 
           <div
@@ -303,7 +262,7 @@ const Inventario: React.FC = () => {
             ref={fileInputRef}
             className="hidden"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={handleUpload}
           />
         </div>
 
@@ -316,17 +275,26 @@ const Inventario: React.FC = () => {
           {isAuthenticated ? user?.email : userData?.email}
         </p>
         <p>
-          <strong>Plan:</strong> Kazuo Pro
+          <strong>Plan: </strong>
+          {userData?.isAdmin ? "Kazuo Pro" : "Free"}
+        </p>
+        <p>
+          <Link href={"/Company"}>
+            <strong className="text-green-800">Ir a Mi Empresa</strong>
+          </Link>
         </p>
 
         <button
-          className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          className={`mt-4 px-4 py-2 rounded text-white ${
+            userData?.isAdmin
+              ? "bg-green-600 hover:bg-green-700"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
           onClick={() => router.push("/register-company")}
+          disabled={!userData?.isAdmin}
         >
           Registrar Empresa
         </button>
-       
-
       </div>
 
       {/* Encabezado de Inventario */}
@@ -396,33 +364,36 @@ const Inventario: React.FC = () => {
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                                className={`${
-                                  active
-                                    ? "bg-blue-500 text-white"
-                                    : "text-gray-900"
-                                } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                                className={`mt-4 px-4 py-2 rounded text-white ${
+                                  userData?.isAdmin
+                                    ? "bg-blue-500 hover:bg-blue-700"
+                                    : "bg-gray-400 cursor-not-allowed"
+                                }`}
                                 onClick={(e) =>
-                                  handleNavigateToEditStore(e, bodega.id)
-                                }
+                                  handleNavigateToEditStore(e, bodega.id)}
+                                disabled={!userData?.isAdmin}
                               >
                                 Modificar
                               </button>
                             )}
                           </Menu.Item>
+                          <br />
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                                className={`${
-                                  active
-                                    ? "bg-red-500 text-white"
-                                    : "text-gray-900"
-                                } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                                onClick={(e) => handleDeleteStore(e, bodega.id)}
+                                className={`mt-4 px-4 py-2 rounded text-white ${
+                                  userData?.isAdmin
+                                    ? "bg-red-600 hover:bg-red-700"
+                                    : "bg-gray-400 cursor-not-allowed"
+                                }`}
+                                onClick={()=>handleDeleteStore}
+                                disabled={!userData?.isAdmin}
                               >
                                 Eliminar
                               </button>
                             )}
                           </Menu.Item>
+                          <br />
                           <Menu.Item>
                             {({ active }) => (
                               <button

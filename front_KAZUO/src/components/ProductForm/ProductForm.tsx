@@ -2,18 +2,22 @@
 import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import { IEditStoreProps, IProduct, IProductsErrors, userData } from "@/interfaces/types";
+import {
+  IEditStoreProps,
+  IProduct,
+  IProductsErrors,
+  userData,
+} from "@/interfaces/types";
 import { validateProductForm } from "@/helpers/validate";
 import * as XLSX from "xlsx";
 import { useAppContext } from "@/context/AppContext";
 import Loader from "../Loader/Loader";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { FaDownload } from 'react-icons/fa';
+import { FaDownload } from "react-icons/fa";
 import Loader1 from "../Loader/Loader1";
 
-
 const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
-  const {userData} = useAppContext();
+  const { userData } = useAppContext();
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -136,9 +140,8 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
 
         handleBulkUpload(productsToSend);
       };
-      
+
       reader.readAsArrayBuffer(file);
-   
     }
   };
 
@@ -152,11 +155,11 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${userToken}`
+          Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify(products),
       });
-      console.log(userToken)
+      console.log(userToken);
       if (response.ok) {
         Swal.fire({
           title: "Productos Añadidos con éxito",
@@ -204,11 +207,7 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     if (name === "bange") {
       setSelectedCurrency(value);
       const newPrice = convertPrice(formData.outPrice, formData.bange, value);
-      const newInPrice = convertPrice(
-        formData.inPrice,
-        formData.bange,
-        value
-      );
+      const newInPrice = convertPrice(formData.inPrice, formData.bange, value);
       setFormData((prevState) => ({
         ...prevState,
         [name]: value,
@@ -242,9 +241,8 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
       if (userData) {
         const parsedUserData = JSON.parse(userData);
         userId = parsedUserData.id;
-        
       }
-  
+
       const dataToSend = {
         ...formData,
         quantity: Number(formData.quantity),
@@ -255,35 +253,36 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
         userId: userId,
         storeId: storeId,
       };
-      
+
       try {
         if (userData) {
           const parsedUserDataToken = JSON.parse(userData);
-        const userToken = parsedUserDataToken.token;
-        setLoading(true);
-        const response = await fetch(`${kazuo_back}/product`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization : `Bearer ${userToken}`
-          },
-          body: JSON.stringify(dataToSend),
-        });
-  console.log(`Datos de usuario: ${userToken}`)
-      
-        if (response.ok) {
-          Swal.fire({
-            title: "¡Producto creado!",
-            text: "El producto se ha creado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
+          const userToken = parsedUserDataToken.token;
+          setLoading(true);
+          const response = await fetch(`${kazuo_back}/product`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+            body: JSON.stringify(dataToSend),
           });
-          router.push(`/Products/${storeId}`);
-        } else {
-          const errorData = await response.json();
-          console.error("Error en la respuesta del servidor:", errorData);
-          throw new Error(errorData.message || "Error al crear el producto");
-        }}
+          console.log(`Datos de usuario: ${userToken}`);
+
+          if (response.ok) {
+            Swal.fire({
+              title: "¡Producto creado!",
+              text: "El producto se ha creado correctamente.",
+              icon: "success",
+              confirmButtonText: "Aceptar",
+            });
+            router.push(`/Products/${storeId}`);
+          } else {
+            const errorData = await response.json();
+            console.error("Error en la respuesta del servidor:", errorData);
+            throw new Error(errorData.message || "Error al crear el producto");
+          }
+        }
       } catch (error) {
         Swal.fire({
           title: "Error",
@@ -298,8 +297,6 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
   };
 
   const handleGenerateReport = async () => {
-    
-
     try {
       const response = await fetch(`${kazuo_back}/product/report/${storeId}`, {
         method: "GET",
@@ -308,16 +305,16 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
           "Content-Type": "application/json",
         },
       });
-      
+
       if (!response.ok) {
         throw new Error("Error al generar el informe");
       }
-      
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'informe_bodega.pdf';
+      a.download = "informe_bodega.pdf";
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -327,24 +324,25 @@ const ProductForm: React.FC<IEditStoreProps> = ({ storeId }) => {
     }
   };
 
-const handleBack = () => {
-  window.history.back();
-};
+  const handleBack = () => {
+    window.history.back();
+  };
 
-      
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 mt-5">
-      
       <div className="w-full max-w-md mt-5 mb-5 p-8 space-y-6 bg-white shadow-lg rounded-lg">
-      <button onClick={handleBack} className="mb-4">
-    <ArrowLeft className="mr-2 h-4 w-4" />
-</button>
+        <button onClick={handleBack} className="mb-4">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+        </button>
         <h2 className="text-2xl font-bold text-center text-blue-700">
           Registrar
         </h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Nombre del Producto:
             </label>
             <input
@@ -360,9 +358,12 @@ const handleBack = () => {
             />
             {errors.name && <p className="text-red-600">{errors.name}</p>}
           </div>
-  
+
           <div className="space-y-2">
-            <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="quantity"
+              className="block text-sm font-medium text-gray-700"
+            >
               Cantidad:
             </label>
             <input
@@ -377,11 +378,16 @@ const handleBack = () => {
               min="0"
               required
             />
-            {errors.quantity && <p className="text-red-600">{errors.quantity}</p>}
+            {errors.quantity && (
+              <p className="text-red-600">{errors.quantity}</p>
+            )}
           </div>
-  
+
           <div className="space-y-2">
-            <label htmlFor="unids" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="unids"
+              className="block text-sm font-medium text-gray-700"
+            >
               Unidad de medida:
             </label>
             <input
@@ -396,9 +402,12 @@ const handleBack = () => {
               required
             />
           </div>
-  
+
           <div className="space-y-2">
-            <label htmlFor="maxCapacity" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="maxCapacity"
+              className="block text-sm font-medium text-gray-700"
+            >
               Capacidad máxima:
             </label>
             <input
@@ -413,7 +422,9 @@ const handleBack = () => {
               required
             />
           </div>
-          {errors.maxCapacity && <p className="text-red-600">{errors.maxCapacity}</p>}
+          {errors.maxCapacity && (
+            <p className="text-red-600">{errors.maxCapacity}</p>
+          )}
           <div className="space-y-2">
             <label
               htmlFor="bange"
@@ -451,15 +462,14 @@ const handleBack = () => {
               type="number"
               name="inPrice"
               id="inPrice"
-              value= {Number(formData.inPrice).toFixed(2)}
+              value={Number(formData.inPrice).toFixed(2)}
               onChange={handleChange}
               onBlur={handleBlur}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Ingresa el valor por el que lo compraste"
               required
             />
-          {errors.inPrice && <p className="text-red-600">{errors.inPrice}</p>}
-      
+            {errors.inPrice && <p className="text-red-600">{errors.inPrice}</p>}
           </div>
 
           <div className="space-y-2">
@@ -483,7 +493,10 @@ const handleBack = () => {
           </div>
           {errors.inPrice && <p className="text-red-600">{errors.inPrice}</p>}
           <div className="space-y-2">
-            <label htmlFor="minStock" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="minStock"
+              className="block text-sm font-medium text-gray-700"
+            >
               Cantidad Mínima:
             </label>
             <input
@@ -498,42 +511,50 @@ const handleBack = () => {
               min="0"
               required
             />
-            {errors.minStock && <p className="text-red-600">{errors.minStock}</p>}
+            {errors.minStock && (
+              <p className="text-red-600">{errors.minStock}</p>
+            )}
           </div>
-  
+
           <button
-  type="submit"
-  disabled={!areFieldsFilled()}
-  className={`flex items-center justify-center w-full py-2 px-4 text-white rounded-md ${
-    areFieldsFilled() ? "bg-blue-500 hover:bg-blue-900" : "bg-gray-300 cursor-not-allowed"
-  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
->
-  
-  {loading ? <Loader /> : "Registrar Producto"}
-</button>
+            type="submit"
+            disabled={!areFieldsFilled()}
+            className={`flex items-center justify-center w-full py-2 px-4 text-white rounded-md ${
+              areFieldsFilled()
+                ? "bg-blue-500 hover:bg-blue-900"
+                : "bg-gray-300 cursor-not-allowed"
+            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+          >
+            {loading ? <Loader /> : "Registrar Producto"}
+          </button>
 
-<p className="text-center"></p>
+          <p className="text-center"></p>
 
-<button
-  onClick={downloadTemplate}
-  className="bg-blue-500 text-white rounded w-full flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors duration-200"
-  style={{ height: '40px' }} 
->
-  <FaDownload className="h-5 w-5" />
-  {loadingTemplate ? (
-    <div className="flex items-center justify-center">
-      <Loader1 />
-    </div>
-  ) : (
-    "Descargar Plantilla"
-  )}
-</button>
+          <button
+            onClick={downloadTemplate}
+            className="bg-blue-500 text-white rounded w-full flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors duration-200"
+            style={{ height: "40px" }}
+          >
+            <FaDownload className="h-5 w-5" />
+            {loadingTemplate ? (
+              <div className="flex items-center justify-center">
+                <Loader1 />
+              </div>
+            ) : (
+              "Descargar Plantilla"
+            )}
+          </button>
 
-<input type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="mt-4" />
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileChange}
+            className="mt-4"
+          />
         </form>
       </div>
     </div>
   );
 };
 
-export default ProductForm
+export default ProductForm;

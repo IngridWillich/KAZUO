@@ -1,6 +1,13 @@
-import { IFormData, IFormErrors, ILoginError, ILoginProps, IUpdatePassProps, TUpdatePassError } from "@/interfaces/types";
+import {
+  IFormData,
+  IFormErrors,
+  ILoginError,
+  ILoginProps,
+  IUpdatePassProps,
+  TUpdatePassError,
+} from "@/interfaces/types";
 import { IRegisterProps, TRegisterError } from "@/interfaces/types";
-import {IProduct,IProductsErrors} from "@/interfaces/types";
+import { IProduct, IProductsErrors } from "@/interfaces/types";
 
 export function validateLoginForm(values: ILoginProps): ILoginError {
   const errors: ILoginError = {};
@@ -78,7 +85,7 @@ export function validateRegisterForm(values: IRegisterProps): TRegisterError {
   }
 
   return errors;
-};
+}
 
 export function validateEmail(email: string): boolean {
   return /\S+@\S+\.\S+/.test(email);
@@ -86,8 +93,6 @@ export function validateEmail(email: string): boolean {
 
 export function validateUpdatePass(values: IUpdatePassProps): TUpdatePassError {
   const errors: TUpdatePassError = {};
-
-  
 
   // Validación de contraseña
   if (!values.newPassword) {
@@ -106,7 +111,7 @@ export function validateUpdatePass(values: IUpdatePassProps): TUpdatePassError {
     errors.newPassword =
       "La contraseña debe contener al menos un carácter especial (!@#$%^&*)";
   }
-  
+
   if (!values.newPassword) {
     errors.newPassword = "La contraseña es obligatoria";
   } else if (values.newPassword !== values.confirmNewPass) {
@@ -114,7 +119,7 @@ export function validateUpdatePass(values: IUpdatePassProps): TUpdatePassError {
   }
 
   return errors;
-};
+}
 
 // Validación para productos
 export function validateProductForm(values: IProduct): IProductsErrors {
@@ -149,7 +154,8 @@ export function validateProductForm(values: IProduct): IProductsErrors {
   if (!values.maxCapacity) {
     errors.maxCapacity = "La capacidad máxima es obligatoria";
   } else if (Number(values.maxCapacity) <= 0) {
-    errors.maxCapacity = "La capacidad máxima debe ser un número mayor que cero";
+    errors.maxCapacity =
+      "La capacidad máxima debe ser un número mayor que cero";
   }
 
   // Validación del precio de entrada
@@ -181,7 +187,8 @@ export function validateProductForm(values: IProduct): IProductsErrors {
   } else if (values.unids.length > 20) {
     errors.unids = "La unidad de medida no debe exceder los 20 caracteres";
   } else if (values.unids !== values.unids.trim()) {
-    errors.unids = "La unidad de medida no debe tener espacios al inicio o al final";
+    errors.unids =
+      "La unidad de medida no debe tener espacios al inicio o al final";
   }
 
   return errors;
@@ -195,8 +202,9 @@ export function validateDataForm(values: IFormData): IFormErrors {
   if (!values.CompanyName.trim()) {
     errors.CompanyName = "El nombre de la empresa es obligatorio";
   } else if (values.CompanyName.length < 5) {
-  errors.CompanyName = "El nombre de la empresa debe tener al menos 5 caracteres";
-}
+    errors.CompanyName =
+      "El nombre de la empresa debe tener al menos 5 caracteres";
+  }
 
   // Validación para el campo "country"
   if (!values.country.trim()) {
@@ -206,19 +214,18 @@ export function validateDataForm(values: IFormData): IFormErrors {
   // Validación para el campo "address"
   if (!values.address.trim()) {
     errors.address = "La dirección es obligatoria";
-} else if (values.address.length < 10) {
-  errors.address = "La dirección debe tener al menos 10 caracteres";
-}
+  } else if (values.address.length < 10) {
+    errors.address = "La dirección debe tener al menos 10 caracteres";
+  }
 
-// Validación para el campo "tel de contacto"
-if (!values.contactPhone) {
-  errors.contactPhone = "El tel de contacto es obligatorio";
-} else if (Number(values.contactPhone) <= 0) {
-  errors.contactPhone = "El tel de contacto no debe ser un numero negativo";
-} else if (!/^\d{10}$/.test(String(values.contactPhone))) {
-  errors.contactPhone = "El tel de contacto debe tener 10 dígitos";
-}
-
+  // Validación para el campo "tel de contacto"
+  if (!values.contactPhone) {
+    errors.contactPhone = "El tel de contacto es obligatorio";
+  } else if (Number(values.contactPhone) <= 0) {
+    errors.contactPhone = "El tel de contacto no debe ser un numero negativo";
+  } else if (!/^\d{10}$/.test(String(values.contactPhone))) {
+    errors.contactPhone = "El tel de contacto debe tener 10 dígitos";
+  }
 
   // Validación para el campo "email"
   if (!values.email.trim()) {
@@ -227,11 +234,10 @@ if (!values.contactPhone) {
     errors.email = "El correo electrónico no es válido";
   }
 
-   // Validación para el campo "industry"
-   if (!values.industry.trim()) {
+  // Validación para el campo "industry"
+  if (!values.industry.trim()) {
     errors.industry = "La industria es obligatoria";
-
   }
-  
+
   return errors;
 }

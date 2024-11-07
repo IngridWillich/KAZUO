@@ -1,10 +1,8 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import { CompanyData, TeamMember } from "@/interfaces/types";
 import Loader from "@/components/Loader/Loader";
-import Loader1 from "../Loader/Loader1";
 import Swal from "sweetalert2";
 
 export default function MiEmpresa() {
@@ -47,10 +45,10 @@ export default function MiEmpresa() {
       } catch (error) {
         console.error("Error al obtener los datos de la empresa:", error);
         Swal.fire({
-          title: 'Error',
-          text: 'No se pudo cargar la información de la empresa.',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
+          title: "Error",
+          text: "No se pudo cargar la información de la empresa.",
+          icon: "error",
+          confirmButtonText: "Aceptar",
         });
       } finally {
         setIsLoading(false);
@@ -73,8 +71,8 @@ export default function MiEmpresa() {
           body: JSON.stringify(newMember),
         }
       );
-      console.log(userToken)
-      console.log(response)
+      console.log(userToken);
+      console.log(response);
 
       if (response.ok) {
         setTeamMembers([
@@ -83,17 +81,17 @@ export default function MiEmpresa() {
         ]);
         setNewMember({ id: "", name: "", email: "", position: "" });
         Swal.fire({
-          title: '¡Miembro agregado!',
-          text: 'El miembro del equipo ha sido agregado con éxito.',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
+          title: "¡Miembro agregado!",
+          text: "El miembro del equipo ha sido agregado con éxito.",
+          icon: "success",
+          confirmButtonText: "Aceptar",
         });
-      }else {
+      } else {
         Swal.fire({
-          title: '¡Error!',
-          text: 'Ocurrió un error al agregar el miembro del equipo.',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
+          title: "¡Error!",
+          text: "Ocurrió un error al agregar el miembro del equipo.",
+          icon: "error",
+          confirmButtonText: "Aceptar",
         });
       }
     } catch (error) {
@@ -104,10 +102,10 @@ export default function MiEmpresa() {
   const handleRemoveTeamMember = (id: string) => {
     setTeamMembers(teamMembers.filter((member) => member.id !== id));
     Swal.fire({
-      title: '¡Eliminado!',
-      text: 'Miembro del equipo eliminado correctamente.',
-      icon: 'success',
-      confirmButtonText: 'Aceptar',
+      title: "¡Eliminado!",
+      text: "Miembro del equipo eliminado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar",
     });
   };
 
@@ -205,5 +203,4 @@ export default function MiEmpresa() {
       </div>
     );
   }
-
 }
