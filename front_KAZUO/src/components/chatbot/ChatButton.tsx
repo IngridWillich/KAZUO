@@ -31,7 +31,7 @@ export default function Component() {
       )}
 {isChatOpen && (
         <div className="chat-window">
-          <ChatBot  />
+          <ChatBot onClose={() => setIsChatOpen(false)} />
         </div>
       )}
      

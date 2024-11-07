@@ -3,7 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Send, GripHorizontal, X } from 'lucide-react'
 
-export default function ChatBot() {
+
+
+interface ChatBotProps {
+  onClose: () => void;
+}
+
+export default function ChatBot({onClose}: ChatBotProps) {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -115,7 +121,12 @@ export default function ChatBot() {
         onMouseDown={handleMouseDown}
       >
         <button
-          onClick={() => setIsVisible(false)}
+          onClick={() =>{
+            onClose();
+            setIsVisible(false)
+          }
+          } 
+          
           className="absolute left-2 top-2 text-white hover:text-gray-200 focus:outline-none"
           aria-label="Cerrar chat"
         >

@@ -11,12 +11,12 @@ import { useAppContext } from '@/context/AppContext'
 
 export default function MiEmpresa() {
   const [companyData, setCompanyData] = useState<CompanyData>({
-    nombreEmpresa: '',
-    pais: '',
-    direccion: '',
-    telefonoContacto: '',
-    correoElectronico: '',
-    industria: '',
+    CompanyName: '',
+    country: '',
+    address: '',
+    contactPhone: '',
+    email: '',
+    industry: '',
    
   })
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
@@ -67,13 +67,13 @@ export default function MiEmpresa() {
   
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {}
-    if (!companyData.nombreEmpresa.trim()) newErrors.nombreEmpresa = 'El nombre de la empresa es requerido'
-    if (!companyData.pais.trim()) newErrors.pais = 'El país es requerido'
-    if (!companyData.direccion.trim()) newErrors.direccion = 'La dirección es requerida'
-    if (!companyData.telefonoContacto.trim()) newErrors.telefonoContacto = 'El teléfono de contacto es requerido'
-    if (!/^\d{11}$/.test(companyData.telefonoContacto)) newErrors.telefonoContacto = 'El teléfono debe tener 11 dígitos'
-    if (!companyData.correoElectronico.trim()) newErrors.correoElectronico = 'El correo electrónico es requerido'
-    if (!/\S+@\S+\.\S+/.test(companyData.correoElectronico)) newErrors.correoElectronico = 'El correo electrónico no es válido'
+    if (!companyData.CompanyName.trim()) newErrors.CompanyName = 'El nombre de la empresa es requerido'
+    if (!companyData.country.trim()) newErrors.country = 'El país es requerido'
+    if (!companyData.address.trim()) newErrors.address = 'La dirección es requerida'
+    if (!companyData.contactPhone.trim()) newErrors.telefonoContacto = 'El teléfono de contacto es requerido'
+    if (!/^\d{11}$/.test(companyData.contactPhone)) newErrors.telefonoContacto = 'El teléfono debe tener 11 dígitos'
+    if (!companyData.email.trim()) newErrors.email= 'El correo electrónico es requerido'
+    if (!/\S+@\S+\.\S+/.test(companyData.email)) newErrors.correoElectronico = 'El correo electrónico no es válido'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
