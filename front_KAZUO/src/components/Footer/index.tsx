@@ -132,20 +132,6 @@ export default function Footer() {
               </div>
             ))}
           </div>
-          <h4 className="font-bold mt-6 mb-2">SUSCRÍBETE</h4>
-          <form className="space-y-2">
-            <input
-              type="email"
-              placeholder="Correo"
-              className="bg-blue-800 border-blue-700 text-white placeholder-blue-400"
-            />
-            <button
-              type="submit"
-              className="w-full bg-white text-blue-900 hover:bg-blue-100"
-            >
-              Enviar
-            </button>
-          </form>
         </div>
 
         {/* Secciones adicionales de Kazuo, Soluciones y Recursos */}
@@ -164,11 +150,6 @@ export default function Footer() {
             </li>
 
             <li>
-              <a href="#" className="hover:underline">
-                Términos y condiciones
-              </a>
-            </li>
-            <li>
               <a href="/Contacto" className="hover:underline">
                 Contáctanos
               </a>
@@ -184,11 +165,6 @@ export default function Footer() {
                 Sistema de gestión
               </a>
             </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Integraciones
-              </a>
-            </li>
           </ul>
         </div>
 
@@ -196,19 +172,13 @@ export default function Footer() {
           <h3 className="font-bold text-lg mb-4">Recursos</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:underline">
+              <a href="/Contacto" className="hover:underline">
                 Soporte
               </a>
             </li>
             <li>
               <a href="/Sobre Nosotros" className="hover:underline">
                 Desarrolladores
-              </a>
-            </li>
-
-            <li>
-              <a href="#" className="hover:underline">
-                Biblioteca de recursos
               </a>
             </li>
           </ul>

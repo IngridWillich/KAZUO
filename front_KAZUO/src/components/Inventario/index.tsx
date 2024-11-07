@@ -386,7 +386,7 @@ const Inventario: React.FC = () => {
                                     ? "bg-red-600 hover:bg-red-700"
                                     : "bg-gray-400 cursor-not-allowed"
                                 }`}
-                                onClick={(e) => handleDeleteStore(e, bodega.id)}
+                                onClick={()=>handleDeleteStore}
                                 disabled={!userData?.isAdmin}
                               >
                                 Eliminar
