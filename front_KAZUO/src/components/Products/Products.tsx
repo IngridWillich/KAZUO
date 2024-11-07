@@ -314,7 +314,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
                     ? "bg-blue-600 hover:bg-blue-700"
                     : "bg-gray-400 cursor-not-allowed"
                 }`}
-                onClick={() => router.push("/register-company")}
+                onClick={handleGenerateReport}
                 disabled={!userData?.isAdmin}
               >
                 Generar Informe
@@ -325,7 +325,7 @@ const Products: React.FC<IEditStoreProps> = ({ storeId }) => {
                     ? "bg-green-600 hover:bg-green-700"
                     : "bg-gray-400 cursor-not-allowed"
                 }`}
-                onClick={() => router.push("/register-company")}
+                onClick={handleNavigateToStatistics}
                 disabled={!userData?.isAdmin}
               >
                 Estadisticas por Bodega

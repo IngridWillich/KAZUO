@@ -68,8 +68,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserData(loginData);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userData", JSON.stringify(loginData));
-      if (userData?.token) {
-        localStorage.setItem("token", userData.token);
+      // if (userData?.token) {
+      if (loginData.token) {
+        localStorage.setItem("token", loginData.token);
       }
       if (userData?.igmUrl) {
         localStorage.setItem("igmUrl", userData.igmUrl);

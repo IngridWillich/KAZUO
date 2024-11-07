@@ -32,7 +32,7 @@ export default function Navbar() {
 
     if (result.isConfirmed) {
       logout();
-      router.push("/");
+      router.push("/Login");
     }
   };
 

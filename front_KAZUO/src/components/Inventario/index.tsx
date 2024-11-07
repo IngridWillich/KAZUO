@@ -154,8 +154,16 @@ const Inventario: React.FC = () => {
             `${kazuo_back}/companies/AllStoresCompany/${userData?.company}`
           );
           const dataStore = await response.json();
-          setStore(dataStore.stores);
-          console.log(dataStore.stores);
+
+          const storeInfo =
+            dataStore[0]?.stores.map((store: any) => ({
+              id: store?.id || "",
+              name: store?.name || "",
+              categoryName: store?.category?.name || "",
+              categoryId: store?.category?.id || "",
+            })) || [];
+
+          setStore(storeInfo);
         } catch (error) {
           console.error("No se pudo cargar las bodegas ", error);
           setStore([]);
@@ -361,7 +369,8 @@ const Inventario: React.FC = () => {
                                     ? "bg-blue-500 hover:bg-blue-700"
                                     : "bg-gray-400 cursor-not-allowed"
                                 }`}
-                                onClick={() => router.push("/register-company")}
+                                onClick={(e) =>
+                                  handleNavigateToEditStore(e, bodega.id)}
                                 disabled={!userData?.isAdmin}
                               >
                                 Modificar
@@ -377,7 +386,7 @@ const Inventario: React.FC = () => {
                                     ? "bg-red-600 hover:bg-red-700"
                                     : "bg-gray-400 cursor-not-allowed"
                                 }`}
-                                onClick={() => router.push("/register-company")}
+                                onClick={(e) => handleDeleteStore(e, bodega.id)}
                                 disabled={!userData?.isAdmin}
                               >
                                 Eliminar

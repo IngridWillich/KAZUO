@@ -8,6 +8,10 @@ interface ChatBotProps {
   onClose: () => void;
 }
 
+interface Message {
+  role: string;
+  content: string;
+}
 export default function ChatBot({ onClose }: ChatBotProps) {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     []
@@ -84,17 +88,31 @@ export default function ChatBot({ onClose }: ChatBotProps) {
         }
 
         const backendData = await backendResponse.json();
-        const botMessage = {
+        const botMessage: Message = {
           role: "assistant",
           content: backendData.prompt,
         };
-        const newMessages = [...updatedMessages, botMessage];
-        setMessages(newMessages);
 
         if (backendData.data) {
+          const dataMessage: Message = {
+            role: "assistant",
+            content:
+              typeof backendData.data === "string"
+                ? backendData.data
+                : JSON.stringify(backendData.data),
+          };
+          const newMessages: Message[] = [
+            ...updatedMessages,
+            botMessage,
+            dataMessage,
+          ];
+          setMessages(newMessages);
+        } else {
+          const newMessages: Message[] = [...updatedMessages, botMessage];
+          setMessages(newMessages);
         }
 
-        sessionStorage.setItem("chatConversation", JSON.stringify(newMessages));
+        sessionStorage.setItem("chatConversation", JSON.stringify(messages));
       } catch (error) {
         console.error("Error al procesar la solicitud:", error);
         const errorMessage = {
