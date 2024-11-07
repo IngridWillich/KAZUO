@@ -40,11 +40,13 @@ export interface userData {
   email: string;
   password: string;
   name: string;
-  company: string;
+  company?: string;
   token: string;
   userId: string;
-  igmUrl?: string
-  auth0Id?: string
+  igmUrl?: string;
+  auth0Id?: string;
+  isAdmin?: boolean;
+  isSuperAdmin?: boolean;
 }
 
 export interface IProduct {
@@ -59,9 +61,9 @@ export interface IProduct {
   minStock: number;
   storeId: string;
   userId: string;
-  store?:{
-    name:string
-  }
+  store?: {
+    name: string;
+  };
   [key: string]: any;
 }
 
@@ -75,9 +77,9 @@ export interface IUpdateProduct {
   outPrice?: number;
   storeId?: string;
   userId?: string;
-  store?:{
-    name:string
-  }
+  store?: {
+    name: string;
+  };
   [key: string]: any;
 }
 
@@ -105,8 +107,7 @@ export interface IFormData {
   contactPhone: number;
   email: string;
   industry: string;
-  userId:string;
-
+  userId: string;
 }
 
 export interface IFormErrors {
@@ -119,31 +120,26 @@ export interface IFormErrors {
 }
 
 export interface CompanyData {
-  id?: string
-  CompanyName: string
-  country: string
-  address: string
-  contactPhone: string
-  email: string
-  industry: string
-
+  id?: string;
+  CompanyName: string;
+  country: string;
+  address: string;
+  contactPhone: string;
+  email: string;
+  industry: string;
 }
 export interface TeamMember {
-  id: string
-  name: string
-  email:string
-  position: string
-
+  id: string;
+  name: string;
+  email: string;
+  position: string;
 }
-
-
 
 export interface IStore {
   id: string;
   name: string;
   categoryName: string;
   categoryId: "string";
-  
 }
 
 export interface ICategory {

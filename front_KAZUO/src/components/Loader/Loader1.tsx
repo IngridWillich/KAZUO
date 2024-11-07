@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FaDownload } from 'react-icons/fa'; // Asegúrate de tener el icono importado
+import React, { useEffect, useState } from "react";
+import { FaDownload } from "react-icons/fa"; // Asegúrate de tener el icono importado
 
 const Loader1 = () => {
   const [count, setCount] = useState(1); // Estado para el conteo

@@ -16,14 +16,14 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await fetch(`${kazuo_back}/product/${productId}`,{
+      const response = await fetch(`${kazuo_back}/product/${productId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userData?.token}`,
         },
       });
-      console.log(userData?.token)
+      console.log(userData?.token);
       const data = await response.json();
       setProduct(data);
       setFormValues({
@@ -182,6 +182,7 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
                 defaultValue={product.name}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!userData?.isAdmin}
               />
             </div>
 
@@ -210,6 +211,7 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
                 defaultValue={product.maxCapacity}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!userData?.isAdmin}
               />
             </div>
 
@@ -224,6 +226,7 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
                 defaultValue={product.inPrice}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!userData?.isAdmin}
               />
             </div>
 
@@ -238,6 +241,7 @@ const EditProductForm: React.FC<{ productId: string }> = ({ productId }) => {
                 defaultValue={product.outPrice}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                disabled={!userData?.isAdmin}
               />
             </div>
 

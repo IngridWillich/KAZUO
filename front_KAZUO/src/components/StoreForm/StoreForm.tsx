@@ -14,10 +14,10 @@ export const StoreForm = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
-  
-  const categoriesFromStorage: ICategory[] = typeof window !== 'undefined' 
-  ? JSON.parse(localStorage.getItem("Categorias") || "[]")
-  : [];
+  const categoriesFromStorage: ICategory[] =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("Categorias") || "[]")
+      : [];
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -50,7 +50,7 @@ export const StoreForm = () => {
       categoryName: selectedCategory,
       userId,
     };
-    console.log(`Token: ${token}`)
+    console.log(`Token: ${token}`);
 
     try {
       setLoading(true);
@@ -97,7 +97,10 @@ export const StoreForm = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Campo para el nombre de la bodega */}
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Nombre de la Bodega:
             </label>
             <input
@@ -113,7 +116,10 @@ export const StoreForm = () => {
 
           {/* Desplegable para seleccionar categoría */}
           <div className="space-y-2">
-            <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="categoryName"
+              className="block text-sm font-medium text-gray-700"
+            >
               Seleccione su categoría:
             </label>
             <select
@@ -137,7 +143,9 @@ export const StoreForm = () => {
           <button
             type="submit"
             disabled={isButtonDisabled} // Deshabilita el botón si isButtonDisabled es true
-            className={`w-full py-2 px-4 text-white ${isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md flex items-center justify-center`}
+            className={`w-full py-2 px-4 text-white ${
+              isButtonDisabled ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-900"
+            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md flex items-center justify-center`}
           >
             {loading ? <Loader /> : "Crear Bodega"}
           </button>

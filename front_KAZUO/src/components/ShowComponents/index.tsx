@@ -1,18 +1,9 @@
-'use client'
-import { usePathname } from "next/navigation"
+"use client";
+import { usePathname } from "next/navigation";
 
-const ShowComponents = ({ children }: { children: React.ReactNode}) => {
-   const pathname = usePathname();
-    return (
-        <div>
-            {
-                pathname !== "/login" && (
-                    children
-                )
+const ShowComponents = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+  return <div>{pathname !== "/login" && children}</div>;
+};
 
-            }
-        </div>
-    )
-}
-
-export default ShowComponents
+export default ShowComponents;

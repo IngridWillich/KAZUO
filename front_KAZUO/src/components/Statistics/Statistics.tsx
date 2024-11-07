@@ -163,9 +163,7 @@ const Statistics: React.FC<IStatisticsProps> = ({ storeId }) => {
         <div>
           <h1>HISTORIA "{storeInfo.name}"</h1>
         </div>
-        <div>
-          Fecha de creacion: {formatDate(createdAt)}
-        </div>
+        <div>Fecha de creacion: {formatDate(createdAt)}</div>
       </div>
       <div className="grid grid-cols-4 grid-rows-4 mx-20">
         <div className="col-span-4 my-4">

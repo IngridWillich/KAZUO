@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { createContext, useState, useContext, useEffect } from "react";
@@ -12,28 +11,38 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { logout: logoutAuth0, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  
-  const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>("isLoggedIn", false);
+  const {
+    logout: logoutAuth0,
+    user,
+    isAuthenticated,
+    getAccessTokenSilently,
+  } = useAuth0();
+
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>(
+    "isLoggedIn",
+    false
+  );
   const [userData, setUserData] = useState<userData | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-    const storedLoginStatus = localStorage.getItem("isLoggedIn");
-    const storedUserData = localStorage.getItem("userData");
-    if (storedLoginStatus === "true" && storedUserData) {
-      setIsLoggedIn(true);
-      setUserData(JSON.parse(storedUserData));
+    if (typeof window !== "undefined") {
+      const storedLoginStatus = localStorage.getItem("isLoggedIn");
+      const storedUserData = localStorage.getItem("userData");
+      if (storedLoginStatus === "true" && storedUserData) {
+        setIsLoggedIn(true);
+        setUserData(JSON.parse(storedUserData));
+      }
     }
-  }
   }, []);
 
   useEffect(() => {
-    console.log(`Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`);
+    console.log(
+      `Estado de la sesión: ${isLoggedIn ? "Iniciada" : "No iniciada"}`
+    );
     if (isAuthenticated && user) {
       const auth0Id = user.sub || "";
       const newUserData: userData = {
-        id: "", 
+        id: "",
         password: "", // Manejar según tus necesidades
         company: user.email || "", // Usar el email o algún otro campo como compañía
         token: "", // Establecer el token si lo tienes
@@ -53,8 +62,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [isAuthenticated, user]); // Incluido isAuthenticated y user
 
- 
-
   const login = async (loginData: any) => {
     try {
       setIsLoggedIn(true);
@@ -63,14 +70,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("userData", JSON.stringify(loginData));
       if (userData?.token) {
         localStorage.setItem("token", userData.token);
-     }
-     if (userData?.igmUrl) {
+      }
+      if (userData?.igmUrl) {
         localStorage.setItem("igmUrl", userData.igmUrl);
-     }
-  } catch (error) {
+      }
+    } catch (error) {
       console.error("Error de login", error);
       throw error;
-  }
+    }
   };
 
   const logout = () => {
@@ -102,6 +109,6 @@ export const useAppContext = () => {
   if (context === undefined) {
     throw new Error("Error de contexto");
   }
- 
+
   return context;
 };

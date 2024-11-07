@@ -1,14 +1,11 @@
-
-
-
-"use client"
+"use client";
 import React, { useEffect } from "react";
-
 
 const GoogleTranslateWidget: React.FC = () => {
   useEffect(() => {
     const googleTranslateScript = document.createElement("script");
-    googleTranslateScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    googleTranslateScript.src =
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     googleTranslateScript.async = true;
     document.body.appendChild(googleTranslateScript);
 
@@ -16,7 +13,8 @@ const GoogleTranslateWidget: React.FC = () => {
       new (window as any).google.translate.TranslateElement(
         {
           pageLanguage: "es", // Cambia esto si tu idioma base no es español
-          layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE
+          layout: (window as any).google.translate.TranslateElement.InlineLayout
+            .SIMPLE,
         },
         "google_translate_element"
       );
@@ -31,4 +29,3 @@ const GoogleTranslateWidget: React.FC = () => {
 };
 
 export default GoogleTranslateWidget;
-

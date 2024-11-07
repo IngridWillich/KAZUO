@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import ButtonCheckout from '../ButtonCheckout';
+import { useEffect, useState } from "react";
+import ButtonCheckout from "../ButtonCheckout";
 
-import { useAppContext } from '@/context/AppContext';
-
-
+import { useAppContext } from "@/context/AppContext";
 
 interface Price {
   id: string;
@@ -19,12 +17,13 @@ export default function Planes() {
   const [prices, setPrices] = useState<Price[]>([]);
 
   const { userData } = useAppContext();
-  
 
   useEffect(() => {
     async function fetchPrices() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/prices`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/stripe/prices`
+        );
         if (!res.ok) {
           throw new Error("Failed to fetch prices");
         }
@@ -39,10 +38,8 @@ export default function Planes() {
   }, []);
 
   return (
-
     <div className="max-w-screen px-4 sm:px-6 lg:px-8">
       <div className="animate-fade-in">
-
         {prices.map((price: Price) => (
           <div
             key={price.id}
@@ -53,11 +50,11 @@ export default function Planes() {
                 {price.nickname}
               </h3>
               <h2 className="font-extrabold text-4xl lg:text-5xl mb-6">
-                ${(price.unit_amount / 100).toFixed(2)} {price.currency.toUpperCase()}
+                ${(price.unit_amount / 100).toFixed(2)}{" "}
+                {price.currency.toUpperCase()}
               </h2>
 
               {/* <p className="text-sm mb-4">Facturación {price.interval}</p> */}
-
             </div>
             <ul className="text-sm md:text-base space-y-3 mb-8">
               <li className="flex items-center space-x-2">
@@ -86,10 +83,8 @@ export default function Planes() {
               </li>
             </ul>
 
-            
-            <ButtonCheckout priceId={price.id} userEmail={userData?.email!}/>
+            <ButtonCheckout priceId={price.id} userEmail={userData?.email!} />
             <p className="mt-6 text-center text-gray-200 text-sm animate-pulse duration-1000">
-
               Descarga la app y lleva tu gestión a donde vayas
             </p>
           </div>

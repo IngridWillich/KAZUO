@@ -41,7 +41,7 @@ const Login: React.FC = () => {
     const handleAuthenticationComplete = async () => {
       if (isAuthenticated && user) {
         console.log("User authenticated:", user);
-        
+
         try {
           const accessToken = await getAccessTokenSilently();
           console.log("Access token:", accessToken);
@@ -192,7 +192,6 @@ const Login: React.FC = () => {
           confirmButtonText: "Aceptar",
         });
       } finally {
-      
         setLoading(false); // Desactiva el loader
         console.log("Datos del formulario:", dataUser);
       }
@@ -298,15 +297,16 @@ const Login: React.FC = () => {
             )}
           </div>
           <button
-  type="submit"
-  disabled={isButtonDisabled}
-  className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
-    isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"
-  }`}
->
-  {loading ? <Loader /> : "Iniciar sesión"}
-</button>
-
+            type="submit"
+            disabled={isButtonDisabled}
+            className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex justify-center items-center ${
+              isButtonDisabled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gray-900 hover:bg-gray-800"
+            }`}
+          >
+            {loading ? <Loader /> : "Iniciar sesión"}
+          </button>
         </form>
         <p className="text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}

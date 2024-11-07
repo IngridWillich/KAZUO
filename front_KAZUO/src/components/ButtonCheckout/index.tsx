@@ -1,11 +1,9 @@
-
 "use client";
 
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
-
 
 interface ButtonCheckoutProps {
   priceId: string;
@@ -19,7 +17,7 @@ const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const { userData } = useAppContext();
   const router = useRouter();
-  
+
   const handleCheckout = async () => {
     setIsLoading(true);
     if (!userData?.token) {
@@ -38,11 +36,9 @@ const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({
         }
       );
 
-
       const data = await res.json();
 
       if (!res.ok) {
-
         console.error("Respuesta de error del servidor:", data);
         throw new Error(data.message || "Error al procesar el pago");
       }
@@ -51,17 +47,11 @@ const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({
 
       if (!data.url) {
         throw new Error("No se recibió la URL de checkout");
-
       }
 
       window.location.href = data.url;
     } catch (error) {
-
       console.error("Error durante el checkout:", error);
-      alert(
-        "Hubo un problema al iniciar el proceso de checkout. Por favor, inténtalo de nuevo."
-      );
-
     } finally {
       setIsLoading(false);
     }
@@ -73,13 +63,9 @@ const ButtonCheckout: React.FC<ButtonCheckoutProps> = ({
       onClick={handleCheckout}
       disabled={isLoading}
     >
-
       {isLoading ? "Procesando..." : "Adquirir Kazuo Pro"}
-
     </Button>
   );
 };
 
-
 export default ButtonCheckout;
-

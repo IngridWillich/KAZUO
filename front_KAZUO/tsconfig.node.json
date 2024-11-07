@@ -4,12 +4,10 @@
     "module": "CommonJS",
     "lib": ["ES2020"],
     "skipLibCheck": true,
-    "composite": true,  // Añadir composite: true
-    "noEmit": false,  // Eliminar noEmit o cambiar a false
+    "composite": true, // Añadir composite: true
+    "noEmit": false, // Eliminar noEmit o cambiar a false
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

@@ -1,30 +1,27 @@
-
-
 "use client";
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Swal from 'sweetalert2';
-import { validateDataForm } from '@/helpers/validate';
-import { IFormData, IFormErrors } from '@/interfaces/types';
-import Loader from '../Loader/Loader';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import { validateDataForm } from "@/helpers/validate";
+import { IFormData, IFormErrors } from "@/interfaces/types";
+import Loader from "../Loader/Loader";
 
-import { useAppContext } from '@/context/AppContext';
+import { useAppContext } from "@/context/AppContext";
 
 const CompanyRegistrationForm: React.FC = () => {
   const kazuo_back = process.env.NEXT_PUBLIC_API_URL;
   const { userData } = useAppContext();
 
-const token = userData?.token;
-
+  const token = userData?.token;
 
   const initialFormData: IFormData = {
-    CompanyName: '',
-    country: '',
-    address: '',
+    CompanyName: "",
+    country: "",
+    address: "",
     contactPhone: 0,
-    email: '',
-    industry: '',
-    userId: '',
+    email: "",
+    industry: "",
+    userId: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -40,7 +37,9 @@ const token = userData?.token;
     industry: false,
   });
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleBlur = (
+    event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name } = event.target;
     setTouched((prevTouched) => ({
       ...prevTouched,
@@ -60,7 +59,9 @@ const token = userData?.token;
     );
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
     let newValue: number | string = value;
     if (name === "contactPhone") {
@@ -81,10 +82,6 @@ const token = userData?.token;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-
-    
-
-
     event.preventDefault();
     const validationErrors = validateDataForm(formData);
     setErrors(validationErrors);
@@ -97,15 +94,14 @@ const token = userData?.token;
         userId = parsedUserData.id;
       }
 
-      
       const dataFormm = {
         ...formData,
         userId: userId,
         contactPhone: Number(formData.contactPhone),
       };
-console.log(`token: ${token}`)
+      console.log(`token: ${token}`);
       try {
-        console.log(`Datos de usuario ${token}`)
+        console.log(`Datos de usuario ${token}`);
 
         setLoading(true);
         const response = await fetch(`${kazuo_back}/companies`, {
@@ -118,7 +114,7 @@ console.log(`token: ${token}`)
           body: JSON.stringify(dataFormm),
         });
         // console.log(dataFormm);
-        console.log(token)
+        console.log(token);
 
         if (response.ok) {
           Swal.fire({
@@ -130,10 +126,6 @@ console.log(`token: ${token}`)
           router.push("/Company");
         } else {
           throw new Error("Respuesta no exitosa del servidor");
-
-   
-          
-
         }
       } catch {
         Swal.fire({
@@ -144,9 +136,6 @@ console.log(`token: ${token}`)
         });
       } finally {
         setLoading(false);
-
-        
-
       }
     }
   };
@@ -157,13 +146,18 @@ console.log(`token: ${token}`)
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-700 uppercase">Registra tu Empresa</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-700 uppercase">
+          Registra tu Empresa
+        </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="CompanyName" className="block text-sm font-bold text-gray-700">
+              <label
+                htmlFor="CompanyName"
+                className="block text-sm font-bold text-gray-700"
+              >
                 Nombre de la Empresa
               </label>
               <input
@@ -176,12 +170,17 @@ console.log(`token: ${token}`)
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
               {touched.CompanyName && errors.CompanyName && (
-                <p className="mt-2 text-sm text-red-500">{errors.CompanyName}</p>
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.CompanyName}
+                </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="country" className="block text-sm font-bold text-gray-700">
+              <label
+                htmlFor="country"
+                className="block text-sm font-bold text-gray-700"
+              >
                 País
               </label>
               <input
@@ -199,7 +198,10 @@ console.log(`token: ${token}`)
             </div>
 
             <div>
-              <label htmlFor="address" className="block text-sm font-bold text-gray-700">
+              <label
+                htmlFor="address"
+                className="block text-sm font-bold text-gray-700"
+              >
                 Dirección
               </label>
               <input
@@ -217,25 +219,33 @@ console.log(`token: ${token}`)
             </div>
 
             <div>
-              <label htmlFor="contactPhone" className="block text-sm font-bold text-gray-700">
+              <label
+                htmlFor="contactPhone"
+                className="block text-sm font-bold text-gray-700"
+              >
                 Teléfono de Contacto
               </label>
               <input
                 id="contactPhone"
                 name="contactPhone"
                 type="number"
-                value={formData.contactPhone || ''}
+                value={formData.contactPhone || ""}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
               {touched.contactPhone && errors.contactPhone && (
-                <p className="mt-2 text-sm text-red-500">{errors.contactPhone}</p>
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.contactPhone}
+                </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-bold text-gray-700"
+              >
                 Correo Electrónico
               </label>
               <input
@@ -253,7 +263,10 @@ console.log(`token: ${token}`)
             </div>
 
             <div>
-              <label htmlFor="industry" className="block text-sm font-bold text-gray-700">
+              <label
+                htmlFor="industry"
+                className="block text-sm font-bold text-gray-700"
+              >
                 Industria
               </label>
               <select
@@ -277,16 +290,17 @@ console.log(`token: ${token}`)
             </div>
 
             <div>
-            <button
-  type="submit"
-  disabled={isButtonDisabled}
-  className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex items-center justify-center ${
-    isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"
-  }`}
->
-  {loading ? <Loader /> : 'Registrar empresa'}
-</button>
-
+              <button
+                type="submit"
+                disabled={isButtonDisabled}
+                className={`w-full py-2 px-4 text-white font-semibold rounded-md shadow-sm flex items-center justify-center ${
+                  isButtonDisabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-gray-900 hover:bg-gray-800"
+                }`}
+              >
+                {loading ? <Loader /> : "Registrar empresa"}
+              </button>
             </div>
           </form>
         </div>
